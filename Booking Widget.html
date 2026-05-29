@@ -265,7 +265,7 @@
             <div class="dropdown-menu" id="dd2" style="display:none;">
               <div class="dropdown-section">
                 <button class="dropdown-item" onclick="showToast('Opening editor…')">
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
                 <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
@@ -307,7 +307,7 @@
                   Activate
                 </button>
                 <button class="dropdown-item" onclick="showToast('Opening editor…')">
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
                 <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
@@ -345,7 +345,7 @@
             <div class="dropdown-menu" id="dd4" style="display:none;">
               <div class="dropdown-section">
                 <button class="dropdown-item" onclick="showToast('Opening editor…')">
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
                 <button class="dropdown-item danger" onclick="showToast('Widget deleted')">
@@ -388,6 +388,26 @@
   </div>
 </div>
 
+<!-- Edit Widget Modal -->
+<div class="modal-overlay" id="edit-widget-modal" onclick="closeEditModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Edit Widget</span>
+      <button class="modal-close" onclick="closeEditWidgetModal()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <p class="modal-label">Widget Name</p>
+    <input class="modal-input" type="text" id="edit-widget-name" placeholder="e.g. Online Booking - Portland" />
+    <p class="modal-label">Description</p>
+    <textarea class="modal-input" id="edit-widget-desc" rows="3" style="resize:vertical;line-height:1.5;"></textarea>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeEditWidgetModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveWidgetEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -425,8 +445,8 @@
     </div>
     <div class="ap-breadcrumb-center">
       <div class="ap-widget-name" id="ap-widget-name-display">
-        Online Booking - Seattle
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
       <div class="ap-draft-badge">
         <span>•</span><span>Saved as draft</span>
@@ -454,7 +474,7 @@
     <div class="ap-step-line"></div>
     <div class="ap-step">
       <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Options Configuration</span>
+      <span class="ap-step-label">Booking Policy</span>
     </div>
     <div class="ap-step-line"></div>
     <div class="ap-step">
@@ -646,13 +666,17 @@
     <div class="ap-breadcrumb-left">
       <button class="ap-back-btn" onclick="goBackToAppearance()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
       </button>
-      <div class="ap-widget-name" id="qs-widget-name-display">
-        Online Booking - Seattle
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
     </div>
-    <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    <div class="ap-breadcrumb-center">
+      <div class="ap-widget-name" id="qs-widget-name-display">
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    </div>
+    <div></div>
   </div>
 
   <!-- Stepper: step 2 active -->
@@ -753,6 +777,7 @@
 
         <!-- Q0: Address -->
         <div class="q-card-wrap" id="qcard-0" onclick="selectQuestion(0)">
+          <div class="q-left-spacer"></div>
           <div class="q-card active" id="qcard-inner-0">
             <div class="q-card-header">
               <div class="q-label">What's your address? <span class="q-required">*</span></div>
@@ -763,6 +788,7 @@
 
         <!-- Q1: Contact Details -->
         <div class="q-card-wrap" id="qcard-1" onclick="selectQuestion(1)">
+          <div class="q-left-spacer"></div>
           <div class="q-card" id="qcard-inner-1">
             <div class="q-card-header">
               <div class="q-label">Where should we send your booking confirmation? <span class="q-required">*</span></div>
@@ -794,6 +820,7 @@
 
     <!-- Right: live preview — shows only the selected question -->
     <div class="qs-right">
+      <div class="ap-preview-wrap">
       <div class="qs-preview-wrap">
         <div class="qp-header-top">
           <span>Book Your Service Appointment!</span>
@@ -810,6 +837,7 @@
           <button class="qp-btn back">Back</button>
           <button class="qp-btn next" id="qs-preview-next-btn">Proceed</button>
         </div>
+      </div>
       </div>
     </div>
 
@@ -844,13 +872,17 @@
     <div class="ap-breadcrumb-left">
       <button class="ap-back-btn" onclick="goBackToQuestions()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
       </button>
-      <div class="ap-widget-name">
-        Online Booking - Seattle
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
     </div>
-    <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    <div class="ap-breadcrumb-center">
+      <div class="ap-widget-name">
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    </div>
+    <div></div>
   </div>
 
   <!-- Stepper: steps 1+2 done, step 3 active -->
@@ -972,17 +1004,17 @@
     </div>
 
     <!-- Right: widget preview (50%) — single selected card, Figma-exact -->
-    <div style="width:50%;background:#f9fafb;display:flex;align-items:center;justify-content:center;padding:32px;">
-      <div style="position:relative;">
+    <div style="width:50%;background:white;display:flex;padding:16px 24px 24px;">
+      <div class="ap-preview-wrap">
+      <div style="position:relative;width:100%;max-width:560px;">
 
         <!-- The card itself -->
         <div id="svc-preview-card" style="
-          width:360px;
-          border:1px solid #e5e7eb;
-          border-radius:12px;
+          width:100%;
+          border-radius:16px;
           overflow:hidden;
           background:white;
-          box-shadow: 2px 5px 6px rgba(0,0,0,.1), 7px 21px 11px rgba(0,0,0,.09), 15px 46px 14.5px rgba(0,0,0,.05), 27px 82px 17.5px rgba(0,0,0,.01);
+          box-shadow: 0 4px 12px rgba(0,0,0,.06), 0 12px 32px rgba(0,0,0,.08);
         ">
           <!-- Image area -->
           <div id="svc-preview-img-wrap" style="height:220px;overflow:hidden;position:relative;background:#f3f4f6;">
@@ -995,6 +1027,7 @@
             <p id="svc-preview-desc" style="font-size:12px;color:#9ca3af;overflow:hidden;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;line-height:1.6;margin-bottom:12px;"></p>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -1040,13 +1073,17 @@
     <div class="ap-breadcrumb-left">
       <button class="ap-back-btn" onclick="closeAddServiceScreen()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
       </button>
-      <div class="ap-widget-name">
-        Online Booking - Seattle
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
     </div>
-    <span style="font-size:14px;font-weight:500;color:#f79009;">● Saved as draft</span>
+    <div class="ap-breadcrumb-center">
+      <div class="ap-widget-name">
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    </div>
+    <div></div>
   </div>
 
   <!-- Stepper -->
@@ -1176,22 +1213,67 @@
               <span class="ie-field-hint">Total time blocked on the calendar per booking, including travel and on-site work</span>
             </div>
 
-            <!-- Buffer Time -->
+            <!-- Appointment Spacing -->
             <div class="ie-field">
               <div class="ie-field-label-row">
-                <span class="ie-label-sm">Buffer Time</span>
+                <span class="ie-label-sm">Appointment Spacing</span>
+              </div>
+              <div class="appt-spacing-wrap" onclick="event.stopPropagation()">
+
+                <!-- Option 1: Back-to-back -->
+                <label class="appt-spacing-option selected" id="spacing-opt-none" onclick="selectSpacing('none')">
+                  <input type="radio" name="appt-spacing" value="none" checked />
+                  <div class="appt-spacing-body">
+                    <div class="appt-spacing-header">
+                      <span class="appt-spacing-title">No buffer</span>
+                      <span class="appt-spacing-badge blue">Maximum availability</span>
+                    </div>
+                    <p class="appt-spacing-desc">Jobs can be booked consecutively. Best for quick inspections or clustered jobs in the same neighbourhood.</p>
+                  </div>
+                </label>
+
+                <!-- Option 2: Fixed gap -->
+                <label class="appt-spacing-option" id="spacing-opt-fixed" onclick="selectSpacing('fixed')">
+                  <input type="radio" name="appt-spacing" value="fixed" />
+                  <div class="appt-spacing-body">
+                    <div class="appt-spacing-header">
+                      <span class="appt-spacing-title">Fixed crew buffer</span>
+                    </div>
+                    <p class="appt-spacing-desc">Block a consistent window after every job for equipment load-out, site cleanup, or crew debrief before the next dispatch.</p>
+                    <div class="appt-spacing-sub" id="spacing-sub-fixed">
+                      <span>Reserve</span>
+                      <input class="appt-spacing-num" type="number" value="30" min="5" step="5" id="spacing-fixed-val" />
+                      <select class="appt-spacing-unit" id="spacing-fixed-unit">
+                        <option>minutes</option>
+                        <option>hours</option>
+                      </select>
+                      <span>after each job before the next booking</span>
+                    </div>
+                  </div>
+                </label>
+
+                <!-- Option 3: Smart spacing -->
+                <label class="appt-spacing-option" id="spacing-opt-smart" onclick="selectSpacing('smart')">
+                  <input type="radio" name="appt-spacing" value="smart" />
+                  <div class="appt-spacing-body">
+                    <div class="appt-spacing-header">
+                      <span class="appt-spacing-title">Drive-time aware</span>
+                      <span class="appt-spacing-badge green">Recommended</span>
+                    </div>
+                    <p class="appt-spacing-desc">Set a fixed drive-time threshold. Only crews whose previous job falls within that range of the new site will be eligible for assignment — reducing travel and keeping dispatch efficient.</p>
+                    <div class="appt-spacing-sub" id="spacing-sub-smart">
+                      <span>Only assign crews within</span>
+                      <input class="appt-spacing-num" type="number" value="60" min="15" step="15" id="spacing-smart-val" />
+                      <select class="appt-spacing-unit" id="spacing-smart-unit">
+                        <option>minutes</option>
+                        <option>hours</option>
+                      </select>
+                      <span>drive of the job site</span>
+                    </div>
+                  </div>
+                </label>
 
               </div>
-              <div class="ie-suffix-wrap">
-                <input class="ie-input ie-has-suffix" id="asvc-buffer" type="number" value="0" min="0" />
-                <div class="ie-suffix-unit">
-                  <select class="ie-unit-select" id="asvc-buffer-unit">
-                    <option>Mins</option>
-                    <option>Hours</option>
-                  </select>
-                </div>
-              </div>
-              <span class="ie-field-hint">Gap added after each booking to allow for clean-up, travel, or preparation before the next job</span>
             </div>
 
             <!-- Skills Required -->
@@ -1321,13 +1403,17 @@
     <div class="ap-breadcrumb-left">
       <button class="ap-back-btn" onclick="closeBookingPolicyScreen()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
       </button>
-      <div class="ap-widget-name">
-        Online Booking - Seattle
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
     </div>
-    <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    <div class="ap-breadcrumb-center">
+      <div class="ap-widget-name">
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    </div>
+    <div></div>
   </div>
 
   <!-- Stepper: steps 1–3 done, step 4 active -->
@@ -1348,13 +1434,13 @@
     </div>
     <div class="ap-step-line"></div>
     <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Booking Policy</span>
+      <div class="ap-step-circle active"></div>
+      <span class="ap-step-label active">Booking Policy</span>
     </div>
     <div class="ap-step-line"></div>
     <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Advanced Settings</span>
+      <div class="ap-step-circle"></div>
+      <span class="ap-step-label">Advanced Settings</span>
     </div>
   </div>
 
@@ -1608,6 +1694,7 @@
 
     <!-- RIGHT: preview -->
     <div class="bp-right">
+      <div class="ap-preview-wrap">
       <div class="bp-preview-card">
         <div class="bp-preview-header">
           <span>Booking Policy Summary</span>
@@ -1634,6 +1721,7 @@
       </div>
       <p class="bp-preview-hint">Live preview — updates as you fill in the form</p>
     </div>
+      </div>
 
   </div><!-- /body -->
 </div>
@@ -1665,13 +1753,17 @@
     <div class="ap-breadcrumb-left">
       <button class="ap-back-btn" onclick="closeAdvancedSettingsScreen()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
       </button>
-      <div class="ap-widget-name">
-        Online Booking - Seattle
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
     </div>
-    <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    <div class="ap-breadcrumb-center">
+      <div class="ap-widget-name">
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    </div>
+    <div></div>
   </div>
 
   <!-- Stepper: all previous done, Advanced Settings active -->
@@ -1912,6 +2004,7 @@
 
     <!-- RIGHT: live summary preview -->
     <div class="as-right">
+      <div class="ap-preview-wrap">
       <div class="as-preview-card">
         <div class="as-prev-header">
           <span>Advanced Settings Summary</span>
@@ -1942,6 +2035,7 @@
       </div>
       <p class="as-preview-hint">Live preview — updates as you configure</p>
     </div>
+      </div>
 
   </div><!-- /as-body -->
 </div>
