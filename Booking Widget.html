@@ -679,30 +679,6 @@
         <div class="widgets-grid" id="widgets-grid">
 
           <!-- Card 1: Active – Instant Estimation -->
-          <div class="widget-card" onclick="handleCardClick(event, 'card1')">
-            <div class="card-top">
-              <div class="card-icon-wrap green">
-                <svg fill="none" viewBox="0 0 24 24" stroke="#039855" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
-              </div>
-              <div class="card-actions">
-                <div class="status-badge">
-                  <div class="status-dot active"></div>
-                  <span class="status-label">Active</span>
-                </div>
-                <div class="icon-btn" title="Copy link">
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                </div>
-                <div class="icon-btn" title="More options" onclick="toggleDropdown(event, 'dd1')">
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p class="card-title">Online Booking - Seattle</p>
-              <p class="card-desc">Online booking tool that lets customers schedule services, select appointments, and manage their bookings with ease.</p>
-            </div>
-          </div>
-
           <!-- Card 2: Active – Online Booking (with open dropdown) -->
           <div class="widget-card" onclick="handleCardClick(event, 'card2')" style="position:relative;">
             <div class="card-top">
@@ -733,9 +709,9 @@
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
-                <button class="dropdown-item" onclick="showToast('Widget cloned!')">
+                <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  Clone
+                  Duplicate
                 </button>
                 <button class="dropdown-item" onclick="showToast('Widget deactivated')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
@@ -775,9 +751,9 @@
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
-                <button class="dropdown-item" onclick="showToast('Widget cloned!')">
+                <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  Clone
+                  Duplicate
                 </button>
                 <button class="dropdown-item danger" onclick="showToast('Widget deleted')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
@@ -861,6 +837,67 @@
      Hidden until user clicks Next in modal
 ════════════════════════════════════════════════ -->
 <style>
+  /* ── Shared screen top nav ── */
+  .screen-topnav {
+    height: 56px; background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center;
+    padding: 0 20px; gap: 12px;
+    flex-shrink: 0; position: relative;
+  }
+  .stn-logo {
+    width: 32px; height: 32px; border-radius: 6px;
+    background: var(--orange); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .stn-logo svg { width: 18px; height: 18px; color: white; }
+  .stn-new-btn {
+    display: flex; align-items: center; gap: 4px;
+    padding: 6px 10px; border-radius: 6px;
+    border: 1px solid #e5e7eb; background: white;
+    font-size: 13px; font-weight: 500; color: #1f2937;
+    cursor: pointer; font-family: inherit; flex-shrink: 0;
+  }
+  .stn-new-btn svg { width: 14px; height: 14px; }
+  .stn-search {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 420px;
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid #d1d5db; border-radius: 7px;
+    padding: 7px 10px; background: white; color: #9ca3af;
+  }
+  .stn-search svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .stn-search span { flex: 1; font-size: 14px; color: #9ca3af; }
+  .stn-kbd { display: flex; align-items: center; gap: 3px; }
+  .stn-kbd kbd {
+    font-size: 11px; color: #9ca3af;
+    border: 1px solid #e5e7eb; border-radius: 4px;
+    padding: 1px 5px; font-family: inherit;
+    background: #f9fafb;
+  }
+  .stn-right { margin-left: auto; display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .stn-icon-btn {
+    position: relative; width: 34px; height: 34px;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #6b7280;
+  }
+  .stn-icon-btn:hover { background: #f3f4f6; }
+  .stn-icon-btn svg { width: 18px; height: 18px; }
+  .stn-badge {
+    position: absolute; top: 2px; right: 2px;
+    background: #ef4444; color: white;
+    font-size: 9px; font-weight: 700;
+    border-radius: 10px; padding: 1px 4px;
+    line-height: 1.3; border: 1.5px solid white;
+  }
+  .stn-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #e44a19; color: white;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin-left: 4px;
+  }
+
   /* ── Appearance Screen ── */
   #appearance-screen {
     display: none;
@@ -874,34 +911,39 @@
 
   /* Breadcrumb bar */
   .ap-breadcrumb {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 24px;
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 14px 24px;
+    border-bottom: 1px solid #e5e7eb;
     flex-shrink: 0;
   }
-  .ap-breadcrumb-left { display: flex; align-items: center; gap: 12px; }
+  .ap-breadcrumb-left { display: flex; align-items: center; }
   .ap-back-btn {
     background: none; border: none; cursor: pointer;
-    display: flex; align-items: center;
-    color: var(--ink-light);
-    padding: 0;
+    display: flex; align-items: center; gap: 6px;
+    color: #475467; font-size: 14px; font-weight: 500;
+    padding: 0; font-family: inherit;
   }
   .ap-back-btn svg { width: 16px; height: 16px; }
+  .ap-breadcrumb-center {
+    display: flex; align-items: center; gap: 10px;
+    justify-content: center;
+  }
   .ap-widget-name {
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 6px;
     font-size: 14px; font-weight: 600; color: #1f2937;
   }
-  .ap-widget-name svg { width: 16px; height: 16px; color: var(--ink-light); cursor: pointer; }
+  .ap-widget-name svg { width: 14px; height: 14px; color: var(--ink-light); cursor: pointer; }
   .ap-draft-badge {
     font-size: 12px; font-weight: 500; color: #f79009;
-    display: flex; align-items: baseline; gap: 4px;
+    display: flex; align-items: center; gap: 4px;
   }
 
   /* Stepper */
   .ap-stepper-bar {
     display: flex; align-items: center; justify-content: center;
-    border-top: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
-    padding: 16px 48px;
+    padding: 14px 48px;
     flex-shrink: 0;
     gap: 6px;
   }
@@ -1157,37 +1199,58 @@
     align-items: center;
   }
   .wp-btn {
-    padding: 6px 25px;
+    padding: 6px 10px;
     border-radius: 6px;
     font-size: 10.8px; font-weight: 500;
     border: none; cursor: default;
   }
-  .wp-btn.back { background: transparent; color: #1f2937; }
-  .wp-btn.proceed { background: #1f2937; color: white; }
+  .wp-btn.back { background: transparent; color: #1f2937; border: 1px solid #d1d5db; }
+  .wp-btn.proceed { background: #ea580c; color: white; }
 </style>
 
 <div id="appearance-screen">
+  <!-- Top nav -->
+  <div class="screen-topnav">
+    <div class="stn-logo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <button class="stn-new-btn">New <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="stn-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="stn-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="stn-right">
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge" style="background:#6b7280;">80</span></div>
+      <div class="stn-avatar">S</div>
+    </div>
+  </div>
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
       <button class="ap-back-btn" onclick="goBackToWidgets()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
       </button>
+    </div>
+    <div class="ap-breadcrumb-center">
       <div class="ap-widget-name" id="ap-widget-name-display">
         Online Booking - Seattle
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
+      <div class="ap-draft-badge">
+        <span>•</span><span>Saved as draft</span>
+      </div>
     </div>
-    <div class="ap-draft-badge">
-      <span>•</span><span>Saved as draft</span>
-    </div>
+    <div></div>
   </div>
 
   <!-- Stepper -->
   <div class="ap-stepper-bar">
     <div class="ap-step">
-      <div class="ap-step-circle active">
-      </div>
+      <div class="ap-step-circle active"></div>
       <span class="ap-step-label active">Appearance</span>
     </div>
     <div class="ap-step-line"></div>
@@ -1203,7 +1266,7 @@
     <div class="ap-step-line"></div>
     <div class="ap-step">
       <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Booking Policy</span>
+      <span class="ap-step-label">Options Configuration</span>
     </div>
     <div class="ap-step-line"></div>
     <div class="ap-step">
@@ -1298,10 +1361,10 @@
           <div class="ap-row-control">
             <div class="ap-textcolor-cards">
               <div class="ap-textcolor-card selected" id="tc-white" onclick="selectTextColor('white')">
-                <div class="ap-btn-preview white-text" id="preview-btn-white">White</div>
+                <div class="ap-btn-preview white-text" id="preview-btn-white">Light</div>
               </div>
               <div class="ap-textcolor-card" id="tc-black" onclick="selectTextColor('black')">
-                <div class="ap-btn-preview black-text" id="preview-btn-black">Black</div>
+                <div class="ap-btn-preview black-text" id="preview-btn-black">Dark</div>
               </div>
             </div>
           </div>
@@ -1684,6 +1747,24 @@
 </style>
 
 <div id="questions-screen">
+  <!-- Top nav -->
+  <div class="screen-topnav">
+    <div class="stn-logo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <button class="stn-new-btn">New <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="stn-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="stn-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="stn-right">
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge" style="background:#6b7280;">80</span></div>
+      <div class="stn-avatar">S</div>
+    </div>
+  </div>
   <!-- Breadcrumb (reuse same bar) -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
@@ -2675,6 +2756,24 @@
 </style>
 
 <div id="services-screen">
+  <!-- Top nav -->
+  <div class="screen-topnav">
+    <div class="stn-logo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <button class="stn-new-btn">New <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="stn-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="stn-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="stn-right">
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge" style="background:#6b7280;">80</span></div>
+      <div class="stn-avatar">S</div>
+    </div>
+  </div>
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
@@ -4189,7 +4288,24 @@
 </style>
 
 <div id="booking-policy-screen">
-
+  <!-- Top nav -->
+  <div class="screen-topnav">
+    <div class="stn-logo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <button class="stn-new-btn">New <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="stn-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="stn-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="stn-right">
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge" style="background:#6b7280;">80</span></div>
+      <div class="stn-avatar">S</div>
+    </div>
+  </div>
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
@@ -4855,7 +4971,24 @@
 </style>
 
 <div id="advanced-settings-screen">
-
+  <!-- Top nav -->
+  <div class="screen-topnav">
+    <div class="stn-logo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <button class="stn-new-btn">New <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="stn-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="stn-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="stn-right">
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge" style="background:#6b7280;">80</span></div>
+      <div class="stn-avatar">S</div>
+    </div>
+  </div>
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
