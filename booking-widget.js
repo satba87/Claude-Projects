@@ -24,8 +24,6 @@
   function handleCardClick(e, cardId) {
     if (e.target.closest('.icon-btn') || e.target.closest('.dropdown-menu')) return;
     const card = e.currentTarget || e.target.closest('.widget-card');
-    const statusDot = card.querySelector('.status-dot');
-    if (statusDot && statusDot.classList.contains('active')) return;
     const cardTitle = card.querySelector('.card-title')?.textContent?.trim();
     if (cardTitle) document.querySelectorAll('.wname-text').forEach(el => el.textContent = cardTitle);
     openAppearanceScreen();
@@ -69,14 +67,13 @@
   }
 
   function createWidget() {
-    const name = document.getElementById('widget-name-input').value.trim();
+    const name = document.getElementById('widget-name-input').value.trim() || 'Online Booking Widget';
     const desc = document.getElementById('widget-desc-input').value.trim();
-    const type = document.getElementById('widget-type-select').value;
-    if (!name || !type) { showToast('Please fill in all fields'); return; }
+    const type = document.getElementById('widget-type-select').value || 'online-booking';
+    const isEstimate = type === 'instant-estimate';
 
     // Add new card to widget list
     const ddId = 'dd-' + Date.now();
-    const isEstimate = type === 'instant-estimate';
     const iconSvg = isEstimate
       ? `<svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>`
       : `<svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>`;
@@ -129,9 +126,10 @@
     // Reset modal inputs
     document.getElementById('widget-name-input').value = '';
     document.getElementById('widget-desc-input').value = '';
-    document.getElementById('widget-type-select').value = '';
+    document.getElementById('widget-type-select').value = 'online-booking';
 
     closeNewWidgetModal();
+    if (isEstimate) { showToast('This will follow the instant estimate flow'); return; }
     openAppearanceScreen();
   }
 
@@ -145,7 +143,7 @@
       .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('open'); });
     document.getElementById('widget-name-input').value = '';
     document.getElementById('widget-desc-input').value = '';
-    document.getElementById('widget-type-select').value = '';
+    document.getElementById('widget-type-select').value = 'online-booking';
   }
 
   // Live preview: welcome message
@@ -1065,11 +1063,19 @@
     document.querySelector('.asvc-page-title').textContent = 'Add a new service';
   }
   function resetAddServiceForm() {
-    document.getElementById('asvc-name').value = '';
-    document.getElementById('asvc-desc-editor').value = '';
-    document.getElementById('asvc-cost').value = '';
-    document.getElementById('asvc-duration').value = '60';
-    document.querySelectorAll('.asvc-tpl-chip').forEach(c => c.classList.remove('active'));
+    const tpl = ROOFING_TEMPLATES[0]; // Prefill with Roof Inspection defaults
+    document.getElementById('asvc-name').value = tpl.name;
+    document.getElementById('asvc-desc-editor').value = tpl.desc;
+    document.getElementById('asvc-cost').value = tpl.cost;
+    document.getElementById('asvc-duration').value = tpl.duration;
+    const unitDd = document.getElementById('asvc-duration-unit');
+    if (unitDd) {
+      unitDd.dataset.value = tpl.unit;
+      unitDd.querySelector('.unit-dd-val').textContent = tpl.unit;
+      unitDd.querySelectorAll('.unit-dd-item').forEach(item => {
+        item.classList.toggle('selected', item.textContent.trim() === tpl.unit);
+      });
+    }
     updateAddServicePreview();
   }
   function updateAddServicePreview() {
