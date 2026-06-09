@@ -378,8 +378,8 @@
     <p class="modal-label">Widget Type</p>
     <select class="modal-select" id="widget-type-select">
       <option value="">Select type…</option>
+      <option value="instant-estimate">Instant Estimate</option>
       <option value="online-booking" selected>Online Booking</option>
-      <option value="online-booking">Online Booking</option>
     </select>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeNewWidgetModal()">Cancel</button>
@@ -403,8 +403,88 @@
     <textarea class="modal-input" id="edit-widget-desc" rows="3" style="resize:vertical;line-height:1.5;"></textarea>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeEditWidgetModal()">Cancel</button>
-      <button class="btn-primary" onclick="saveWidgetEdit()">Save</button>
+      <button class="btn-primary" onclick="saveWidgetEdit()">Update</button>
     </div>
+  </div>
+</div>
+
+<!-- Widget Ready Modal -->
+<div class="modal-overlay" id="widget-ready-modal" onclick="closeWidgetReadyOutside(event)">
+  <div class="wr-modal">
+
+    <!-- Check icon with sparkles -->
+    <div class="wr-check-wrap">
+      <span class="wr-spark wr-spark-tl"></span>
+      <span class="wr-spark wr-spark-tr"></span>
+      <span class="wr-spark wr-spark-bl"></span>
+      <span class="wr-spark wr-spark-br"></span>
+      <div class="wr-check-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="28" height="28"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h2 class="wr-title">Your Booking Widget is Ready!</h2>
+    <p class="wr-widget-name">Online Booking - Seattle</p>
+
+    <!-- Manage link row -->
+    <div class="wr-manage-row">
+      <div class="wr-manage-info">
+        <p class="wr-manage-title">Manage booking link</p>
+        <p class="wr-manage-desc">Share or embed on your landing page to let customers book appointments directly.</p>
+      </div>
+      <a href="#" class="wr-preview-link" onclick="openPreviewScreen();return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Preview Widget
+      </a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="wr-tab-bar">
+      <button class="wr-tab active" id="wr-tab-qr" onclick="switchWrTab('qr')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="19" y="14" width="2" height="2"/><rect x="14" y="19" width="2" height="2"/><rect x="18" y="18" width="3" height="3"/></svg>
+        QR code
+      </button>
+      <button class="wr-tab" id="wr-tab-embed" onclick="switchWrTab('embed')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Embed code
+      </button>
+    </div>
+
+    <!-- QR panel -->
+    <div id="wr-panel-qr" class="wr-panel">
+      <div class="wr-qr-img">
+        <img src="widget-qr-code%20(2).png" alt="QR Code" width="144" height="144" style="display:block;border-radius:4px;">
+      </div>
+      <div class="wr-qr-info">
+        <p class="wr-qr-title">Share your QR code anywhere</p>
+        <p class="wr-qr-desc">Scan to open your booking widget. Works on websites, print materials, and anywhere you connect with customers.</p>
+        <div class="wr-url-row">
+          <span class="wr-url-text">https://booking.zuperpro.com?region=apac-staging&amp;widget_uid=f...</span>
+          <button class="wr-copy-btn" onclick="showToast('Link copied!')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+        <button class="wr-download-btn" onclick="showToast('QR code downloading...')">Download PNG</button>
+      </div>
+    </div>
+
+    <!-- Embed panel -->
+    <div id="wr-panel-embed" class="wr-panel" style="display:none;">
+      <div class="wr-embed-wrap">
+        <p class="wr-qr-title">Embed on your website</p>
+        <p class="wr-qr-desc">Copy and paste this snippet into your website's HTML to embed the booking widget.</p>
+        <div class="wr-embed-code">&lt;iframe src="https://booking.zuperpro.com?region=apac-staging&amp;widget_uid=f..." width="100%" height="600" frameborder="0"&gt;&lt;/iframe&gt;</div>
+        <button class="wr-download-btn" onclick="showToast('Code copied!')">Copy Code</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="wr-footer">
+      <button class="wr-btn-home" onclick="goHomeFromWidgetReady()">Go to home</button>
+      <button class="wr-btn-preview" onclick="openPreviewScreen()">Preview Widget</button>
+    </div>
+
   </div>
 </div>
 
@@ -664,7 +744,7 @@
   <!-- Breadcrumb (reuse same bar) -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
-      <button class="ap-back-btn" onclick="goBackToAppearance()">
+      <button class="ap-back-btn" onclick="goBackToWidgets()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Back to widgets
       </button>
@@ -682,9 +762,7 @@
   <!-- Stepper: step 2 active -->
   <div class="ap-stepper-bar">
     <div class="ap-step">
-      <div class="ap-step-circle done">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
+      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
       <span class="ap-step-label">Appearance</span>
     </div>
     <div class="ap-step-line"></div>
@@ -823,15 +901,10 @@
       <div class="ap-preview-wrap">
       <div class="qs-preview-wrap">
         <div class="qp-header-top">
-          <span>Book Your Service Appointment!</span>
+          <span id="qp-header-title">Get Your Instant Roof Estimate!</span>
           <span id="qp-step-label">Step 1 of 2</span>
         </div>
-        <div class="qp-progress">
-          <div class="qp-bar on"  id="qp-bar-0"></div>
-          <div class="qp-bar off" id="qp-bar-1"></div>
-          <div class="qp-bar off" id="qp-bar-2"></div>
-          <div class="qp-bar off" id="qp-bar-3"></div>
-        </div>
+        <div class="qp-progress" id="qp-progress-bar"></div>
         <div id="qp-preview-slot"></div>
         <div class="qp-footer">
           <button class="qp-btn back">Back</button>
@@ -870,7 +943,7 @@
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
-      <button class="ap-back-btn" onclick="goBackToQuestions()">
+      <button class="ap-back-btn" onclick="goBackToWidgets()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Back to widgets
       </button>
@@ -945,9 +1018,26 @@
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
               <div class="svc-toggle on" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
-              <button class="svc2-more" onclick="event.stopPropagation()">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+              <button class="svc2-icon-btn" onclick="event.stopPropagation();openEditServiceScreen(this.closest('[id^=svc-card-]').id.split('-')[2])">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               </button>
+              <div style="position:relative;">
+                <button class="svc2-more" onclick="event.stopPropagation();toggleSvcDropdown(event,this)">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                </button>
+                <div class="svc-dropdown">
+                  <div class="dropdown-section">
+                    <button class="dropdown-item" onclick="event.stopPropagation();duplicateService(this)">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Duplicate
+                    </button>
+                    <button class="dropdown-item danger" onclick="event.stopPropagation();deleteService(this)">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -965,9 +1055,26 @@
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
               <div class="svc-toggle on" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
-              <button class="svc2-more" onclick="event.stopPropagation()">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+              <button class="svc2-icon-btn" onclick="event.stopPropagation();openEditServiceScreen(this.closest('[id^=svc-card-]').id.split('-')[2])">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               </button>
+              <div style="position:relative;">
+                <button class="svc2-more" onclick="event.stopPropagation();toggleSvcDropdown(event,this)">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                </button>
+                <div class="svc-dropdown">
+                  <div class="dropdown-section">
+                    <button class="dropdown-item" onclick="event.stopPropagation();duplicateService(this)">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Duplicate
+                    </button>
+                    <button class="dropdown-item danger" onclick="event.stopPropagation();deleteService(this)">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -986,9 +1093,26 @@
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
               <div class="svc-toggle" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
-              <button class="svc2-more" onclick="event.stopPropagation()">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+              <button class="svc2-icon-btn" onclick="event.stopPropagation();openEditServiceScreen(this.closest('[id^=svc-card-]').id.split('-')[2])">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               </button>
+              <div style="position:relative;">
+                <button class="svc2-more" onclick="event.stopPropagation();toggleSvcDropdown(event,this)">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                </button>
+                <div class="svc-dropdown">
+                  <div class="dropdown-section">
+                    <button class="dropdown-item" onclick="event.stopPropagation();duplicateService(this)">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Duplicate
+                    </button>
+                    <button class="dropdown-item danger" onclick="event.stopPropagation();deleteService(this)">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1071,7 +1195,7 @@
   <!-- Breadcrumb bar (matches services screen) -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
-      <button class="ap-back-btn" onclick="closeAddServiceScreen()">
+      <button class="ap-back-btn" onclick="goBackToWidgets()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Back to widgets
       </button>
@@ -1127,6 +1251,37 @@
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
           <span class="asvc-page-title">Add a new service</span>
+        </div>
+
+        <!-- ── Quick Templates ── -->
+        <div class="asvc-templates-wrap" id="asvc-templates-wrap">
+          <p class="asvc-templates-label">Start from a template</p>
+          <div class="asvc-templates-grid">
+            <button class="asvc-tpl-chip" onclick="applyServiceTemplate(0)">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Roof Inspection
+            </button>
+            <button class="asvc-tpl-chip" onclick="applyServiceTemplate(1)">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Shingle Replacement
+            </button>
+            <button class="asvc-tpl-chip" onclick="applyServiceTemplate(2)">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+              Emergency Tarping
+            </button>
+            <button class="asvc-tpl-chip" onclick="applyServiceTemplate(3)">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+              Gutter Cleaning
+            </button>
+            <button class="asvc-tpl-chip" onclick="applyServiceTemplate(4)">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Full Roof Replacement
+            </button>
+            <button class="asvc-tpl-chip" onclick="applyServiceTemplate(5)">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Leak Detection & Repair
+            </button>
+          </div>
         </div>
 
         <!-- ── Section 1: Service Details ── -->
@@ -1204,10 +1359,16 @@
               <div class="ie-suffix-wrap">
                 <input class="ie-input ie-has-suffix" id="asvc-duration" type="number" value="60" min="15" step="15" />
                 <div class="ie-suffix-unit">
-                  <select class="ie-unit-select" id="asvc-duration-unit">
-                    <option>Mins</option>
-                    <option>Hours</option>
-                  </select>
+                  <div class="unit-dd" id="asvc-duration-unit" data-value="Mins">
+                    <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                      <span class="unit-dd-val">Mins</span>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="unit-dd-menu">
+                      <div class="unit-dd-item selected" onclick="selectUnitDd(this,'Mins')">Mins</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Hours')">Hours</div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <span class="ie-field-hint">Total time blocked on the calendar per booking, including travel and on-site work</span>
@@ -1243,10 +1404,16 @@
                     <div class="appt-spacing-sub" id="spacing-sub-fixed">
                       <span>Reserve</span>
                       <input class="appt-spacing-num" type="number" value="30" min="5" step="5" id="spacing-fixed-val" />
-                      <select class="appt-spacing-unit" id="spacing-fixed-unit">
-                        <option>minutes</option>
-                        <option>hours</option>
-                      </select>
+                      <div class="unit-dd unit-dd-inline" id="spacing-fixed-unit" data-value="minutes">
+                        <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                          <span class="unit-dd-val">minutes</span>
+                          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="unit-dd-menu">
+                          <div class="unit-dd-item selected" onclick="selectUnitDd(this,'minutes')">minutes</div>
+                          <div class="unit-dd-item" onclick="selectUnitDd(this,'hours')">hours</div>
+                        </div>
+                      </div>
                       <span>after each job before the next booking</span>
                     </div>
                   </div>
@@ -1264,10 +1431,16 @@
                     <div class="appt-spacing-sub" id="spacing-sub-smart">
                       <span>Only assign crews within</span>
                       <input class="appt-spacing-num" type="number" value="60" min="15" step="15" id="spacing-smart-val" />
-                      <select class="appt-spacing-unit" id="spacing-smart-unit">
-                        <option>minutes</option>
-                        <option>hours</option>
-                      </select>
+                      <div class="unit-dd unit-dd-inline" id="spacing-smart-unit" data-value="minutes">
+                        <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                          <span class="unit-dd-val">minutes</span>
+                          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="unit-dd-menu">
+                          <div class="unit-dd-item selected" onclick="selectUnitDd(this,'minutes')">minutes</div>
+                          <div class="unit-dd-item" onclick="selectUnitDd(this,'hours')">hours</div>
+                        </div>
+                      </div>
                       <span>drive of the job site</span>
                     </div>
                   </div>
@@ -1401,7 +1574,7 @@
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
-      <button class="ap-back-btn" onclick="closeBookingPolicyScreen()">
+      <button class="ap-back-btn" onclick="goBackToWidgets()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Back to widgets
       </button>
@@ -1473,11 +1646,17 @@
                 <input class="ie-input ie-has-suffix" id="bp-lead-time" type="number" value="24" min="0" step="1"
                   oninput="updateBpPreview()" />
                 <div class="ie-suffix-unit">
-                  <select class="ie-unit-select" id="bp-lead-unit" onchange="updateBpPreview()">
-                    <option value="Hours" selected>Hours</option>
-                    <option value="Days">Days</option>
-                    <option value="Mins">Mins</option>
-                  </select>
+                  <div class="unit-dd" id="bp-lead-unit" data-value="Hours" data-onchange="updateBpPreview">
+                    <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                      <span class="unit-dd-val">Hours</span>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="unit-dd-menu">
+                      <div class="unit-dd-item selected" onclick="selectUnitDd(this,'Hours')">Hours</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Days')">Days</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Mins')">Mins</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1501,11 +1680,17 @@
                 <input class="ie-input ie-has-suffix" id="bp-window" type="number" value="60" min="1" step="1"
                   oninput="updateBpPreview()" />
                 <div class="ie-suffix-unit">
-                  <select class="ie-unit-select" id="bp-window-unit" onchange="updateBpPreview()">
-                    <option value="Days" selected>Days</option>
-                    <option value="Weeks">Weeks</option>
-                    <option value="Months">Months</option>
-                  </select>
+                  <div class="unit-dd" id="bp-window-unit" data-value="Days" data-onchange="updateBpPreview">
+                    <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                      <span class="unit-dd-val">Days</span>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="unit-dd-menu">
+                      <div class="unit-dd-item selected" onclick="selectUnitDd(this,'Days')">Days</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Weeks')">Weeks</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Months')">Months</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1572,7 +1757,7 @@
               <div class="bpf-radio-item bpf-radio-selected" onclick="bpfSelect(3)" id="bpf-opt-3">
                 <div class="bpf-radio-dot bpf-dot-selected"></div>
                 <div class="bpf-radio-content">
-                  <p class="bpf-radio-title">Date, timeslot &amp; field engineer</p>
+                  <p class="bpf-radio-title">Date, time &amp; technician</p>
                   <p class="bpf-radio-desc">Homeowner picks a date and slot, then chooses from available field engineers.</p>
                   <div class="bpf-steps-row">
                     <span class="bpf-step-pill">Address &amp; details</span>
@@ -1591,7 +1776,7 @@
               <div class="bpf-radio-item" onclick="bpfSelect(4)" id="bpf-opt-4">
                 <div class="bpf-radio-dot"></div>
                 <div class="bpf-radio-content">
-                  <p class="bpf-radio-title">Date, field engineer &amp; timeslot</p>
+                  <p class="bpf-radio-title">Pick technician, then time</p>
                   <p class="bpf-radio-desc">Homeowner picks a date, chooses a field engineer, then selects a slot from that engineer's availability.</p>
                   <div class="bpf-steps-row">
                     <span class="bpf-step-pill">Address &amp; details</span>
@@ -1751,7 +1936,7 @@
   <!-- Breadcrumb -->
   <div class="ap-breadcrumb">
     <div class="ap-breadcrumb-left">
-      <button class="ap-back-btn" onclick="closeAdvancedSettingsScreen()">
+      <button class="ap-back-btn" onclick="goBackToWidgets()">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Back to widgets
       </button>
@@ -1803,193 +1988,247 @@
 
         <div>
           <p class="as-page-title">Advanced Settings</p>
-          <p class="as-page-sub">Configure how notifications, booking preferences, and lead handling work for this widget.</p>
+          <p class="as-page-sub">Configure how bookings, notifications, and lead handling work for this widget.</p>
         </div>
 
-        <!-- ── Section 1: Booking Preferences ── -->
+        <!-- ── Section 2: Booking Preferences ── -->
         <div class="as-section-card">
-          <div class="as-card-hdr" onclick="toggleAsCard('as-s1-body', this)">
+          <div class="as-card-hdr">
             <div class="as-card-hdr-left">
               <div class="as-card-icon">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               </div>
               <div>
                 <p class="as-card-title">Booking Preferences</p>
                 <p class="as-card-sub">Choose what happens in Zuper when a customer submits their booking request.</p>
               </div>
             </div>
-            <svg class="as-card-chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
-          <div id="as-s1-body" class="as-card-body">
+
+          <div class="as-card-body">
 
             <!-- Lead Handling -->
-            <div class="as-inner-row">
-              <div class="as-inner-content">
-                <p class="as-inner-title">Lead Handling</p>
-                <p class="as-inner-sub">Choose what gets created in Zuper when a customer completes a booking.</p>
+            <div class="as-mini-card">
+              <div class="as-inner-row" style="border-bottom:1px solid rgba(0,0,0,.06);">
+                <div class="as-inner-content">
+                  <p class="as-inner-title">Lead Handling</p>
+                  <p class="as-inner-sub">Choose what gets created in Zuper when a customer submits a booking.</p>
+                </div>
               </div>
-            </div>
-            <div class="as-radio-group" style="background:#f9fafb;border-top:1px solid rgba(0,0,0,.04);">
-              <div class="as-radio-row" onclick="selectLeadHandling(this, 'contact')">
+              <div onclick="selectLeadHandling(this,'contact')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.06);">
                 <span class="as-radio-label">Create a Contact</span>
                 <div class="as-radio-btn" id="lh-contact"></div>
               </div>
-              <div class="as-radio-row" onclick="selectLeadHandling(this, 'job')" style="flex-direction:column;align-items:stretch;padding:0;">
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;">
+              <div style="display:flex;flex-direction:column;">
+                <div onclick="selectLeadHandling(this,'job')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;">
                   <span class="as-radio-label">Create a Contact &amp; Job</span>
-                  <div class="as-radio-btn selected" id="lh-job">
-                    <span style="width:10px;height:10px;border-radius:50%;background:#1f2937;display:block;"></span>
-                  </div>
+                  <div class="as-radio-btn selected" id="lh-job"></div>
                 </div>
-                <div class="as-sub-bg" id="lh-job-sub">
-                  <p class="as-sub-hint">Job category under which the booking job needs to be created</p>
-                  <div class="as-dropdown-row">
-                    <span class="as-dropdown-placeholder">Select job category</span>
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+                <div id="lh-job-sub" style="background:#f9fafb;border-top:1px solid rgba(0,0,0,.06);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                  <span style="font-size:13px;color:#6b7280;flex:1;">Job Category under which job needs to be created</span>
+                  <div class="as-input" style="display:flex;align-items:center;justify-content:space-between;width:160px;padding:8px 12px;">
+                    <span class="as-input-placeholder">Roofing</span>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Text Message Opt-In -->
-            <div class="as-inner-row" style="border-top:1px solid rgba(0,0,0,.05);">
-              <div class="as-inner-content">
-                <p class="as-inner-title">Text Message Opt-In</p>
-                <p class="as-inner-sub">Allow customers to opt in to SMS updates about their booking.</p>
+            <div class="as-mini-card">
+              <div class="as-inner-row">
+                <div class="as-inner-content">
+                  <p class="as-inner-title">Text Message Opt-In</p>
+                  <p class="as-inner-sub">Allow customers to opt in to text message updates about their estimate.</p>
+                </div>
+                <div class="as-toggle on" id="toggle-sms" onclick="asToggle('toggle-sms','sms-body',true)"></div>
               </div>
-              <div class="as-toggle on" id="toggle-sms" onclick="asToggle('toggle-sms', 'sms-sub', true); updateAsPreview()"></div>
-            </div>
-            <div id="sms-sub" class="as-field-group" style="display:flex;">
-              <div class="as-field">
-                <span class="as-field-label">SMS opt-in message shown to customers</span>
-                <div class="as-rich-wrap">
-                  <div class="as-rich-editor" id="as-sms-msg" contenteditable="true"
-                    data-placeholder="Enter your opt-in message…"
-                    oninput="updateAsPreview()">By providing your mobile number and completing this booking, you agree to receive SMS updates from [Your Company Name] regarding your appointment status, reminders, and follow-ups. Message frequency varies. Msg & data rates may apply. Reply STOP to unsubscribe.</div>
-                  <div class="as-rich-toolbar">
-                    <button onclick="document.execCommand('undo')" title="Undo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg></button>
-                    <button onclick="document.execCommand('redo')" title="Redo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.17"/></svg></button>
-                    <div class="sep"></div>
-                    <button onclick="document.execCommand('bold')"><strong>B</strong></button>
-                    <button onclick="document.execCommand('italic')"><em>I</em></button>
-                    <button onclick="document.execCommand('underline')" style="text-decoration:underline;">U</button>
-                    <div class="sep"></div>
-                    <button onclick="document.execCommand('insertUnorderedList')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg></button>
-                    <button onclick="document.execCommand('removeFormat')" style="font-size:10px;">T<sub>x</sub></button>
-                    <div class="sep"></div>
-                    <select title="Format"><option>Paragraph</option><option>Heading 1</option><option>Heading 2</option></select>
+              <div id="sms-body" class="as-field-group" style="display:flex;">
+                <div class="as-field">
+                  <span class="as-field-label">Enter your message here</span>
+                  <div class="as-rich-wrap">
+                    <div class="as-rich-editor" contenteditable="true" data-placeholder="Enter your opt-in message…">By providing your mobile phone number and opting in through our website forms, you agree to receive SMS text messages from Zuperflex regarding appointments, estimates, project updates, reminders, and promotions. Message frequency varies. Message and data rates may apply. Reply STOP to unsubscribe. Reply HELP for help. View our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+                    <div class="as-rich-toolbar">
+                      <button onclick="document.execCommand('undo')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg></button>
+                      <button onclick="document.execCommand('redo')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.17"/></svg></button>
+                      <div class="sep"></div>
+                      <button onclick="document.execCommand('bold')"><strong>B</strong></button>
+                      <button onclick="document.execCommand('italic')"><em>I</em></button>
+                      <button onclick="document.execCommand('underline')" style="text-decoration:underline;">U</button>
+                      <div class="sep"></div>
+                      <button onclick="document.execCommand('createLink',false,prompt('URL:'))"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Out-of-Service Territory -->
-            <div class="as-inner-row" style="border-top:1px solid rgba(0,0,0,.05);">
-              <div class="as-inner-content">
-                <p class="as-inner-title">Out of Service Territory Message</p>
-                <p class="as-inner-sub">Show a custom message when a customer tries to book from an address outside your service area.</p>
-              </div>
-              <div class="as-toggle on" id="toggle-oos" onclick="asToggle('toggle-oos', 'oos-sub', true); updateAsPreview()"></div>
-            </div>
-            <div id="oos-sub" class="as-field-group" style="display:flex;">
-              <div class="as-field">
-                <span class="as-field-label">Include Locations</span>
-                <div class="as-chips-wrap" id="as-location-chips">
-                  <span class="as-chip">New York <button class="as-chip-x" onclick="removeChip(event,'chip-ny')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
-                  <span class="as-chip">San Francisco <button class="as-chip-x" onclick="removeChip(event,'chip-sf')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
-                  <span class="as-chip">Seattle <button class="as-chip-x" onclick="removeChip(event,'chip-se')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
-                  <span class="as-chip-add"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
+            <!-- Out of Service Territory -->
+            <div class="as-mini-card">
+              <div class="as-inner-row">
+                <div class="as-inner-content">
+                  <p class="as-inner-title">Out of Service Territory Message</p>
+                  <p class="as-inner-sub">Show a custom message when a customer enters an address outside your service territory.</p>
                 </div>
+                <div class="as-toggle on" id="toggle-oos" onclick="asToggle('toggle-oos','oos-body',true)"></div>
               </div>
-              <div class="as-field">
-                <span class="as-field-label">Message shown to out-of-area customers</span>
-                <div class="as-rich-wrap">
-                  <div class="as-rich-editor" id="as-oos-msg" contenteditable="true"
-                    data-placeholder="Enter your message…"
-                    oninput="updateAsPreview()">Thanks for your interest! We're unable to accept bookings for your location at this time. Please contact us directly at (555) 123-4567 or email us to discuss your service needs — we'd love to help!</div>
-                  <div class="as-rich-toolbar">
-                    <button onclick="document.execCommand('undo')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg></button>
-                    <button onclick="document.execCommand('redo')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.17"/></svg></button>
-                    <div class="sep"></div>
-                    <button onclick="document.execCommand('bold')"><strong>B</strong></button>
-                    <button onclick="document.execCommand('italic')"><em>I</em></button>
-                    <button onclick="document.execCommand('underline')" style="text-decoration:underline;">U</button>
-                    <div class="sep"></div>
-                    <button onclick="document.execCommand('removeFormat')" style="font-size:10px;">T<sub>x</sub></button>
-                    <div class="sep"></div>
-                    <select title="Format"><option>Paragraph</option><option>Heading 1</option><option>Heading 2</option></select>
+              <div id="oos-body" class="as-field-group" style="display:flex;">
+                <div class="as-field">
+                  <span class="as-field-label">Include Locations</span>
+                  <div class="as-chips-wrap">
+                    <span class="as-chip">Portland <button class="as-chip-x"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" width="10" height="10"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
+                    <span class="as-chip-add"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </div>
                 </div>
-              </div>
-              <div class="as-check-row" onclick="toggleAsCheck(this)">
-                <div class="as-checkbox checked"></div>
-                <span class="as-check-label">Collect booking info from out-of-service-area customers too</span>
+                <div class="as-field">
+                  <span class="as-field-label">Message shown to out-of-area homeowners</span>
+                  <div class="as-rich-wrap">
+                    <div class="as-rich-editor" contenteditable="true" data-placeholder="Enter your message…">Thanks for reaching out! We don't currently serve your area, but we'd love to help if we expand. Feel free to contact us directly.</div>
+                    <div class="as-rich-toolbar">
+                      <button onclick="document.execCommand('undo')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg></button>
+                      <button onclick="document.execCommand('redo')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.17"/></svg></button>
+                      <div class="sep"></div>
+                      <button onclick="document.execCommand('bold')"><strong>B</strong></button>
+                      <button onclick="document.execCommand('italic')"><em>I</em></button>
+                      <button onclick="document.execCommand('underline')" style="text-decoration:underline;">U</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
           </div>
         </div>
 
-        <!-- ── Section 2: Customer Notifications ── -->
+        <!-- ── Customer Notifications ── -->
         <div class="as-section-card">
-          <div class="as-card-hdr" onclick="toggleAsCard('as-s2-body', this)">
+          <div class="as-card-hdr">
             <div class="as-card-hdr-left">
               <div class="as-card-icon">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
               </div>
               <div>
                 <p class="as-card-title">Customer Notifications</p>
-                <p class="as-card-sub">Configure automated messages sent to customers when they complete a booking.</p>
+                <p class="as-card-sub">Configure notifications sent to customers when they submit an estimate request.</p>
               </div>
             </div>
-            <svg class="as-card-chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
-          <div id="as-s2-body" class="as-card-body">
 
-            <!-- Email notification -->
-            <div class="as-inner-row">
-              <div class="as-inner-content">
-                <p class="as-inner-title">Email</p>
-                <p class="as-inner-sub">Send customers a booking confirmation email with their appointment details.</p>
+          <div class="as-card-body">
+            <!-- SMS Text Message mini-card -->
+            <div class="as-mini-card">
+              <div class="as-inner-row" style="border-bottom:none;">
+                <div class="as-inner-content">
+                  <p class="as-inner-title">Text Message</p>
+                  <p class="as-inner-sub">Send booking confirmations via SMS to customer's phone number</p>
+                </div>
+                <div class="as-toggle" id="toggle-cn-sms"></div>
               </div>
-              <div class="as-toggle on" id="toggle-email" onclick="asToggle('toggle-email', 'email-sub', true); updateAsPreview()"></div>
+              <div class="as-zuper-banner">
+                <div class="as-zuper-logo">
+                  <img src="https://www.figma.com/api/mcp/asset/3e78a6a2-e2d7-4b10-a6a8-50a0cf58c152" alt="Zuper" style="width:50px;height:50px;object-fit:contain;"/>
+                </div>
+                <div class="as-zuper-text">
+                  <p class="as-zuper-title">Zuper Connect</p>
+                  <p class="as-zuper-desc">Zuper connect is not enabled. To enable please reach out your Account Manager. <strong>Learn More</strong></p>
+                </div>
+              </div>
             </div>
-            <div id="email-sub" style="display:flex;flex-direction:column;">
-              <!-- Tabs: All options / Specific option -->
-              <div class="as-tab-bar">
-                <div class="as-tab active" onclick="switchAsTab(this,'as-tab-all')">All Options</div>
-                <div class="as-tab" onclick="switchAsTab(this,'as-tab-specific')">Specific Option</div>
+
+            <!-- Email mini-card -->
+            <div class="as-mini-card">
+              <!-- Header row -->
+              <div class="as-inner-row">
+                <div class="as-inner-content">
+                  <p class="as-inner-title">Email</p>
+                  <p class="as-inner-sub">Send customers an email summary of their estimate.</p>
+                </div>
+                <div class="as-toggle" id="toggle-cn-email" onclick="asToggle('toggle-cn-email','cn-email-body',true)"></div>
               </div>
-              <div class="as-field-group">
+              <!-- Expanded config (hidden until toggle on) -->
+              <div id="cn-email-body" class="as-field-group" style="display:none;">
                 <div class="as-field">
                   <span class="as-field-label">Send from</span>
-                  <div class="as-input" style="display:flex;justify-content:space-between;align-items:center;">
-                    <span class="as-input-placeholder">no-reply@zuper.co/yourbusiness</span>
+                  <div class="as-input" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="font-size:14px;color:#374151;">ductainrow@gmail.com</span>
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
                   </div>
                 </div>
                 <div class="as-field">
                   <span class="as-field-label">CC</span>
-                  <div class="as-input" style="display:flex;">
-                    <span class="as-input-placeholder">e.g. manager@yourcompany.com, team@yourcompany.com</span>
-                  </div>
-                </div>
-                <div class="as-field">
-                  <span class="as-field-label">Email preview</span>
-                  <div class="as-input" style="display:flex;justify-content:space-between;align-items:center;">
-                    <span class="as-input-placeholder">Booking confirmation email template</span>
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+                  <div class="as-input">
+                    <input type="text" placeholder="Type an email and press Enter" style="border:none;outline:none;width:100%;font-size:14px;color:#374151;font-family:inherit;background:transparent;"/>
                   </div>
                 </div>
                 <div class="as-field">
                   <span class="as-field-label">Select Email Template</span>
-                  <div class="as-template-preview" id="as-email-template">
-                    Hi {{customer_name}}, your booking for {{service_name}} on {{appointment_date}} at {{appointment_time}} is confirmed. Your technician will arrive at {{property_address}}. If you need to reschedule, please contact us at least 24 hours in advance. Thank you for choosing {{business_name}}!
+                  <div class="as-input" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="font-size:14px;color:#374151;">Instant Estimate</span>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                </div>
+                <div class="as-field">
+                  <span class="as-field-label">Email preview</span>
+                  <textarea class="as-email-preview" rows="6" readonly>Hi {{customer_first_name}},
+
+Thank you for taking the time to provide information about your roofing project.
+
+Based on the details you submitted, we've prepared a preliminary estimate and selected roofing options that may be a good fit for your property. Please find the attached estimate package for a detailed overview of the available roofing systems, pricing, specifications, and included services.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Contact Details ── -->
+        <div class="as-section-card">
+          <div class="as-card-hdr">
+            <div class="as-card-hdr-left">
+              <div class="as-card-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div>
+                <p class="as-card-title">Contact Details</p>
+                <p class="as-card-sub">Choose which team member's contact info is displayed on the estimate.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="as-card-body">
+            <div class="as-mini-card">
+              <!-- Toggle row -->
+              <div class="as-inner-row">
+                <div class="as-inner-content">
+                  <p class="as-inner-title">Show contact details on estimate</p>
+                  <p class="as-inner-sub">Show a team member's contact details so customers can reach out directly.</p>
+                </div>
+                <div class="as-toggle on" id="toggle-contact" onclick="asToggle('toggle-contact','contact-details-body',true)"></div>
+              </div>
+              <!-- Expanded fields -->
+              <div id="contact-details-body" class="as-field-group" style="display:flex;">
+                <div class="as-field">
+                  <span class="as-field-label">Select team member</span>
+                  <div class="as-input" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="font-size:14px;color:#374151;">Sathish Babu</span>
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;">
+                  <div class="as-field" style="flex:1;">
+                    <span class="as-field-label">Mobile number</span>
+                    <div class="as-input">
+                      <input type="text" value="5037147727" style="border:none;outline:none;width:100%;font-size:14px;color:#374151;font-family:inherit;background:transparent;"/>
+                    </div>
+                  </div>
+                  <div class="as-field" style="flex:1;">
+                    <span class="as-field-label">Email address</span>
+                    <div class="as-input">
+                      <input type="text" value="sathishbabu.b@zuper.co" style="border:none;outline:none;width:100%;font-size:14px;color:#374151;font-family:inherit;background:transparent;"/>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -1998,7 +2237,7 @@
       <!-- Footer -->
       <div class="as-footer">
         <button class="as-btn-back" onclick="closeAdvancedSettingsScreen()">Back</button>
-        <button class="as-btn-publish" onclick="showToast('Widget published successfully!')">Publish Widget</button>
+        <button class="as-btn-publish" onclick="openWidgetReadyModal()">Publish Widget</button>
       </div>
     </div><!-- /as-left -->
 
@@ -2040,5 +2279,519 @@
   </div><!-- /as-body -->
 </div>
   <script src="booking-widget.js"></script>
+
+<!-- ══════════════════════════════════════════════
+     PREVIEW WEBSITE SCREEN
+═════════════════════════════════════════════════ -->
+<div id="preview-website-screen">
+
+  <!-- Back bar -->
+  <div class="pw-back-bar">
+    <button class="pw-back-btn" onclick="closePreviewScreen()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to widget builder
+    </button>
+    <span class="pw-back-label">Preview Mode — Online Booking - Seattle</span>
+  </div>
+
+  <!-- Website scroll area -->
+  <div class="pw-site" id="pw-site">
+
+    <!-- Nav -->
+    <nav class="pw-nav">
+      <div class="pw-nav-inner">
+        <div class="pw-nav-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/><rect x="9" y="14" width="6" height="7"/></svg>
+          MARASUN Roofing
+        </div>
+        <div class="pw-nav-links">
+          <a>Services</a>
+          <a>About Us</a>
+          <a>Gallery</a>
+          <a>Contact</a>
+        </div>
+        <button class="pw-nav-cta">Get a Free Quote</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="pw-hero">
+      <div class="pw-hero-overlay"></div>
+      <div class="pw-hero-content">
+        <p class="pw-hero-eyebrow">Licensed · Bonded · Insured</p>
+        <h1 class="pw-hero-h1">Professional Roofing<br>You Can Trust</h1>
+        <p class="pw-hero-sub">Serving Seattle and surrounding areas since 1998. Free inspections, guaranteed workmanship.</p>
+        <div class="pw-hero-btns">
+          <button class="pw-hero-primary" onclick="openBookingPanel()">Book an Appointment</button>
+          <button class="pw-hero-secondary">View Our Work</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services strip -->
+    <div class="pw-services-strip">
+      <div class="pw-service-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/></svg>
+        Roof Replacement
+      </div>
+      <div class="pw-service-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Roof Repair
+      </div>
+      <div class="pw-service-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Inspections
+      </div>
+      <div class="pw-service-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Gutters &amp; Drainage
+      </div>
+      <div class="pw-service-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Insurance Claims
+      </div>
+    </div>
+
+    <!-- Main two-col body -->
+    <div class="pw-body">
+      <div class="pw-body-left">
+        <p class="pw-section-eyebrow">Online Booking</p>
+        <h2 class="pw-section-h2">Ready to get on our schedule?</h2>
+        <p class="pw-section-body">Book your roofing inspection or service appointment online in under 2 minutes. We'll confirm your slot within 2 hours.</p>
+        <ul class="pw-checklist">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> No phone call required</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> Choose your preferred time</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> Instant confirmation via email &amp; SMS</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> Free cancellation anytime</li>
+        </ul>
+        <button class="pw-book-cta" onclick="openBookingPanel()">Book Online Now</button>
+      </div>
+      <div class="pw-body-right">
+        <h2 class="pw-section-h2">Built to Protect.<br>Born to Serve.</h2>
+        <div class="pw-values">
+          <div class="pw-value-item">
+            <div class="pw-value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <p class="pw-value-title">The Guardian Mindset</p>
+              <p class="pw-value-desc">We protect more than roofs — we protect families, homes, and the community. Every project is an act of stewardship.</p>
+            </div>
+          </div>
+          <div class="pw-value-item">
+            <div class="pw-value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <p class="pw-value-title">Community Roots</p>
+              <p class="pw-value-desc">Deeply rooted in Seattle communities. We live here, serve here, and invest here.</p>
+            </div>
+          </div>
+          <div class="pw-value-item">
+            <div class="pw-value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div>
+              <p class="pw-value-title">Clarity</p>
+              <p class="pw-value-desc">Transparent communication, honest pricing, and straightforward answers — no surprises on your final invoice.</p>
+            </div>
+          </div>
+          <div class="pw-value-item">
+            <div class="pw-value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div>
+              <p class="pw-value-title">Craftsmanship</p>
+              <p class="pw-value-desc">Owens Corning Platinum Preferred status. We hold ourselves to the highest standard because you deserve nothing less.</p>
+            </div>
+          </div>
+          <div class="pw-value-item">
+            <div class="pw-value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <p class="pw-value-title">Trust</p>
+              <p class="pw-value-desc">We earn it before we ask for it. From the first conversation to the final inspection, our word is our bond.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="pw-footer">
+      <p>© 2025 MARASUN Roofing · Seattle, WA · License #MARASRR921KO · <span style="color:#e85d00;">info@marasunroofing.com</span></p>
+    </div>
+
+  </div><!-- /pw-site -->
+
+  <!-- ── Side booking widget ───────────────── -->
+  <div class="pw-widget-wrap" id="pw-widget-wrap">
+
+    <!-- Dim overlay — click to close -->
+    <div class="pw-sheet-overlay" id="pw-sheet-overlay" onclick="closeBookingPanel()"></div>
+
+    <!-- "Book Online" tab — always visible on right edge -->
+    <button class="pw-widget-tab" id="pw-widget-tab" onclick="openBookingPanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Book Online</span>
+    </button>
+
+    <!-- Full side sheet -->
+    <div class="pw-panel" id="pw-panel">
+      <div class="pw-panel-inner">
+
+        <!-- Panel header -->
+        <div class="pw-panel-hdr">
+          <button class="pw-panel-close" onclick="closeBookingPanel()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Close
+          </button>
+        </div>
+
+        <!-- Scrollable body -->
+        <div class="pw-panel-body">
+          <div class="pw-content-col">
+
+            <!-- ── STEP 1: Location ── -->
+            <div id="pw-step-1">
+
+              <div class="pw-panel-progress">
+                <div class="pw-panel-progress-row">
+                  <span class="pw-prog-label">Schedule Your Appointment</span>
+                  <span class="pw-prog-step">Step 1 of 4</span>
+                </div>
+                <div class="pw-prog-bar">
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg"></div>
+                  <div class="pw-prog-seg"></div>
+                  <div class="pw-prog-seg"></div>
+                </div>
+              </div>
+
+              <div class="pw-loc-card">
+                <p class="pw-loc-title">Select your service address</p>
+                <p class="pw-loc-sub">Enter the address where you need roofing services.</p>
+                <div class="pw-loc-input-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input class="pw-loc-input" type="text" placeholder="Enter your location" />
+                </div>
+                <div class="pw-map-wrap">
+                  <img src="map.png" alt="Map" class="pw-map-img" />
+                  <div class="pw-map-controls">
+                    <button class="pw-map-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></button>
+                    <button class="pw-map-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                    <button class="pw-map-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pw-panel-footer">
+                <button class="pw-panel-continue" onclick="pwGoToStep(2)">Proceed</button>
+              </div>
+
+            </div><!-- /pw-step-1 -->
+
+            <!-- ── STEP 2: Contact Details ── -->
+            <div id="pw-step-2" style="display:none;">
+
+              <div class="pw-panel-progress">
+                <div class="pw-panel-progress-row">
+                  <span class="pw-prog-label">Schedule Your Appointment</span>
+                  <span class="pw-prog-step">Step 2 of 4</span>
+                </div>
+                <div class="pw-prog-bar">
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg"></div>
+                  <div class="pw-prog-seg"></div>
+                </div>
+              </div>
+
+              <div class="pw-loc-card">
+                <p class="pw-loc-title">Your contact details</p>
+                <p class="pw-loc-sub">To update your estimate or use a different address</p>
+
+                <div class="pw-contact-fields">
+                  <!-- First + Last name -->
+                  <div class="pw-field-row">
+                    <input class="pw-field" type="text" placeholder="First name" value="Michael" />
+                    <input class="pw-field" type="text" placeholder="Last name" value="Harrington" />
+                  </div>
+                  <!-- Email -->
+                  <input class="pw-field" type="email" placeholder="Your email address" value="m.harrington@gmail.com" />
+                  <!-- Phone -->
+                  <div class="pw-phone-row">
+                    <div class="pw-phone-prefix">(+1)</div>
+                    <input class="pw-field pw-field-phone" type="tel" placeholder="Your mobile number" value="503-714-8842" />
+                  </div>
+                  <!-- SMS consent -->
+                  <div class="pw-consent-row">
+                    <input type="checkbox" class="pw-consent-check" id="pw-sms-consent" />
+                    <label for="pw-sms-consent" class="pw-consent-text">
+                      By submitting your phone number, you agree to receive marketing text messages from MARASUN Roofing. Message frequency varies. Message and data rates may apply. Text HELP for Support. Text STOP to opt-out. View our <a href="#" class="pw-consent-link">terms and conditions</a>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pw-panel-footer">
+                <button class="pw-panel-back" onclick="pwGoToStep(1)">Back</button>
+                <button class="pw-panel-continue" onclick="pwGoToStep(3)">Proceed</button>
+              </div>
+
+            </div><!-- /pw-step-2 -->
+
+            <!-- ── STEP 3: Schedule ── -->
+            <div id="pw-step-3" style="display:none;">
+
+              <div class="pw-panel-progress">
+                <div class="pw-panel-progress-row">
+                  <span class="pw-prog-label">Schedule Your Appointment</span>
+                  <span class="pw-prog-step">Step 3 of 4</span>
+                </div>
+                <div class="pw-prog-bar">
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg"></div>
+                </div>
+              </div>
+
+              <!-- Compact service + address chip -->
+              <div class="pw-svc-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/></svg>
+                <span class="pw-svc-chip-name">Roof Inspection</span>
+                <span class="pw-svc-chip-dot">·</span>
+                <span class="pw-svc-chip-addr">228 226th Ave NE, Redmond, WA</span>
+                <span class="pw-svc-chip-fee">Free</span>
+              </div>
+
+              <!-- Combined date + time card -->
+              <div class="pw-loc-card pw-schedule-card">
+                <p class="pw-loc-title">Select date &amp; time</p>
+
+                <!-- Horizontal date strip -->
+                <div class="pw-date-strip-wrap">
+                  <button class="pw-date-arrow" onclick="pwScrollDates(-1)" aria-label="Previous">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <div class="pw-date-strip" id="pw-date-strip">
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Tue, Jun 9" data-config="1"><span class="pw-dc-dow">Tue</span><span class="pw-dc-day">9</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Wed, Jun 10" data-config="2"><span class="pw-dc-dow">Wed</span><span class="pw-dc-day">10</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Thu, Jun 11" data-config="0"><span class="pw-dc-dow">Thu</span><span class="pw-dc-day">11</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Fri, Jun 12" data-config="1"><span class="pw-dc-dow">Fri</span><span class="pw-dc-day">12</span></div>
+                    <div class="pw-date-chip unavail"><span class="pw-dc-dow">Sat</span><span class="pw-dc-day">13</span></div>
+                    <div class="pw-date-chip unavail"><span class="pw-dc-dow">Sun</span><span class="pw-dc-day">14</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Mon, Jun 16" data-config="2"><span class="pw-dc-dow">Mon</span><span class="pw-dc-day">16</span></div>
+                    <div class="pw-date-chip avail selected" onclick="pwSelectDateChip(this)" data-label="Tue, Jun 17" data-config="0"><span class="pw-dc-dow">Tue</span><span class="pw-dc-day">17</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Wed, Jun 18" data-config="1"><span class="pw-dc-dow">Wed</span><span class="pw-dc-day">18</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Thu, Jun 19" data-config="2"><span class="pw-dc-dow">Thu</span><span class="pw-dc-day">19</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Fri, Jun 20" data-config="0"><span class="pw-dc-dow">Fri</span><span class="pw-dc-day">20</span></div>
+                    <div class="pw-date-chip unavail"><span class="pw-dc-dow">Sat</span><span class="pw-dc-day">21</span></div>
+                    <div class="pw-date-chip unavail"><span class="pw-dc-dow">Sun</span><span class="pw-dc-day">22</span></div>
+                    <div class="pw-date-chip avail" onclick="pwSelectDateChip(this)" data-label="Mon, Jun 23" data-config="1"><span class="pw-dc-dow">Mon</span><span class="pw-dc-day">23</span></div>
+                  </div>
+                  <button class="pw-date-arrow" onclick="pwScrollDates(1)" aria-label="Next">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
+
+                <!-- ── Available Professionals ── -->
+                <div id="pw-tab-slots" class="pw-tab-body">
+                  <p class="pw-avail-label" id="pw-avail-label">Available Professionals for Tuesday, Jun 17</p>
+
+                  <!-- Scott Orta -->
+                  <div class="pw-fe-row">
+                    <div class="pw-fe-hdr">
+                      <div class="pw-fe-av" style="background:#e85d00;">SO</div>
+                      <div class="pw-fe-info">
+                        <p class="pw-fe-name">Scott Orta</p>
+                        <p class="pw-fe-bio">Dynamic &amp; driven, Scott brings expertise to every roofing project.</p>
+                      </div>
+                    </div>
+                    <div class="pw-fe-slots">
+                      <button class="pw-fe-slot selected" onclick="pwSelectFeSlot(this)">12:00 PM – 1:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">2:00 PM – 3:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">4:00 PM – 5:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">6:00 PM – 7:00 PM</button>
+                    </div>
+                  </div>
+
+                  <!-- Andrew John -->
+                  <div class="pw-fe-row">
+                    <div class="pw-fe-hdr">
+                      <div class="pw-fe-av" style="background:#3b82f6;">AJ</div>
+                      <div class="pw-fe-info">
+                        <p class="pw-fe-name">Andrew John</p>
+                        <p class="pw-fe-bio">Roof whisperer. Ladder pro, John is always one step ahead — usually because he's already on your roof.</p>
+                      </div>
+                    </div>
+                    <div class="pw-fe-slots">
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">2:00 PM – 3:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">4:00 PM – 5:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">5:00 PM – 6:00 PM</button>
+                    </div>
+                  </div>
+
+                  <!-- Maxwell Pain -->
+                  <div class="pw-fe-row">
+                    <div class="pw-fe-hdr">
+                      <div class="pw-fe-av" style="background:#7c3aed;">MP</div>
+                      <div class="pw-fe-info">
+                        <p class="pw-fe-name">Maxwell Pain</p>
+                        <p class="pw-fe-bio">Max brings the drive of a former collegiate athlete to every roofing project he takes on.</p>
+                      </div>
+                    </div>
+                    <div class="pw-fe-slots">
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">12:00 PM – 1:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">2:00 PM – 3:00 PM</button>
+                      <button class="pw-fe-slot" onclick="pwSelectFeSlot(this)">4:00 PM – 5:00 PM</button>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div><!-- /pw-schedule-card -->
+
+              <div class="pw-panel-footer">
+                <button class="pw-panel-back" onclick="pwGoToStep(2)">Back</button>
+                <button class="pw-panel-continue" onclick="pwGoToStep(4)">Confirm Booking</button>
+              </div>
+
+            </div><!-- /pw-step-3 -->
+
+            <!-- ── STEP 4: Review & Confirm ── -->
+            <div id="pw-step-4" style="display:none;">
+
+              <div class="pw-panel-progress">
+                <div class="pw-panel-progress-row">
+                  <span class="pw-prog-label">Review &amp; Confirm</span>
+                  <span class="pw-prog-step">Step 4 of 4</span>
+                </div>
+                <div class="pw-prog-bar">
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg active"></div>
+                  <div class="pw-prog-seg active"></div>
+                </div>
+              </div>
+
+              <!-- Summary card with map -->
+              <div class="pw-review-card">
+                <!-- Top row -->
+                <div class="pw-review-grid">
+                  <div class="pw-review-col">
+                    <p class="pw-review-label">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      Service Address
+                    </p>
+                    <p class="pw-review-value">228 226th Ave NE,<br>Redmond, WA 98053</p>
+                  </div>
+                  <div class="pw-review-col">
+                    <p class="pw-review-label">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"/></svg>
+                      Service Selected
+                    </p>
+                    <p class="pw-review-value">Roof Inspection <span class="pw-review-fee">Free</span></p>
+                  </div>
+                  <!-- Map -->
+                  <div class="pw-review-map-wrap">
+                    <img src="map.png" class="pw-review-map-img" alt="map">
+                    <div class="pw-review-map-dot"></div>
+                    <div class="pw-review-map-fade"></div>
+                  </div>
+                </div>
+
+                <div class="pw-review-divider"></div>
+
+                <!-- Bottom row -->
+                <div class="pw-review-grid">
+                  <div class="pw-review-col">
+                    <p class="pw-review-label">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      Contact Info
+                    </p>
+                    <ul class="pw-review-list">
+                      <li>James Mitchell</li>
+                      <li>james.mitchell@gmail.com</li>
+                      <li>+1 (503) 748-9237</li>
+                    </ul>
+                  </div>
+                  <div class="pw-review-col">
+                    <p class="pw-review-label">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                      Appointment Details
+                    </p>
+                    <ul class="pw-review-list">
+                      <li>Tuesday, June 17, 2026</li>
+                      <li>12:00 PM – 1:00 PM</li>
+                      <li>Scott Orta – Technician</li>
+                    </ul>
+                  </div>
+                  <div class="pw-review-map-wrap" style="visibility:hidden;"></div>
+                </div>
+              </div>
+
+              <!-- Notes -->
+              <div class="pw-notes-card">
+                <p class="pw-notes-title">📋 Tell us more about your needs</p>
+                <textarea class="pw-notes-textarea" placeholder="Share extra details here to help us prepare your roofing estimate..."></textarea>
+              </div>
+
+              <!-- Important booking info -->
+              <div class="pw-info-card">
+                <div class="pw-info-header">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Important Booking Information</span>
+                </div>
+                <p class="pw-info-text"><strong>Cancellation Policy:</strong> Please provide at least 24 hours' notice for cancellations or rescheduling to avoid a $50 late cancellation fee.</p>
+                <p class="pw-info-text"><strong>Payment Terms:</strong> Payment is due on completion of the service. We accept cash, bank transfer, and all major cards.</p>
+                <p class="pw-info-text"><strong>Service Conditions:</strong> Bookings are weather-dependent. We may reschedule if conditions are unsafe. Prices shown are estimates and may vary based on site conditions.</p>
+              </div>
+
+              <!-- T&C checkbox -->
+              <div class="pw-consent-row">
+                <input type="checkbox" class="pw-consent-check" checked>
+                <p class="pw-consent-text">I agree to the <a href="#" class="pw-consent-link">Terms and Conditions</a> and understand the service agreement details.</p>
+              </div>
+
+              <div class="pw-panel-footer">
+                <button class="pw-panel-back" onclick="pwGoToStep(3)">← Back</button>
+                <button class="pw-panel-continue pw-confirm-green" onclick="pwGoToStep(5)">Confirm Booking →</button>
+              </div>
+
+            </div><!-- /pw-step-4 -->
+
+            <!-- ========== STEP 5: SUCCESS ========== -->
+            <div id="pw-step-5" style="display:none;" class="pw-success-screen">
+              <div class="pw-success-confetti pw-success-confetti-left"></div>
+              <div class="pw-success-confetti pw-success-confetti-right"></div>
+              <div class="pw-success-body">
+                <div class="pw-success-icon">✅</div>
+                <h2 class="pw-success-title">Your booking is confirmed for Tuesday, Jun 17, from 12:00 PM to 1:00 PM</h2>
+                <p class="pw-success-sub">We'll send you a confirmation by email and our team will follow up to confirm your appointment.</p>
+                <button class="pw-success-close" onclick="document.getElementById('pw-panel').style.transform='translateX(100%)'">Close</button>
+              </div>
+            </div><!-- /pw-step-5 -->
+
+          </div><!-- /pw-content-col -->
+        </div>
+
+        <!-- Powered by -->
+        <div class="pw-powered">
+          Powered by
+          <svg viewBox="0 0 60 20" width="48" height="16" fill="none">
+            <text x="0" y="14" font-size="12" font-weight="700" fill="#e85d00" font-family="Inter,sans-serif">Zuper</text>
+          </svg>
+        </div>
+
+      </div>
+
+    </div><!-- /pw-panel -->
+  </div><!-- /pw-widget-wrap -->
+
+</div><!-- /preview-website-screen -->
+
 </body>
 </html>

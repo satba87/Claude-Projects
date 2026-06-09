@@ -23,6 +23,12 @@
 
   function handleCardClick(e, cardId) {
     if (e.target.closest('.icon-btn') || e.target.closest('.dropdown-menu')) return;
+    const card = e.currentTarget || e.target.closest('.widget-card');
+    const statusDot = card.querySelector('.status-dot');
+    if (statusDot && statusDot.classList.contains('active')) return;
+    const cardTitle = card.querySelector('.card-title')?.textContent?.trim();
+    if (cardTitle) document.querySelectorAll('.wname-text').forEach(el => el.textContent = cardTitle);
+    openAppearanceScreen();
   }
 
   // Modal
@@ -64,11 +70,66 @@
 
   function createWidget() {
     const name = document.getElementById('widget-name-input').value.trim();
+    const desc = document.getElementById('widget-desc-input').value.trim();
     const type = document.getElementById('widget-type-select').value;
     if (!name || !type) { showToast('Please fill in all fields'); return; }
 
-    // Update appearance screen with entered name
-    document.getElementById('ap-widget-name-display').childNodes[0].textContent = name + ' ';
+    // Add new card to widget list
+    const ddId = 'dd-' + Date.now();
+    const isEstimate = type === 'instant-estimate';
+    const iconSvg = isEstimate
+      ? `<svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>`
+      : `<svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>`;
+    const cardDesc = desc || (isEstimate
+      ? 'Instantly provide customers with an estimated quote for services directly from your website.'
+      : 'Online booking tool that lets customers schedule services and book appointments directly from your website.');
+
+    const card = document.createElement('div');
+    card.className = 'widget-card';
+    card.style.position = 'relative';
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-icon-wrap grey">${iconSvg}</div>
+        <div class="card-actions">
+          <div class="status-badge">
+            <div class="status-dot draft"></div>
+            <span class="status-label">Draft</span>
+          </div>
+          <div class="icon-btn" title="More options" onclick="toggleDropdown(event,'${ddId}')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-title">${name}</p>
+        <p class="card-desc">${cardDesc}</p>
+      </div>
+      <div class="dropdown-menu" id="${ddId}" style="display:none;">
+        <div class="dropdown-section">
+          <button class="dropdown-item" onclick="showToast('Opening editor…')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+          </button>
+          <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Duplicate
+          </button>
+          <button class="dropdown-item danger" onclick="this.closest('.widget-card').remove();showToast('Widget deleted')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Delete widget
+          </button>
+        </div>
+      </div>`;
+    card.addEventListener('click', (e) => handleCardClick(e));
+    document.getElementById('widgets-grid').appendChild(card);
+
+    // Sync widget name across all screen breadcrumbs
+    document.querySelectorAll('.wname-text').forEach(el => el.textContent = name);
+
+    // Reset modal inputs
+    document.getElementById('widget-name-input').value = '';
+    document.getElementById('widget-desc-input').value = '';
+    document.getElementById('widget-type-select').value = '';
 
     closeNewWidgetModal();
     openAppearanceScreen();
@@ -80,8 +141,8 @@
   }
 
   function goBackToWidgets() {
-    document.getElementById('appearance-screen').classList.remove('open');
-    // Reset modal inputs
+    ['appearance-screen','questions-screen','services-screen','add-service-screen','booking-policy-screen','advanced-settings-screen']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('open'); });
     document.getElementById('widget-name-input').value = '';
     document.getElementById('widget-desc-input').value = '';
     document.getElementById('widget-type-select').value = '';
@@ -215,10 +276,10 @@
     } else if (q.type === 'textarea') {
       return `<div class="qp-card"><p class="qp-q">${lbl}</p><textarea class="qp-input" rows="2" style="resize:none;" readonly placeholder="Long answer…"></textarea></div>`;
     } else if (q.type === 'radio') {
-      const opts = (q.options||['Option 1','Option 2']).map(o=>`<label style="display:flex;align-items:center;gap:5px;font-size:10px;color:#1f2937;margin-bottom:3px;"><input type="radio" disabled style="width:10px;height:10px;"/>${o}</label>`).join('');
+      const opts = (q.options||['Option 1','Option 2']).map(o=>`<label class="qp-opt-row"><input type="radio" disabled /><span>${o}</span></label>`).join('');
       return `<div class="qp-card"><p class="qp-q">${lbl}</p>${opts}</div>`;
     } else if (q.type === 'checkbox') {
-      const opts = (q.options||['Option 1','Option 2']).map(o=>`<label style="display:flex;align-items:center;gap:5px;font-size:10px;color:#1f2937;margin-bottom:3px;"><input type="checkbox" disabled style="width:10px;height:10px;"/>${o}</label>`).join('');
+      const opts = (q.options||['Option 1','Option 2']).map(o=>`<label class="qp-opt-row"><input type="checkbox" disabled /><span>${o}</span></label>`).join('');
       return `<div class="qp-card"><p class="qp-q">${lbl}</p>${opts}</div>`;
     } else if (q.type === 'dropdown') {
       const opts = (q.options||['Option 1','Option 2']).map(o=>`<option>${o}</option>`).join('');
@@ -243,9 +304,11 @@
   function renderPreview() {
     const total = 2 + customQuestions.length;
     document.getElementById('qp-step-label').textContent = `Step ${selectedQIndex + 1} of ${total}`;
-    for (let i = 0; i < 4; i++) {
-      const b = document.getElementById('qp-bar-' + i);
-      if (b) b.className = 'qp-bar ' + (i <= selectedQIndex ? 'on' : 'off');
+    const progressEl = document.getElementById('qp-progress-bar');
+    if (progressEl) {
+      progressEl.innerHTML = Array.from({ length: total }, (_, i) =>
+        `<div class="qp-bar ${i <= selectedQIndex ? 'on' : 'off'}"></div>`
+      ).join('');
     }
     let html = '';
     if (selectedQIndex < 2) {
@@ -767,7 +830,6 @@
     selectedSvcIdx = idx;
     document.querySelectorAll('[id^="svc-card-"]').forEach((el, i) => el.classList.toggle('selected', i === idx));
     renderServicePreview();
-    openEditServiceScreen(idx);
   }
 
   function openEditServiceScreen(idx) {
@@ -878,6 +940,60 @@
   }, 0);
 
   /* ── Add Service Screen navigation ── */
+  const ROOFING_TEMPLATES = [
+    {
+      name: 'Roof Inspection',
+      desc: 'Comprehensive on-site assessment of roof condition — shingles, flashing, gutters, fascia, and structural integrity. Includes a detailed photo report and written estimate.',
+      cost: '', duration: '60', unit: 'Mins'
+    },
+    {
+      name: 'Shingle Replacement',
+      desc: 'Full replacement of damaged, curling, or missing shingles. Includes removal of old material, underlayment inspection, installation of new shingles, and site cleanup.',
+      cost: '450', duration: '4', unit: 'Hours'
+    },
+    {
+      name: 'Emergency Tarping',
+      desc: 'Same-day temporary protection for storm-damaged or compromised roofs. Heavy-duty tarp installation to prevent water intrusion until permanent repairs are scheduled.',
+      cost: '150', duration: '2', unit: 'Hours'
+    },
+    {
+      name: 'Gutter Cleaning',
+      desc: 'Complete removal of leaves, debris, and blockages from gutters and downspouts. Includes flushing with water to verify proper drainage and minor resealing if needed.',
+      cost: '120', duration: '90', unit: 'Mins'
+    },
+    {
+      name: 'Full Roof Replacement',
+      desc: 'Complete tear-off and replacement of existing roofing system. Includes new decking inspection, ice and water shield, synthetic underlayment, and premium shingle installation.',
+      cost: '8500', duration: '2', unit: 'Hours'
+    },
+    {
+      name: 'Leak Detection & Repair',
+      desc: 'Thorough inspection to identify the source of active or suspected leaks. Includes targeted repair — flashing re-sealing, valley patching, or vent boot replacement as needed.',
+      cost: '280', duration: '2', unit: 'Hours'
+    }
+  ];
+
+  function applyServiceTemplate(idx) {
+    const tpl = ROOFING_TEMPLATES[idx];
+    if (!tpl) return;
+    document.getElementById('asvc-name').value = tpl.name;
+    document.getElementById('asvc-desc-editor').value = tpl.desc;
+    document.getElementById('asvc-cost').value = tpl.cost;
+    document.getElementById('asvc-duration').value = tpl.duration;
+    // Update unit dropdown
+    const unitDd = document.getElementById('asvc-duration-unit');
+    if (unitDd) {
+      unitDd.dataset.value = tpl.unit;
+      unitDd.querySelector('.unit-dd-val').textContent = tpl.unit;
+      unitDd.querySelectorAll('.unit-dd-item').forEach(item => {
+        item.classList.toggle('selected', item.textContent.trim() === tpl.unit);
+      });
+    }
+    // Highlight active chip
+    document.querySelectorAll('.asvc-tpl-chip').forEach((c, i) => c.classList.toggle('active', i === idx));
+    updateAddServicePreview();
+  }
+
   function openAddServiceScreen() {
     document.getElementById('services-screen').classList.remove('open');
     document.getElementById('add-service-screen').classList.add('open');
@@ -886,6 +1002,63 @@
     // Reset form
     resetAddServiceForm();
   }
+  /* ── Custom unit dropdown (replaces native <select> for Mins/Hours etc.) ── */
+  function toggleUnitDd(btn) {
+    const menu = btn.nextElementSibling;
+    const isOpen = menu.classList.contains('open');
+    document.querySelectorAll('.unit-dd-menu.open').forEach(m => m.classList.remove('open'));
+    if (!isOpen) menu.classList.add('open');
+  }
+  function selectUnitDd(item, value) {
+    const menu = item.closest('.unit-dd-menu');
+    const wrapper = item.closest('.unit-dd');
+    wrapper.querySelector('.unit-dd-val').textContent = value;
+    wrapper.dataset.value = value;
+    menu.querySelectorAll('.unit-dd-item').forEach(i => i.classList.remove('selected'));
+    item.classList.add('selected');
+    menu.classList.remove('open');
+    if (wrapper.dataset.onchange && window[wrapper.dataset.onchange]) {
+      window[wrapper.dataset.onchange]();
+    }
+  }
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.unit-dd-menu.open').forEach(m => m.classList.remove('open'));
+  });
+
+  function toggleSvcDropdown(e, btn) {
+    e.stopPropagation();
+    const menu = btn.nextElementSibling;
+    const isOpen = menu.classList.contains('open');
+    document.querySelectorAll('.svc-dropdown.open').forEach(d => d.classList.remove('open'));
+    if (!isOpen) menu.classList.add('open');
+  }
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.svc-dropdown.open').forEach(d => d.classList.remove('open'));
+  });
+
+  function duplicateService(btn) {
+    const card = btn.closest('[id^="svc-card-"]');
+    const idx = parseInt(card.id.split('-')[2]);
+    const src = services[idx];
+    if (!src) return;
+    const newSvc = { ...src, name: src.name + ' (Copy)' };
+    services.push(newSvc);
+    const newIdx = services.length - 1;
+    const clone = card.cloneNode(true);
+    clone.id = `svc-card-${newIdx}`;
+    clone.onclick = () => selectService(newIdx);
+    clone.querySelector('.svc2-name').textContent = newSvc.name;
+    clone.querySelectorAll('.svc-dropdown').forEach(d => d.classList.remove('open'));
+    card.parentNode.insertBefore(clone, card.nextSibling);
+    showToast('Service duplicated');
+  }
+
+  function deleteService(btn) {
+    const card = btn.closest('[id^="svc-card-"]');
+    card.remove();
+    showToast('Service deleted');
+  }
+
   function closeAddServiceScreen() {
     document.getElementById('add-service-screen').classList.remove('open');
     document.getElementById('services-screen').classList.add('open');
@@ -893,7 +1066,10 @@
   }
   function resetAddServiceForm() {
     document.getElementById('asvc-name').value = '';
-    document.getElementById('asvc-desc-editor').innerHTML = '';
+    document.getElementById('asvc-desc-editor').value = '';
+    document.getElementById('asvc-cost').value = '';
+    document.getElementById('asvc-duration').value = '60';
+    document.querySelectorAll('.asvc-tpl-chip').forEach(c => c.classList.remove('active'));
     updateAddServicePreview();
   }
   function updateAddServicePreview() {
@@ -929,30 +1105,45 @@
     const idx = services.length - 1;
     const list = document.getElementById('svc-list');
     const card = document.createElement('div');
-    card.className = 'svc-card'; card.id = `svc-card-${idx}`;
+    card.className = 'svc2-card'; card.id = `svc-card-${idx}`;
     card.onclick = () => selectService(idx);
     card.innerHTML = `
-      <div class="svc-thumb">
+      <div class="svc2-thumb">
         <img src="${DEFAULT_THUMB}" style="width:100%;height:100%;object-fit:cover;" />
       </div>
-      <div class="svc-body">
-        <div class="svc-info">
-          <div>
-            <div class="svc-name-row"><span class="svc-name">${name}</span></div>
-            <p class="svc-desc">${desc || ''}</p>
-          </div>
-          <div class="svc-price-row"><span class="svc-price">—</span></div>
-        </div>
-        <div class="svc-actions">
-          <div class="svc-toggle on" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
-          <button class="svc-more-btn" onclick="event.stopPropagation()">
+      <div class="svc2-info">
+        <p class="svc2-name">${name}</p>
+        <p class="svc2-desc">${desc || ''}</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div class="svc-toggle on" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
+        <button class="svc2-icon-btn" onclick="event.stopPropagation();openEditServiceScreen(${idx})">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <div style="position:relative;">
+          <button class="svc2-more" onclick="event.stopPropagation();toggleSvcDropdown(event,this)">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
           </button>
+          <div class="svc-dropdown">
+            <div class="dropdown-section">
+              <button class="dropdown-item" onclick="event.stopPropagation();duplicateService(this)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Duplicate
+              </button>
+              <button class="dropdown-item danger" onclick="event.stopPropagation();deleteService(this)">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       </div>`;
     list.appendChild(card);
     closeAddServiceScreen();
-    selectService(idx);
+    // Highlight the new card and update preview without re-opening the edit screen
+    selectedSvcIdx = idx;
+    document.querySelectorAll('[id^="svc-card-"]').forEach((el, i) => el.classList.toggle('selected', i === idx));
+    renderServicePreview();
     showToast('Service option added!');
   }
 
@@ -1104,9 +1295,9 @@ function openBookingPolicyScreen() {
   }
   function updateBpPreview() {
     const lead     = document.getElementById('bp-lead-time').value || '0';
-    const leadUnit = document.getElementById('bp-lead-unit').value;
+    const leadUnit = document.getElementById('bp-lead-unit').dataset.value || 'Hours';
     const win      = document.getElementById('bp-window').value || '0';
-    const winUnit  = document.getElementById('bp-window-unit').value;
+    const winUnit  = document.getElementById('bp-window-unit').dataset.value || 'Days';
     const policy   = document.getElementById('bp-policy-editor').innerText || '';
     const showPol  = document.getElementById('bp-policy-toggle').classList.contains('on');
 
@@ -1135,12 +1326,10 @@ function openBookingPolicyScreen() {
   function bpfSelect(idx) {
     document.getElementById('bpf-opt-' + bpfSelected).classList.remove('bpf-radio-selected');
     document.getElementById('bpf-opt-' + bpfSelected).querySelector('.bpf-radio-dot').classList.remove('bpf-dot-selected');
-    document.getElementById('bpf-opt-' + bpfSelected).querySelector('.bpf-radio-dot').innerHTML = '';
     bpfSelected = idx;
     document.getElementById('bpf-opt-' + idx).classList.add('bpf-radio-selected');
     var dot = document.getElementById('bpf-opt-' + idx).querySelector('.bpf-radio-dot');
     dot.classList.add('bpf-dot-selected');
-    dot.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:#1f2937;display:block;"></span>';
     var prevFlow = document.getElementById('bp-prev-flow');
     if (prevFlow) prevFlow.innerHTML = bpfLabels[idx];
   }
@@ -1150,7 +1339,8 @@ function openBookingPolicyScreen() {
     const body = document.getElementById(bodyId);
     const chev = hdrEl.querySelector('.as-card-chev');
     const isOpen = body.style.display !== 'none';
-    body.style.display = isOpen ? 'none' : 'block';
+    body.style.display = isOpen ? 'none' : 'flex';
+    body.style.flexDirection = 'column';
     if (chev) chev.style.transform = isOpen ? 'rotate(-90deg)' : 'rotate(0deg)';
   }
 
@@ -1172,18 +1362,14 @@ function openBookingPolicyScreen() {
   function selectLeadHandling(row, type) {
     // deselect all
     document.getElementById('lh-contact').classList.remove('selected');
-    document.getElementById('lh-contact').innerHTML = '';
     document.getElementById('lh-job').classList.remove('selected');
-    document.getElementById('lh-job').innerHTML = '';
     const jobSub = document.getElementById('lh-job-sub');
     if (type === 'contact') {
       document.getElementById('lh-contact').classList.add('selected');
-      document.getElementById('lh-contact').innerHTML = '<span style="width:10px;height:10px;border-radius:50%;background:#1f2937;display:block;"></span>';
       if (jobSub) jobSub.style.display = 'none';
     } else {
       document.getElementById('lh-job').classList.add('selected');
-      document.getElementById('lh-job').innerHTML = '<span style="width:10px;height:10px;border-radius:50%;background:#1f2937;display:block;"></span>';
-      if (jobSub) jobSub.style.display = 'block';
+      if (jobSub) jobSub.style.display = 'flex';
     }
     updateAsPreview();
   }
@@ -1226,4 +1412,114 @@ function openBookingPolicyScreen() {
     setBadge('prev-oos', oosOn);
     setYesNo('prev-collect-oos', !!collectChecked);
     setBadge('prev-email', emailOn);
+  }
+
+  function openWidgetReadyModal() {
+    document.getElementById('widget-ready-modal').classList.add('open');
+  }
+  function closeWidgetReadyModal() {
+    document.getElementById('widget-ready-modal').classList.remove('open');
+  }
+  function closeWidgetReadyOutside(e) {
+    if (e.target.id === 'widget-ready-modal') closeWidgetReadyModal();
+  }
+  function goHomeFromWidgetReady() {
+    closeWidgetReadyModal();
+    goBackToWidgets();
+  }
+
+  function openPreviewScreen() {
+    closeWidgetReadyModal();
+    document.getElementById('preview-website-screen').classList.add('open');
+  }
+  function closePreviewScreen() {
+    document.getElementById('preview-website-screen').classList.remove('open');
+    closeBookingPanel();
+  }
+  function openBookingPanel() {
+    document.getElementById('pw-panel').classList.add('open');
+    document.getElementById('pw-sheet-overlay').classList.add('open');
+    document.getElementById('pw-widget-tab').classList.add('hidden');
+  }
+  function closeBookingPanel() {
+    var p = document.getElementById('pw-panel');
+    var o = document.getElementById('pw-sheet-overlay');
+    var t = document.getElementById('pw-widget-tab');
+    if (p) p.classList.remove('open');
+    if (o) o.classList.remove('open');
+    if (t) t.classList.remove('hidden');
+  }
+  function toggleBookingPanel() {
+    var p = document.getElementById('pw-panel');
+    if (p && p.classList.contains('open')) { closeBookingPanel(); } else { openBookingPanel(); }
+  }
+  function pwGoToStep(n) {
+    [1, 2, 3, 4, 5].forEach(function(i) {
+      var s = document.getElementById('pw-step-' + i);
+      if (s) s.style.display = n === i ? 'flex' : 'none';
+    });
+    var body = document.querySelector('.pw-panel-body');
+    if (body) body.scrollTop = 0;
+  }
+
+  function pwSelectDateChip(el) {
+    if (el.classList.contains('unavail')) return;
+    document.querySelectorAll('.pw-date-chip.selected').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    var label = el.getAttribute('data-label') || '';
+    // Update both tab availability labels
+    var lbl = document.getElementById('pw-avail-label');
+    if (lbl) lbl.textContent = 'Available Professionals for ' + label;
+    // Clear any previously selected FE slot
+    document.querySelectorAll('.pw-fe-slot.selected').forEach(function(s) { s.classList.remove('selected'); });
+  }
+
+  function pwSelectFeSlot(el) {
+    document.querySelectorAll('.pw-fe-slot.selected').forEach(function(s) { s.classList.remove('selected'); });
+    el.classList.add('selected');
+  }
+
+
+function pwScrollDates(dir) {
+    var strip = document.getElementById('pw-date-strip');
+    if (strip) strip.scrollBy({ left: dir * 210, behavior: 'smooth' });
+  }
+
+  function selectPwService(row) {
+    document.querySelectorAll('.pw-svc-opt').forEach(function(o) {
+      o.classList.remove('selected');
+      o.querySelector('.pw-svc-radio').classList.remove('selected');
+    });
+    row.classList.add('selected');
+    row.querySelector('.pw-svc-radio').classList.add('selected');
+  }
+
+  function navigateToStep(n) {
+    const screens = [
+      'appearance-screen',
+      'questions-screen',
+      'services-screen',
+      'booking-policy-screen',
+      'advanced-settings-screen'
+    ];
+    screens.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('open', i === n - 1);
+    });
+  }
+
+  // Wire stepper step clicks across all screens
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.ap-stepper-bar').forEach(function (bar) {
+      bar.querySelectorAll('.ap-step').forEach(function (step, idx) {
+        step.style.cursor = 'pointer';
+        step.addEventListener('click', function () { navigateToStep(idx + 1); });
+      });
+    });
+  });
+  function switchWrTab(tab) {
+    document.getElementById('wr-tab-qr').classList.toggle('active', tab === 'qr');
+    document.getElementById('wr-tab-embed').classList.toggle('active', tab === 'embed');
+    document.getElementById('wr-panel-qr').style.display = tab === 'qr' ? 'flex' : 'none';
+    document.getElementById('wr-panel-embed').style.display = tab === 'embed' ? 'flex' : 'none';
   }
