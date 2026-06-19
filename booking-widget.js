@@ -69,8 +69,7 @@
   function createWidget() {
     const name = document.getElementById('widget-name-input').value.trim() || 'Online Booking Widget';
     const desc = document.getElementById('widget-desc-input').value.trim();
-    const type = document.getElementById('widget-type-select').value || 'online-booking';
-    const isEstimate = type === 'instant-estimate';
+    const isEstimate = false; // type is now chosen on the Widget Purpose step
 
     // Add new card to widget list
     const ddId = 'dd-' + Date.now();
@@ -126,7 +125,7 @@
     // Reset modal inputs
     document.getElementById('widget-name-input').value = '';
     document.getElementById('widget-desc-input').value = '';
-    document.getElementById('widget-type-select').value = 'online-booking';
+
 
     closeNewWidgetModal();
     if (isEstimate) { showToast('This will follow the instant estimate flow'); return; }
@@ -139,11 +138,74 @@
   }
 
   function goBackToWidgets() {
-    ['appearance-screen','questions-screen','services-screen','add-service-screen','booking-policy-screen','advanced-settings-screen']
+    ['appearance-screen','widget-purpose-screen','questions-screen','services-screen','add-service-screen','booking-policy-screen','advanced-settings-screen']
       .forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('open'); });
     document.getElementById('widget-name-input').value = '';
     document.getElementById('widget-desc-input').value = '';
-    document.getElementById('widget-type-select').value = 'online-booking';
+  }
+
+  function openWidgetPurposeScreen() {
+    document.getElementById('appearance-screen').classList.remove('open');
+    document.getElementById('widget-purpose-screen').classList.add('open');
+  }
+
+  function goBackToAppearance() {
+    document.getElementById('widget-purpose-screen').classList.remove('open');
+    document.getElementById('appearance-screen').classList.add('open');
+  }
+
+  function goBackToWidgetPurpose() {
+    document.getElementById('questions-screen').classList.remove('open');
+    document.getElementById('widget-purpose-screen').classList.add('open');
+  }
+
+  // Widget Purpose selection — update right-side preview
+  const PURPOSE_CONTENT = {
+    'online-booking': {
+      color: '#3b82f6', bg: '#eff6ff',
+      icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>',
+      title: 'Online Booking',
+      sub: 'Allow customers to browse services, choose a time slot, and book appointments directly from your website.',
+      tags: ['Service selection', 'Time slot picker', 'Booking confirmation']
+    },
+    'instant-estimate': {
+      color: '#ca8a04', bg: '#fefce8',
+      icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>',
+      title: 'Instant Estimate',
+      sub: 'Give customers an on-the-spot price estimate based on their inputs — no back-and-forth needed.',
+      tags: ['Instant pricing', 'No account needed', 'Quick conversion']
+    },
+    'estimate-booking': {
+      color: '#16a34a', bg: '#f0fdf4',
+      icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>',
+      title: 'Estimate & Book',
+      sub: 'Show a price estimate upfront, then let customers convert immediately by booking an appointment — all in one flow.',
+      tags: ['Estimate first', 'One-click booking', 'Higher conversion']
+    },
+    'lead-intake': {
+      color: '#9333ea', bg: '#fdf4ff',
+      icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      title: 'Lead Intake Form',
+      sub: 'Capture customer contact details and service needs for your team to follow up — great for high-touch or custom jobs.',
+      tags: ['Contact capture', 'CRM ready', 'Follow-up workflow']
+    }
+  };
+
+  function selectWidgetPurpose(value) {
+    const p = PURPOSE_CONTENT[value];
+    if (!p) return;
+    // Highlight selected card
+    document.querySelectorAll('.wp-purpose-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('wpc-' + value).classList.add('selected');
+    // Update preview
+    const iconWrap = document.getElementById('wpp-icon-wrap');
+    if (iconWrap) { iconWrap.style.background = p.bg; iconWrap.innerHTML = p.icon.replace('stroke="currentColor"', `stroke="${p.color}"`); }
+    const title = document.getElementById('wpp-title');
+    if (title) title.textContent = p.title;
+    const sub = document.getElementById('wpp-sub');
+    if (sub) sub.textContent = p.sub;
+    const tags = document.getElementById('wpp-tags');
+    if (tags) tags.innerHTML = p.tags.map(t => `<span class="wpp-tag">${t}</span>`).join('');
   }
 
   // Live preview: welcome message
@@ -205,17 +267,48 @@
 
   // Questions screen
   function openQuestionsScreen() {
-    document.getElementById('appearance-screen').classList.remove('open');
+    document.getElementById('widget-purpose-screen').classList.remove('open');
     document.getElementById('questions-screen').classList.add('open');
-  }
-  function goBackToAppearance() {
-    document.getElementById('questions-screen').classList.remove('open');
-    document.getElementById('appearance-screen').classList.add('open');
   }
 
 /* ─── Questions screen state ─── */
   let selectedQIndex = 0;
   const customQuestions = []; // { id, type, label, options }
+
+  const MAP_FIELDS = {
+    contact: {
+      default: [
+        { value: 'first_name',  label: 'First Name' },
+        { value: 'last_name',   label: 'Last Name' },
+        { value: 'email',       label: 'Email' },
+        { value: 'phone',       label: 'Phone' },
+        { value: 'address',     label: 'Address' },
+        { value: 'notes',       label: 'Notes' },
+      ],
+      custom: [
+        { value: 'preferred_contact', label: 'Preferred Contact Method' },
+        { value: 'lead_source',       label: 'Lead Source' },
+        { value: 'referred_by',       label: 'Referred By' },
+      ]
+    },
+    job: {
+      default: [
+        { value: 'job_title',       label: 'Job Title' },
+        { value: 'job_description', label: 'Job Description' },
+        { value: 'priority',        label: 'Priority' },
+        { value: 'service_address', label: 'Service Address' },
+        { value: 'billing_address', label: 'Billing Address' },
+      ],
+      custom: [
+        { value: 'property_type',  label: 'Property Type' },
+        { value: 'stories',        label: 'Number of Stories' },
+        { value: 'square_footage', label: 'Property Size (sq ft)' },
+        { value: 'roof_age',       label: 'Roof Age' },
+        { value: 'urgency',        label: 'Urgency Level' },
+        { value: 'budget',         label: 'Budget' },
+      ]
+    }
+  };
 
   const TYPE_ICONS = {
     text:     `<svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="16" height="16"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="12" x2="15" y2="12"/></svg>`,
@@ -520,93 +613,57 @@
         </div>
         <div id="qfields-${globalIdx}">${inputControl}</div>
 
-        <!-- Map to Job Field -->
+        <!-- Map Response -->
         <div class="q-map-section" onclick="event.stopPropagation()">
           <div class="q-map-divider"></div>
-          <div class="q-map-row">
-            <div class="q-map-left">
-              <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              <span class="q-map-label">Map to job field</span>
+          <div class="q-map-header-row">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span class="q-map-label">Map response</span>
+          </div>
+          <div class="q-map-row" style="margin-top:8px;">
+            <span class="q-map-module-label">Module</span>
+            <div class="q-map-select-wrap">
+              <select class="q-map-select" id="qmap-module-${globalIdx}"
+                onchange="onMapModuleChange(${globalIdx}, this.value)"
+                onclick="event.stopPropagation()">
+                <option value="">— Not mapped —</option>
+                <option value="contact">Contact</option>
+                <option value="job">Job</option>
+              </select>
             </div>
+          </div>
+          <div class="q-map-row" id="qmap-field-row-${globalIdx}" style="display:none; margin-top:8px;">
+            <span class="q-map-module-label">Field <span class="q-map-required">*</span></span>
             <div class="q-map-select-wrap">
               <select class="q-map-select" id="qmap-${globalIdx}"
                 onchange="updateFieldMapping(${globalIdx}, this.value)"
                 onclick="event.stopPropagation()">
-                <option value="">— Not mapped —</option>
-                <optgroup label="Service Details">
-                  <option value="service_type">Service Type</option>
-                  <option value="preferred_time">Preferred Time</option>
-                  <option value="job_description">Job Description</option>
-                  <option value="property_type">Property Type</option>
-                  <option value="urgency">Urgency Level</option>
-                </optgroup>
-                <optgroup label="Job Info">
-                  <option value="job_type">Job Type</option>
-                  <option value="priority">Priority</option>
-                  <option value="budget">Budget</option>
-                  <option value="preferred_date">Preferred Date</option>
-                  <option value="notes">Additional Notes</option>
-                </optgroup>
-                <optgroup label="Property">
-                  <option value="property_type">Property Type</option>
-                  <option value="stories">Number of Stories</option>
-                  <option value="square_footage">Property Size (sq ft)</option>
-                </optgroup>
+                <option value="">Select field</option>
               </select>
             </div>
           </div>
           <div class="q-map-hint" id="qmap-hint-${globalIdx}" style="display:none;">
             <svg fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="2" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
-            Customer's response will be saved to <strong id="qmap-hint-field-${globalIdx}"></strong> on the job
+            <span id="qmap-hint-field-${globalIdx}"></span>
           </div>
         </div>
 
-        <!-- Conditional Logic -->
-        <div class="q-map-divider"></div>
-        <div class="q-cond-section" onclick="event.stopPropagation()">
-          <div class="q-cond-header" onclick="toggleConditional(${globalIdx})">
-            <div>
-              <div class="q-cond-header-left">
-                <svg fill="none" viewBox="0 0 24 24" stroke="#f59e0b" stroke-width="2" width="14" height="14"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                Conditional logic
-              </div>
-              <div class="q-cond-subtitle">Show this question based on a previous answer</div>
-            </div>
-            <div class="q-cond-toggle" id="qcond-toggle-${globalIdx}"></div>
-          </div>
-          <div class="q-cond-panel" id="qcond-panel-${globalIdx}">
-            <div class="q-cond-show-label">Show this question when</div>
-            <select class="q-cond-select" id="qcond-qsel-${globalIdx}"
-              onchange="updateCondQuestion(${globalIdx}, this.value)"
-              onclick="event.stopPropagation()">
-              <option value="">— Select a question —</option>
-            </select>
-            <div class="q-cond-op-row">
-              <select class="q-cond-select" id="qcond-op-${globalIdx}"
-                onclick="event.stopPropagation()" style="max-width:110px;">
-                <option value="is">is</option>
-                <option value="is_not">is not</option>
-              </select>
-              <select class="q-cond-select" id="qcond-val-${globalIdx}"
-                onclick="event.stopPropagation()">
-                <option value="">— Select value —</option>
-              </select>
-            </div>
-          </div>
-        </div>
       </div>`;
   }
 
   function buildOptionsHTML(q, globalIdx) {
     const inputType = q.type === 'radio' ? 'radio' : 'checkbox';
+    const showGoto = q.type === 'radio';
+    const gotoDests = showGoto ? buildSkipDestOptions(globalIdx) : '';
     const opts = (q.options || ['Option 1', 'Option 2']).map((opt, oi) => `
       <div class="q-option-row" id="qopt-${globalIdx}-${oi}">
         <input type="${inputType}" disabled style="width:14px;height:14px;flex-shrink:0;" />
         <input class="q-option-input" value="${opt}" onclick="event.stopPropagation()"
           oninput="updateOption(${globalIdx}, ${oi}, this.value)" placeholder="Option ${oi+1}" />
         <button class="q-option-delete" onclick="event.stopPropagation();deleteOption(${globalIdx}, ${oi})">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
+        ${showGoto ? `<select class="q-goto-select" id="qgoto-${globalIdx}-${oi}" onclick="event.stopPropagation()"><option value="next">Continue to next question</option>${gotoDests}</select>` : ''}
       </div>`).join('');
     return `${opts}
       <button class="q-add-option-btn" onclick="event.stopPropagation();addOption(${globalIdx})">
@@ -616,14 +673,16 @@
   }
 
   function buildDropdownEditorHTML(q, globalIdx) {
+    const gotoDests = buildSkipDestOptions(globalIdx);
     const opts = (q.options || ['Option 1', 'Option 2']).map((opt, oi) => `
       <div class="q-option-row" id="qopt-${globalIdx}-${oi}">
         <span style="color:#9ca3af;font-size:12px;flex-shrink:0;">${oi+1}.</span>
         <input class="q-option-input" value="${opt}" onclick="event.stopPropagation()"
           oninput="updateOption(${globalIdx}, ${oi}, this.value)" placeholder="Option ${oi+1}" />
         <button class="q-option-delete" onclick="event.stopPropagation();deleteOption(${globalIdx}, ${oi})">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
+        <select class="q-goto-select" id="qgoto-${globalIdx}-${oi}" onclick="event.stopPropagation()"><option value="next">Continue to next question</option>${gotoDests}</select>
       </div>`).join('');
     return `${opts}
       <button class="q-add-option-btn" onclick="event.stopPropagation();addOption(${globalIdx})">
@@ -637,50 +696,107 @@
     if (q) { q.label = text; if (selectedQIndex === globalIdx) renderPreview(); }
   }
 
-  /* ── Conditional logic functions ── */
-  function toggleConditional(idx) {
-    const toggle = document.getElementById(`qcond-toggle-${idx}`);
-    const panel  = document.getElementById(`qcond-panel-${idx}`);
+  /* ── Skip logic functions ── */
+  function toggleSkipLogic(idx) {
+    const toggle = document.getElementById(`qskip-toggle-${idx}`);
+    const panel  = document.getElementById(`qskip-panel-${idx}`);
     if (!toggle || !panel) return;
     const opening = !toggle.classList.contains('on');
     toggle.classList.toggle('on');
     panel.classList.toggle('open');
-    if (opening) refreshCondSources(idx);
-  }
-
-  function refreshCondSources(idx) {
-    const sel = document.getElementById(`qcond-qsel-${idx}`);
-    if (!sel) return;
-    const eligible = customQuestions.filter(q =>
-      q.id < idx && ['radio', 'checkbox', 'dropdown'].includes(q.type)
-    );
-    const prev = sel.value;
-    sel.innerHTML = '<option value="">— Select a question —</option>';
-    if (eligible.length === 0) {
-      sel.innerHTML += `<option value="" disabled>No choice questions available yet</option>`;
-    } else {
-      eligible.forEach(q => {
-        const label = document.getElementById(`qtitle-${q.id}`)?.textContent?.trim() || q.label;
-        sel.innerHTML += `<option value="${q.id}"${prev == q.id ? ' selected' : ''}>${label}</option>`;
-      });
+    if (opening) {
+      const rulesEl = document.getElementById(`qskip-rules-${idx}`);
+      if (rulesEl && rulesEl.children.length === 0) addSkipRule(idx);
+      else refreshAllSkipDestinations(idx);
     }
-    if (prev) refreshCondValues(idx, prev);
   }
 
-  function updateCondQuestion(idx, questionId) {
-    refreshCondValues(idx, questionId);
+  function addSkipRule(idx) {
+    const rulesEl = document.getElementById(`qskip-rules-${idx}`);
+    if (!rulesEl) return;
+    const ruleIdx = rulesEl.children.length;
+    const q = customQuestions[idx - 2];
+
+    const row = document.createElement('div');
+    row.className = 'q-skip-rule';
+    row.id = `qskip-rule-${idx}-${ruleIdx}`;
+
+    // Build answer options from this question's options
+    const opts = (q && q.options) ? q.options.map(o =>
+      `<option value="${o}">${o}</option>`).join('') :
+      `<option value="" disabled>No options defined yet</option>`;
+
+    // Build destination options from all other questions
+    const dests = buildSkipDestOptions(idx);
+
+    row.innerHTML = `
+      <select class="q-cond-select q-skip-ans" id="qskip-ans-${idx}-${ruleIdx}" onclick="event.stopPropagation()">
+        <option value="">— Select answer —</option>${opts}
+      </select>
+      <span class="q-skip-arrow">→ go to</span>
+      <select class="q-cond-select q-skip-dest" id="qskip-dest-${idx}-${ruleIdx}" onclick="event.stopPropagation()">
+        <option value="">— Select question —</option>${dests}
+      </select>
+      <button class="q-skip-remove-btn" title="Remove rule"
+        onclick="event.stopPropagation();this.closest('.q-skip-rule').remove()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    rulesEl.appendChild(row);
   }
 
-  function refreshCondValues(idx, questionId) {
-    const valSel = document.getElementById(`qcond-val-${idx}`);
-    if (!valSel) return;
-    valSel.innerHTML = '<option value="">— Select value —</option>';
-    if (!questionId) return;
-    const src = customQuestions.find(q => q.id == questionId);
-    if (!src || !src.options) return;
-    src.options.forEach(opt => {
-      valSel.innerHTML += `<option value="${opt}">${opt}</option>`;
+  function buildSkipDestOptions(currentIdx) {
+    let html = '';
+    customQuestions.forEach((q, i) => {
+      if (q.id === currentIdx) return;
+      const label = document.getElementById(`qtitle-${q.id}`)?.textContent?.trim() || q.label;
+      html += `<option value="q${q.id}">Q${i + 3}: ${label}</option>`;
     });
+    html += `<option value="end">End booking</option>`;
+    return html;
+  }
+
+  function refreshAllSkipDestinations(idx) {
+    const rulesEl = document.getElementById(`qskip-rules-${idx}`);
+    if (!rulesEl) return;
+    const dests = buildSkipDestOptions(idx);
+    rulesEl.querySelectorAll('.q-skip-dest').forEach(sel => {
+      const prev = sel.value;
+      sel.innerHTML = `<option value="">— Select question —</option>${dests}`;
+      if (prev) sel.value = prev;
+    });
+  }
+
+  function onMapModuleChange(globalIdx, module) {
+    const fieldRow = document.getElementById(`qmap-field-row-${globalIdx}`);
+    const fieldSel = document.getElementById(`qmap-${globalIdx}`);
+    const hint = document.getElementById(`qmap-hint-${globalIdx}`);
+
+    if (fieldSel) { fieldSel.innerHTML = '<option value="">Select field</option>'; fieldSel.classList.remove('mapped'); }
+    if (hint) hint.style.display = 'none';
+
+    if (!module) { if (fieldRow) fieldRow.style.display = 'none'; return; }
+    if (fieldRow) fieldRow.style.display = 'flex';
+
+    const data = MAP_FIELDS[module];
+    if (!data || !fieldSel) return;
+
+    const defGroup = document.createElement('optgroup');
+    defGroup.label = 'Default Fields';
+    data.default.forEach(f => {
+      const o = document.createElement('option');
+      o.value = module + ':' + f.value; o.textContent = f.label;
+      defGroup.appendChild(o);
+    });
+    fieldSel.appendChild(defGroup);
+
+    const cusGroup = document.createElement('optgroup');
+    cusGroup.label = 'Custom Fields';
+    data.custom.forEach(f => {
+      const o = document.createElement('option');
+      o.value = module + ':' + f.value; o.textContent = f.label;
+      cusGroup.appendChild(o);
+    });
+    fieldSel.appendChild(cusGroup);
   }
 
   function updateFieldMapping(globalIdx, fieldValue) {
@@ -689,12 +805,14 @@
     q.mappedField = fieldValue;
     const sel = document.getElementById(`qmap-${globalIdx}`);
     const hint = document.getElementById(`qmap-hint-${globalIdx}`);
-    const hintField = document.getElementById(`qmap-hint-field-${globalIdx}`);
+    const hintSpan = document.getElementById(`qmap-hint-field-${globalIdx}`);
+    const moduleSel = document.getElementById(`qmap-module-${globalIdx}`);
+    const module = moduleSel ? moduleSel.value : 'job';
+
     if (fieldValue) {
       sel.classList.add('mapped');
-      // Get the display label from the selected option
-      const selectedOpt = sel.options[sel.selectedIndex];
-      hintField.textContent = `"${selectedOpt.text}"`;
+      const label = sel.options[sel.selectedIndex].text;
+      hintSpan.innerHTML = `Saved to <strong>"${label}"</strong> on the ${module}`;
       hint.style.display = 'flex';
     } else {
       sel.classList.remove('mapped');
@@ -947,27 +1065,27 @@
     {
       name: 'Shingle Replacement',
       desc: 'Full replacement of damaged, curling, or missing shingles. Includes removal of old material, underlayment inspection, installation of new shingles, and site cleanup.',
-      cost: '450', duration: '4', unit: 'Hours'
+      cost: '$450 / visit', duration: '4', unit: 'Hours'
     },
     {
       name: 'Emergency Tarping',
       desc: 'Same-day temporary protection for storm-damaged or compromised roofs. Heavy-duty tarp installation to prevent water intrusion until permanent repairs are scheduled.',
-      cost: '150', duration: '2', unit: 'Hours'
+      cost: '$150 / visit', duration: '2', unit: 'Hours'
     },
     {
       name: 'Gutter Cleaning',
       desc: 'Complete removal of leaves, debris, and blockages from gutters and downspouts. Includes flushing with water to verify proper drainage and minor resealing if needed.',
-      cost: '120', duration: '90', unit: 'Mins'
+      cost: '$120 / visit', duration: '90', unit: 'Mins'
     },
     {
       name: 'Full Roof Replacement',
       desc: 'Complete tear-off and replacement of existing roofing system. Includes new decking inspection, ice and water shield, synthetic underlayment, and premium shingle installation.',
-      cost: '8500', duration: '2', unit: 'Hours'
+      cost: '$8,500 / project', duration: '2', unit: 'Hours'
     },
     {
       name: 'Leak Detection & Repair',
       desc: 'Thorough inspection to identify the source of active or suspected leaks. Includes targeted repair — flashing re-sealing, valley patching, or vent boot replacement as needed.',
-      cost: '280', duration: '2', unit: 'Hours'
+      cost: '$280 / visit', duration: '2', unit: 'Hours'
     }
   ];
 
@@ -1081,8 +1199,14 @@
   function updateAddServicePreview() {
     const name = document.getElementById('asvc-name').value || 'Service name here';
     const desc = document.getElementById('asvc-desc-editor').value || 'Add a description to help customers understand this service.';
+    const cost = document.getElementById('asvc-cost').value.trim();
     document.getElementById('asvc-prev-name').textContent = name;
     document.getElementById('asvc-prev-desc').textContent = desc;
+    const costEl = document.getElementById('asvc-prev-cost');
+    if (costEl) {
+      costEl.textContent = cost ? 'Starting at ' + cost : '';
+      costEl.style.display = cost ? 'block' : 'none';
+    }
   }
   function toggleAsvcSection(toggleId, sectionId) {
     const t = document.getElementById(toggleId);
@@ -1240,16 +1364,230 @@
       });
     }
   }
-  // Close skills dropdown when clicking outside
+  // Close dropdowns when clicking outside
   document.addEventListener('click', (e) => {
     const dd = document.getElementById('skills-dropdown');
     const ms = document.getElementById('skills-multiselect');
-    if (!dd || !ms) return;
-    if (!ms.contains(e.target) && !dd.contains(e.target)) {
-      dd.style.display = 'none';
-      ms.classList.remove('open');
+    if (dd && ms && !ms.contains(e.target) && !dd.contains(e.target)) {
+      dd.style.display = 'none'; ms.classList.remove('open');
+    }
+    const add = document.getElementById('assign-dropdown');
+    const ams = document.getElementById('assign-multiselect');
+    if (add && ams && !ams.contains(e.target) && !add.contains(e.target)) {
+      add.style.display = 'none'; ams.classList.remove('open');
+    }
+    const assignDd = document.getElementById('assign-dd');
+    const assignTrigger = document.getElementById('assign-trigger');
+    if (assignDd && assignDd.style.display !== 'none' && e.target.isConnected &&
+        !assignDd.contains(e.target) && !assignTrigger.contains(e.target)) {
+      closeAssignDropdown();
     }
   });
+
+  /* ── Assign to Modal ── */
+  var AM_TEAMS = [
+    { id: 'backoffice', name: 'Backoffice', members: [
+      { id: 'andy-smith', name: 'Andy Smith', role: 'Backoffice' },
+      { id: 'lisa-chen', name: 'Lisa Chen', role: 'Backoffice' },
+    ]},
+    { id: 'roofing', name: 'Roofing Inspection', members: [
+      { id: 'sathish-babu', name: 'Sathish Babu', role: 'Admin' },
+      { id: 'nachivel-kishore', name: 'Nachivel Kishore', role: 'Admin' },
+      { id: 'preeti-badhwar', name: 'Preeti Badhwar', role: 'Admin' },
+      { id: 'manidevi-bezaw', name: 'Manidevi Bezaw', role: 'Admin' },
+      { id: 'sara-smith', name: 'Sara Smith', role: 'Field Tech' },
+      { id: 'james-rodriguez', name: 'James Rodriguez', role: 'Field Tech' },
+      { id: 'mike-turner', name: 'Mike Turner', role: 'Field Tech' },
+      { id: 'david-lee', name: 'David Lee', role: 'Field Tech' },
+      { id: 'chris-evans', name: 'Chris Evans', role: 'Field Tech' },
+    ]},
+  ];
+  var amSelected = new Map();
+  var amCurrentTeamId = AM_TEAMS[0] ? AM_TEAMS[0].id : null;
+  var amSearchQuery = '';
+
+  var AM_ADD_ICON = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>';
+  var AM_REM_ICON = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><line x1="16" y1="6" x2="22" y2="12"/><line x1="22" y1="6" x2="16" y2="12"/></svg>';
+
+  var _amScrollHandler = null;
+
+  function _positionAssignDD() {
+    var dd = document.getElementById('assign-dd');
+    var btn = document.getElementById('assign-trigger');
+    if (!dd || !btn) return;
+    var rect = btn.getBoundingClientRect();
+    dd.style.top = (rect.bottom + 6) + 'px';
+    dd.style.left = rect.left + 'px';
+    dd.style.width = rect.width + 'px';
+  }
+
+  function openAssignDropdown(e) {
+    if (e) e.stopPropagation();
+    var dd = document.getElementById('assign-dd');
+    if (!dd) return;
+    _positionAssignDD();
+    dd.style.display = 'flex';
+    amSearchQuery = '';
+    var si = document.getElementById('assign-dd-search');
+    if (si) si.value = '';
+    renderAMTeamList();
+    renderAMMembers(amCurrentTeamId);
+    updateAMFooter();
+    if (_amScrollHandler) document.removeEventListener('scroll', _amScrollHandler, true);
+    _amScrollHandler = function() { _positionAssignDD(); };
+    document.addEventListener('scroll', _amScrollHandler, true);
+  }
+  function openAssignModal(e) { openAssignDropdown(e); }
+
+  function closeAssignDropdown() {
+    var dd = document.getElementById('assign-dd');
+    if (dd) dd.style.display = 'none';
+    if (_amScrollHandler) {
+      document.removeEventListener('scroll', _amScrollHandler, true);
+      _amScrollHandler = null;
+    }
+  }
+  function closeAssignModal() { closeAssignDropdown(); }
+
+  function confirmAM() {
+    var txt = document.getElementById('assign-trigger-text');
+    if (amSelected.size === 0) {
+      txt.textContent = 'Select teams or users';
+      txt.style.color = '';
+    } else {
+      var names = Array.from(amSelected.values()).map(function(v) { return v.name; });
+      txt.textContent = names.length <= 2 ? names.join(', ') : names.slice(0, 2).join(', ') + ' + ' + (names.length - 2) + ' more';
+      txt.style.color = '#1f2937';
+    }
+    closeAssignDropdown();
+  }
+
+  function amTeamAllAdded(team) {
+    return team.members.length > 0 && team.members.every(function(m) { return amSelected.has(m.id); });
+  }
+
+  function selectAMTeam(teamId) {
+    amCurrentTeamId = teamId;
+    renderAMTeamList();
+    renderAMMembers(teamId);
+  }
+
+  function renderAMTeamList() {
+    var el = document.getElementById('assign-dd-teams');
+    if (!el) return;
+    var html = '';
+    AM_TEAMS.forEach(function(team) {
+      var active = team.id === amCurrentTeamId;
+      var allAdded = amTeamAllAdded(team);
+      var teamBtn = allAdded
+        ? '<button type="button" class="am-team-add-btn added" onclick="event.stopPropagation();toggleAMTeam(\'' + team.id + '\')" title="Remove all">'
+          + '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>'
+          + '</button>'
+        : '<button type="button" class="am-team-add-btn" onclick="event.stopPropagation();toggleAMTeam(\'' + team.id + '\')" title="Add all">'
+          + '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'
+          + '</button>';
+      html += '<div class="am-team-row' + (active ? ' active' : '') + '" onclick="selectAMTeam(\'' + team.id + '\')">'
+        + '<div class="am-team-row-info">'
+        + '<span class="am-team-row-name">' + team.name + '</span>'
+        + '<span class="am-team-row-count">' + team.members.length + ' members</span>'
+        + '</div>'
+        + teamBtn
+        + '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  function filterAMSearch(q) {
+    amSearchQuery = q.trim().toLowerCase();
+    renderAMTeamList();
+    if (amSearchQuery) {
+      renderAMSearchResults();
+    } else {
+      renderAMMembers(amCurrentTeamId);
+    }
+  }
+
+  function renderAMSearchResults() {
+    var membersEl = document.getElementById('assign-dd-members');
+    var labelEl = document.getElementById('assign-dd-team-label');
+    if (!membersEl) return;
+    if (labelEl) labelEl.textContent = 'Search results';
+    var html = '';
+    var found = 0;
+    AM_TEAMS.forEach(function(team) {
+      team.members.forEach(function(m) {
+        if (m.name.toLowerCase().indexOf(amSearchQuery) === -1 && m.role.toLowerCase().indexOf(amSearchQuery) === -1) return;
+        found++;
+        var added = amSelected.has(m.id);
+        html += '<div class="am-user-row">'
+          + '<div class="am-avatar">' + m.name[0] + '</div>'
+          + '<div class="am-user-info">'
+          + '<p class="am-user-name">' + m.name + '</p>'
+          + '<p class="am-user-role">' + m.role + ' &middot; <span class="am-search-team">' + team.name + '</span></p>'
+          + '</div>'
+          + '<button type="button" class="am-add-btn' + (added ? ' added' : '') + '" onclick="toggleAMUser(\'' + m.id + '\',\'' + m.name + '\',\'' + team.name + '\')">' + (added ? AM_REM_ICON : AM_ADD_ICON) + '</button>'
+          + '</div>';
+      });
+    });
+    if (!found) html = '<p class="am-empty-state">No users found</p>';
+    membersEl.innerHTML = html;
+  }
+
+  function renderAMMembers(teamId) {
+    var membersEl = document.getElementById('assign-dd-members');
+    var labelEl = document.getElementById('assign-dd-team-label');
+    var team = AM_TEAMS.find(function(t) { return t.id === teamId; });
+    if (!team || !membersEl) return;
+    if (labelEl) labelEl.textContent = team.name;
+    var html = '';
+    team.members.forEach(function(m) {
+      var added = amSelected.has(m.id);
+      html += '<div class="am-user-row">'
+        + '<div class="am-avatar">' + m.name[0] + '</div>'
+        + '<div class="am-user-info">'
+        + '<p class="am-user-name">' + m.name + '</p>'
+        + '<p class="am-user-role">' + m.role + '</p>'
+        + '</div>'
+        + '<button type="button" class="am-add-btn' + (added ? ' added' : '') + '" onclick="toggleAMUser(\'' + m.id + '\',\'' + m.name + '\',\'' + team.name + '\')">' + (added ? AM_REM_ICON : AM_ADD_ICON) + '</button>'
+        + '</div>';
+    });
+    membersEl.innerHTML = html;
+  }
+
+  function toggleAMTeam(teamId) {
+    var team = AM_TEAMS.find(function(t) { return t.id === teamId; });
+    if (!team) return;
+    if (amTeamAllAdded(team)) {
+      team.members.forEach(function(m) { amSelected.delete(m.id); });
+    } else {
+      team.members.forEach(function(m) { amSelected.set(m.id, { name: m.name, meta: team.name }); });
+    }
+    renderAMTeamList();
+    renderAMMembers(teamId);
+    updateAMFooter();
+  }
+
+  function toggleAMUser(id, name, meta) {
+    if (amSelected.has(id)) { amSelected.delete(id); }
+    else { amSelected.set(id, { name: name, meta: meta }); }
+    renderAMTeamList();
+    if (amSearchQuery) { renderAMSearchResults(); } else { renderAMMembers(amCurrentTeamId); }
+    updateAMFooter();
+  }
+
+  function clearAllAM() {
+    amSelected.clear();
+    renderAMTeamList();
+    if (amSearchQuery) { renderAMSearchResults(); } else { renderAMMembers(amCurrentTeamId); }
+    updateAMFooter();
+  }
+
+  function updateAMFooter() {
+    var countEl = document.getElementById('am-sel-count');
+    var selEl = document.getElementById('assign-dd-sel');
+    if (countEl) countEl.textContent = amSelected.size;
+    if (selEl) selEl.style.display = amSelected.size > 0 ? 'flex' : 'none';
+  }
 
   function toggleAsvcDetails() {}
   function toggleAsvcPricing() {}
@@ -1262,6 +1600,8 @@
     const open = body.style.display !== 'none';
     body.style.display = open ? 'none' : 'block';
     chev.style.transform = open ? 'rotate(-90deg)' : 'rotate(0deg)';
+    const card = hdrEl.closest('.ie-collapsible-card');
+    if (card) card.classList.toggle('open', !open);
   }
 
   /* ── Day availability toggle (IE style) ── */
@@ -1275,6 +1615,8 @@
       times.classList.add('ie-closed');
       times.innerHTML = `<span class="ie-closed-pill">Closed</span>`;
     }
+    var grid = document.getElementById('asvc-slot-day-grid');
+    if (grid && grid.style.display !== 'none') asvcRenderSlotGrid();
   }
 
   /* kept for legacy references */
@@ -1300,15 +1642,8 @@ function openBookingPolicyScreen() {
     document.getElementById('booking-policy-screen').classList.add('open');
   }
   function updateBpPreview() {
-    const lead     = document.getElementById('bp-lead-time').value || '0';
-    const leadUnit = document.getElementById('bp-lead-unit').dataset.value || 'Hours';
-    const win      = document.getElementById('bp-window').value || '0';
-    const winUnit  = document.getElementById('bp-window-unit').dataset.value || 'Days';
     const policy   = document.getElementById('bp-policy-editor').innerText || '';
     const showPol  = document.getElementById('bp-policy-toggle').classList.contains('on');
-
-    document.getElementById('bp-prev-lead').textContent   = `${lead} ${leadUnit}`;
-    document.getElementById('bp-prev-window').textContent = `${win} ${winUnit}`;
 
     const wrap = document.getElementById('bp-prev-policy-wrap');
     if (showPol) {
@@ -1338,6 +1673,199 @@ function openBookingPolicyScreen() {
     dot.classList.add('bpf-dot-selected');
     var prevFlow = document.getElementById('bp-prev-flow');
     if (prevFlow) prevFlow.innerHTML = bpfLabels[idx];
+  }
+
+/* ── Service Config Booking Flow ── */
+  var asvcBpfSelected = 0;
+
+  function asvcBpfSelect(idx) {
+    var prev = document.getElementById('asvc-bpf-opt-' + asvcBpfSelected);
+    if (prev) {
+      prev.classList.remove('bpf-radio-selected');
+      var prevDot = prev.querySelector('.bpf-radio-dot');
+      if (prevDot) prevDot.classList.remove('bpf-dot-selected');
+    }
+    asvcBpfSelected = idx;
+    var cur = document.getElementById('asvc-bpf-opt-' + idx);
+    if (cur) {
+      cur.classList.add('bpf-radio-selected');
+      var curDot = cur.querySelector('.bpf-radio-dot');
+      if (curDot) curDot.classList.add('bpf-dot-selected');
+    }
+    var subopts = document.getElementById('asvc-slot-subopts');
+    if (subopts) subopts.style.display = idx === 1 ? 'flex' : 'none';
+    if (idx !== 1) {
+      var cb = document.getElementById('asvc-bpf-tech-cb');
+      if (cb) cb.checked = false;
+      _asvcBpfUpdateSteps(false);
+    }
+  }
+
+  var asvcSlotTypeSelected = 0;
+  function asvcSlotTypeSelect(idx) {
+    [0, 1].forEach(function(i) {
+      var opt = document.getElementById('asvc-slot-type-' + i);
+      if (!opt) return;
+      var dot = opt.querySelector('.asvc-slot-opt-dot');
+      opt.classList.toggle('asvc-slot-opt-on', i === idx);
+      if (dot) dot.classList.toggle('asvc-slot-dot-on', i === idx);
+    });
+    asvcSlotTypeSelected = idx;
+    var techWrap = document.getElementById('asvc-slot-tech-wrap');
+    if (techWrap) techWrap.style.display = idx === 0 ? 'block' : 'none';
+    var grid = document.getElementById('asvc-slot-day-grid');
+    if (grid) grid.style.display = idx === 1 ? 'block' : 'none';
+    if (idx === 1) asvcRenderSlotGrid();
+    if (idx !== 0) {
+      var cb = document.getElementById('asvc-bpf-tech-cb');
+      if (cb) cb.checked = false;
+      _asvcBpfUpdateSteps(false);
+    }
+  }
+
+  function bpfTechCheckChange(checked) {
+    _asvcBpfUpdateSteps(checked);
+  }
+
+  function _asvcBpfUpdateSteps(withTech) {
+    var stepsRow = document.getElementById('asvc-bpf-steps-1');
+    if (!stepsRow) return;
+    if (withTech) {
+      stepsRow.innerHTML = '<span class="bpf-step-pill">Address &amp; details</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill bpf-step-highlight">Date</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill bpf-step-highlight">Technician</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill bpf-step-highlight">Time slot</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill">Submit</span>';
+    } else {
+      stepsRow.innerHTML = '<span class="bpf-step-pill">Address &amp; details</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill bpf-step-highlight">Date</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill bpf-step-highlight">Time slot</span>'
+        + '<span class="bpf-step-arr">→</span>'
+        + '<span class="bpf-step-pill">Submit</span>';
+    }
+  }
+
+/* ── Service Config Slot Configuration — Weekly Grid ── */
+  var asvcSlotSelected = 0;
+  var asvcWgAdding = false;
+  var asvcWgSlots = [
+    { from: '08:30', to: '09:30', active: [1,1,1,1,1,0,0] },
+    { from: '10:30', to: '11:30', active: [1,0,1,0,1,0,0] },
+    { from: '13:00', to: '14:00', active: [0,1,0,1,0,0,0] },
+    { from: '15:00', to: '16:00', active: [1,1,0,1,1,0,0] }
+  ];
+
+  function _asvcWgFmtRange(from, to) {
+    function f(t) {
+      var p = t.split(':'), h = parseInt(p[0], 10), m = p[1];
+      var ap = h >= 12 ? 'PM' : 'AM', h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      return { h12: h12, m: m, ap: ap };
+    }
+    var a = f(from), b = f(to);
+    if (a.ap === b.ap) return a.h12 + ':' + a.m + ' – ' + b.h12 + ':' + b.m + ' ' + b.ap;
+    return a.h12 + ':' + a.m + ' ' + a.ap + ' – ' + b.h12 + ':' + b.m + ' ' + b.ap;
+  }
+
+  function _asvcWgTimeOpts(sel) {
+    var out = '';
+    for (var h = 6; h <= 21; h++) {
+      for (var m = 0; m <= 30; m += 30) {
+        if (h === 21 && m > 0) break;
+        var hh = (h < 10 ? '0' : '') + h, mm = m === 0 ? '00' : '30', val = hh + ':' + mm;
+        var ap = h >= 12 ? 'PM' : 'AM', h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+        out += '<option value="' + val + '"' + (val === sel ? ' selected' : '') + '>' + h12 + ':' + mm + ' ' + ap + '</option>';
+      }
+    }
+    return out;
+  }
+
+  var _WG_CHECK = '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="#0172cb" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+  var _WG_TRASH = '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
+
+  function asvcGetAvailableDays() {
+    var dayIds = ['mon-t', 'tue-t', 'wed-t', 'thu-t', 'fri-t', 'sat-t', 'sun-t'];
+    return dayIds.map(function(id) {
+      var el = document.getElementById(id);
+      return el ? !el.classList.contains('ie-closed') : true;
+    });
+  }
+
+  function asvcRenderSlotGrid() {
+    var tbody = document.getElementById('asvc-wg-body');
+    var addArea = document.getElementById('asvc-wg-add-area');
+    if (!tbody) return;
+    var avail = asvcGetAvailableDays();
+    var html = '';
+    asvcWgSlots.forEach(function(slot, si) {
+      html += '<tr class="asvc-wg-row">';
+      html += '<td class="asvc-wg-td-slot"><span class="asvc-wg-slot-time">' + _asvcWgFmtRange(slot.from, slot.to) + '</span></td>';
+      for (var di = 0; di < 7; di++) {
+        var dayAvail = avail[di];
+        if (!dayAvail && slot.active[di]) slot.active[di] = 0;
+        var on = !!slot.active[di];
+        var wknd = di >= 5 ? ' asvc-wg-wknd' : '';
+        var offCls = dayAvail ? '' : ' asvc-wg-day-off';
+        html += '<td class="asvc-wg-td-day' + wknd + offCls + '">';
+        if (dayAvail) {
+          html += '<button class="asvc-wg-toggle' + (on ? ' on' : '') + '" onclick="asvcWgTog(' + si + ',' + di + ');event.stopPropagation();">'
+            + (on ? _WG_CHECK : '') + '</button>';
+        } else {
+          html += '<span class="asvc-wg-day-dash">—</span>';
+        }
+        html += '</td>';
+      }
+      html += '<td class="asvc-wg-td-rm"><button class="asvc-wg-rm-btn" onclick="asvcWgDel(' + si + ');event.stopPropagation();" title="Remove">' + _WG_TRASH + '</button></td>';
+      html += '</tr>';
+    });
+    tbody.innerHTML = html;
+
+    var thead = document.querySelector('#asvc-slot-day-grid thead tr');
+    if (thead) {
+      var ths = thead.querySelectorAll('.asvc-wg-th-day');
+      ths.forEach(function(th, di) { th.classList.toggle('asvc-wg-day-off', !avail[di]); });
+    }
+
+    if (addArea) {
+      if (asvcWgAdding) {
+        addArea.innerHTML = '<div class="asvc-wg-add-form">'
+          + '<span class="asvc-wg-add-lbl">From</span>'
+          + '<select class="asvc-wg-time-sel" id="asvc-wg-from">' + _asvcWgTimeOpts('08:00') + '</select>'
+          + '<span class="asvc-wg-add-lbl">to</span>'
+          + '<select class="asvc-wg-time-sel" id="asvc-wg-to">' + _asvcWgTimeOpts('09:00') + '</select>'
+          + '<button class="asvc-wg-add-confirm" onclick="asvcWgConfirm();event.stopPropagation();">Add slot</button>'
+          + '<button class="asvc-wg-add-cancel" onclick="asvcWgAdding=false;asvcRenderSlotGrid();event.stopPropagation();">Cancel</button>'
+          + '</div>';
+      } else {
+        addArea.innerHTML = '<button class="asvc-wg-ghost-btn" onclick="asvcWgAdding=true;asvcRenderSlotGrid();event.stopPropagation();">'
+          + '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'
+          + ' Add time slot</button>';
+      }
+    }
+  }
+
+  function asvcWgTog(si, di) {
+    asvcWgSlots[si].active[di] = asvcWgSlots[si].active[di] ? 0 : 1;
+    asvcRenderSlotGrid();
+  }
+
+  function asvcWgDel(si) {
+    asvcWgSlots.splice(si, 1);
+    asvcRenderSlotGrid();
+  }
+
+  function asvcWgConfirm() {
+    var f = document.getElementById('asvc-wg-from').value;
+    var t = document.getElementById('asvc-wg-to').value;
+    if (f >= t) { alert('End time must be after start time.'); return; }
+    asvcWgSlots.push({ from: f, to: t, active: [1,1,1,1,1,0,0] });
+    asvcWgAdding = false;
+    asvcRenderSlotGrid();
   }
 
 /* ── Advanced Settings helpers ── */
@@ -1503,6 +2031,7 @@ function pwScrollDates(dir) {
   function navigateToStep(n) {
     const screens = [
       'appearance-screen',
+      'widget-purpose-screen',
       'questions-screen',
       'services-screen',
       'booking-policy-screen',
@@ -1529,3 +2058,15 @@ function pwScrollDates(dir) {
     document.getElementById('wr-panel-qr').style.display = tab === 'qr' ? 'flex' : 'none';
     document.getElementById('wr-panel-embed').style.display = tab === 'embed' ? 'flex' : 'none';
   }
+
+  // Ensure assign modal button is wired even if inline onclick fails
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('assign-trigger');
+    if (btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openAssignModal();
+      });
+    }
+    asvcRenderSlotGrid();
+  });
