@@ -238,11 +238,11 @@
         <div class="widgets-grid" id="widgets-grid">
 
           <!-- Card 1: Active – Instant Estimation -->
-          <!-- Card 2: Active – Online Booking (with open dropdown) -->
+          <!-- Card 2: Active – Online Booking -->
           <div class="widget-card" onclick="handleCardClick(event, 'card2')" style="position:relative;">
             <div class="card-top">
-              <div class="card-icon-wrap green">
-                <svg fill="none" viewBox="0 0 24 24" stroke="#039855" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
+              <div class="card-icon-wrap blue">
+                <svg fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
               </div>
               <div class="card-actions">
                 <div class="status-badge">
@@ -258,10 +258,10 @@
               </div>
             </div>
             <div class="card-body">
+              <span class="card-type-badge online-booking">Online Booking</span>
               <p class="card-title">Online Booking - Seattle</p>
               <p class="card-desc">Online booking tool that lets customers schedule services, select appointments, and manage their bookings with ease.</p>
             </div>
-            <!-- Dropdown open state shown -->
             <div class="dropdown-menu" id="dd2" style="display:none;">
               <div class="dropdown-section">
                 <button class="dropdown-item" onclick="showToast('Opening editor…')">
@@ -283,8 +283,8 @@
           <!-- Card 3: Inactive – Instant Estimate Olympia -->
           <div class="widget-card" onclick="handleCardClick(event, 'card3')" style="position:relative;">
             <div class="card-top">
-              <div class="card-icon-wrap grey">
-                <svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
+              <div class="card-icon-wrap yellow">
+                <svg fill="none" viewBox="0 0 24 24" stroke="#a16207" stroke-width="1.5"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>
               </div>
               <div class="card-actions">
                 <div class="status-badge">
@@ -297,8 +297,9 @@
               </div>
             </div>
             <div class="card-body">
+              <span class="card-type-badge instant-estimate">Instant Estimate</span>
               <p class="card-title">Online Booking - Olympia</p>
-              <p class="card-desc">Online booking tool that lets customers schedule services, select appointments, and manage their bookings with ease.</p>
+              <p class="card-desc">Give customers an on-the-spot price estimate based on their inputs — no back-and-forth needed.</p>
             </div>
             <div class="dropdown-menu" id="dd3" style="display:none;">
               <div class="dropdown-section">
@@ -322,11 +323,11 @@
             </div>
           </div>
 
-          <!-- Card 4: Draft -->
+          <!-- Card 4: Draft – Estimate & Book -->
           <div class="widget-card" onclick="handleCardClick(event, 'card4')">
             <div class="card-top">
-              <div class="card-icon-wrap grey">
-                <svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
+              <div class="card-icon-wrap green">
+                <svg fill="none" viewBox="0 0 24 24" stroke="#15803d" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
               </div>
               <div class="card-actions">
                 <div class="status-badge">
@@ -339,8 +340,9 @@
               </div>
             </div>
             <div class="card-body">
+              <span class="card-type-badge estimate-booking">Estimate & Book</span>
               <p class="card-title">Online Booking - Seattle</p>
-              <p class="card-desc">Online booking tool that lets customers schedule services, select appointments, and manage their bookings with ease.</p>
+              <p class="card-desc">Show a price estimate upfront, then let customers convert immediately by booking an appointment — all in one flow.</p>
             </div>
             <div class="dropdown-menu" id="dd4" style="display:none;">
               <div class="dropdown-section">
@@ -530,37 +532,7 @@
   </div>
 
   <!-- Stepper -->
-  <div class="ap-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Widget Purpose</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Advanced Settings</span>
-    </div>
-  </div>
+  <div class="ap-stepper-bar" id="ap-stepper-bar"></div>
 
   <!-- Body -->
   <div class="ap-body">
@@ -661,7 +633,7 @@
       <!-- Footer -->
       <div class="ap-footer">
         <button class="ap-btn-back" onclick="goBackToWidgets()">Back</button>
-        <button class="ap-btn-next" onclick="openWidgetPurposeScreen()">Next</button>
+        <button class="ap-btn-next" onclick="goToNextScreen('appearance-screen')">Next</button>
       </div>
     </div>
 
@@ -755,7 +727,7 @@
   </div>
 
   <!-- Stepper -->
-  <div class="ap-stepper-bar">
+  <div class="ap-stepper-bar" id="wp-stepper-bar">
     <div class="ap-step">
       <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
       <span class="ap-step-label">Appearance</span>
@@ -763,7 +735,7 @@
     <div class="ap-step-line"></div>
     <div class="ap-step">
       <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Widget Purpose</span>
+      <span class="ap-step-label active">Widget Type</span>
     </div>
     <div class="ap-step-line"></div>
     <div class="ap-step">
@@ -778,11 +750,6 @@
     <div class="ap-step-line"></div>
     <div class="ap-step">
       <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
       <span class="ap-step-label">Advanced Settings</span>
     </div>
   </div>
@@ -791,7 +758,7 @@
   <div class="ap-body">
     <div class="ap-form-pane">
       <div class="ap-form-scroll">
-        <p class="ap-section-title">Widget Purpose</p>
+        <p class="ap-section-title">Widget Type</p>
         <p class="ap-section-subtitle">Choose what you'd like this widget to do for your customers.</p>
 
         <div class="wp-purpose-list">
@@ -832,13 +799,13 @@
             <div class="wp-purpose-radio-dot"></div>
           </div>
 
-          <!-- Option 4: Lead Intake Form -->
+          <!-- Option 4: Lead Intake -->
           <div class="wp-purpose-card" id="wpc-lead-intake" onclick="selectWidgetPurpose('lead-intake')">
             <div class="wp-purpose-icon" style="background:#fdf4ff; color:#9333ea;">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="wp-purpose-content">
-              <p class="wp-purpose-title">Lead Intake Form</p>
+              <p class="wp-purpose-title">Lead Intake</p>
               <p class="wp-purpose-desc">Capture customer contact details and service needs for your team to follow up — great for high-touch or custom jobs.</p>
             </div>
             <div class="wp-purpose-radio-dot"></div>
@@ -849,29 +816,20 @@
         <!-- Lead Handling -->
         <div class="wpp-lead-section">
           <p class="ap-section-title" style="margin-top:28px;">Lead Handling</p>
-          <p class="ap-section-subtitle" style="margin-bottom:14px;">Choose what gets created in Zuper when a customer submits this widget.</p>
-          <div class="as-mini-card">
-            <div onclick="selectLeadHandling(this,'contact')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.06);">
+          <p class="ap-section-subtitle" style="margin-bottom:14px;">What should happen in Zuper when a customer submits this widget?</p>
+          <div class="as-mini-card" style="padding:14px 16px;display:flex;flex-direction:column;gap:0;">
+            <label class="bpf-checkbox-label" onclick="event.stopPropagation()">
+              <input type="checkbox" class="bpf-checkbox" id="lh-job-cb" onchange="toggleLhJob(this.checked)">
               <div>
-                <p class="as-radio-label">Create a Contact</p>
-                <p style="font-size:12px;color:#9ca3af;margin:2px 0 0;">Only a contact record is created — no job scheduled yet.</p>
+                <span class="bpf-checkbox-text" style="font-weight:500;color:#111827;">Create a Job</span>
+                <p style="font-size:12px;color:#9ca3af;margin:3px 0 0;">Automatically create a job record, ready to assign and schedule.</p>
               </div>
-              <div class="as-radio-btn" id="lh-contact"></div>
-            </div>
-            <div style="display:flex;flex-direction:column;">
-              <div onclick="selectLeadHandling(this,'job')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;">
-                <div>
-                  <p class="as-radio-label">Create a Contact &amp; Job</p>
-                  <p style="font-size:12px;color:#9ca3af;margin:2px 0 0;">A contact and a job are created together — ready to assign and schedule.</p>
-                </div>
-                <div class="as-radio-btn selected" id="lh-job"></div>
-              </div>
-              <div id="lh-job-sub" style="background:#f9fafb;border-top:1px solid rgba(0,0,0,.06);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
-                <span style="font-size:13px;color:#6b7280;flex:1;">Job Category under which job needs to be created</span>
-                <div class="as-input" style="display:flex;align-items:center;justify-content:space-between;width:160px;padding:8px 12px;">
-                  <span class="as-input-placeholder">Roofing</span>
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
+            </label>
+            <div id="lh-job-sub" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6;align-items:center;justify-content:space-between;gap:12px;">
+              <span style="font-size:13px;color:#6b7280;flex:1;">Job Category</span>
+              <div class="as-input lh-cat-trigger" id="lh-cat-trigger" onclick="toggleLhCatDd(event)" style="display:flex;align-items:center;justify-content:space-between;width:320px;padding:8px 12px;cursor:pointer;gap:8px;">
+                <span id="lh-cat-label" style="font-size:13px;color:#374151;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Select category</span>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14" style="flex-shrink:0;color:#9ca3af;"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
             </div>
           </div>
@@ -880,8 +838,8 @@
       </div>
 
       <div class="ap-footer">
-        <button class="ap-btn-back" onclick="goBackToAppearance()">Back</button>
-        <button class="ap-btn-next" onclick="openQuestionsScreen()">Next</button>
+        <button class="ap-btn-back" onclick="goToPrevScreen('widget-purpose-screen')">Back</button>
+        <button class="ap-btn-next" onclick="goToNextScreen('widget-purpose-screen')">Next</button>
       </div>
     </div>
 
@@ -946,38 +904,8 @@
     <div></div>
   </div>
 
-  <!-- Stepper: step 3 active -->
-  <div class="ap-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Widget Purpose</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Advanced Settings</span>
-    </div>
-  </div>
+  <!-- Stepper -->
+  <div class="ap-stepper-bar" id="qs-stepper-bar"></div>
 
   <!-- Body -->
   <div class="qs-body">
@@ -1083,8 +1011,8 @@
 
       <!-- Footer -->
       <div class="qs-footer">
-        <button class="qs-btn-back" onclick="goBackToWidgetPurpose()">Back</button>
-        <button class="qs-btn-next" onclick="openServicesScreen()">Next</button>
+        <button class="qs-btn-back" onclick="goToPrevScreen('questions-screen')">Back</button>
+        <button class="qs-btn-next" onclick="goToNextScreen('questions-screen')">Next</button>
       </div>
     </div>
 
@@ -1150,38 +1078,8 @@
     <div></div>
   </div>
 
-  <!-- Stepper: steps 1+2+3 done, step 4 active -->
-  <div class="ap-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Widget Purpose</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Advanced Settings</span>
-    </div>
-  </div>
+  <!-- Stepper -->
+  <div class="ap-stepper-bar" id="svc-stepper-bar"></div>
 
   <!-- Body -->
   <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
@@ -1319,8 +1217,8 @@
 
       <!-- Footer inside left pane -->
       <div class="svc-footer">
-        <button class="svc-btn-back" onclick="goBackToQuestions()">Back</button>
-        <button class="svc-btn-proceed" onclick="openBookingPolicyScreen()">Next</button>
+        <button class="svc-btn-back" onclick="goToPrevScreen('services-screen')">Back</button>
+        <button class="svc-btn-proceed" onclick="goToNextScreen('services-screen')">Next</button>
       </div>
     </div>
 
@@ -1416,7 +1314,7 @@
     <div class="ap-step-line"></div>
     <div class="ap-step">
       <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Widget Purpose</span>
+      <span class="ap-step-label">Widget Type</span>
     </div>
     <div class="ap-step-line"></div>
     <div class="ap-step">
@@ -1861,38 +1759,8 @@
     <div></div>
   </div>
 
-  <!-- Stepper: steps 1–4 done, step 5 active -->
-  <div class="ap-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Widget Purpose</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Advanced Settings</span>
-    </div>
-  </div>
+  <!-- Stepper -->
+  <div class="ap-stepper-bar" id="bp-stepper-bar"></div>
 
   <!-- Body -->
   <div class="bp-body">
@@ -1906,12 +1774,269 @@
           <p class="bp-page-sub">Set operational rules for scheduling, cancellations &amp; booking availability</p>
         </div>
 
+        <!-- ── Section 2: Assignment ── -->
+        <div class="ie-collapsible-card open" style="margin-top:24px;">
+          <div class="ie-collapsible-hdr" onclick="toggleIeCard('bp-sec2-body', this)">
+            <div>
+              <p class="ie-section-title">Assignment</p>
+              <p class="ie-section-sub">Choose which teams or individuals can fulfil this service.</p>
+            </div>
+            <svg class="ie-coll-chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="bp-sec2-body" class="ie-collapsible-body">
+            <div class="ie-field">
+              <button type="button" class="assign-trigger" id="bp-assign-trigger" onclick="openAssignDropdown(event,'bp-assign-trigger','bp-assign-trigger-text')">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span id="bp-assign-trigger-text">Select teams or users</span>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14" style="margin-left:auto;color:#9ca3af;"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <span class="ie-field-hint">Leave empty to allow any available team member</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Section 3: Scheduling ── -->
+        <div class="ie-collapsible-card open">
+          <div class="ie-collapsible-hdr" onclick="toggleIeCard('bp-sec3-body', this)">
+            <div>
+              <p class="ie-section-title">Scheduling</p>
+              <p class="ie-section-sub">Job duration, buffer time, booking constraints and available hours.</p>
+            </div>
+            <svg class="ie-coll-chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="bp-sec3-body" class="ie-collapsible-body">
+
+            <!-- Slot Duration -->
+            <div class="ie-field">
+              <span class="ie-label-sm">Slot Duration</span>
+              <div class="ie-suffix-wrap">
+                <input class="ie-input ie-has-suffix" id="bp-duration" type="number" value="60" min="15" step="15" />
+                <div class="ie-suffix-unit">
+                  <div class="unit-dd" id="bp-duration-unit" data-value="Mins">
+                    <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                      <span class="unit-dd-val">Mins</span>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="unit-dd-menu">
+                      <div class="unit-dd-item selected" onclick="selectUnitDd(this,'Mins')">Mins</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Hours')">Hours</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <span class="ie-field-hint">Total time blocked on the calendar per booking, including travel and on-site work</span>
+            </div>
+
+            <!-- Appointment Spacing -->
+            <div class="ie-field">
+              <span class="ie-label-sm">Appointment Spacing</span>
+              <div class="appt-spacing-wrap" onclick="event.stopPropagation()">
+                <label class="appt-spacing-option selected" id="bp-spacing-opt-none" onclick="selectSpacingBp('none')">
+                  <input type="radio" name="bp-appt-spacing" value="none" checked />
+                  <div class="appt-spacing-body">
+                    <div class="appt-spacing-header">
+                      <span class="appt-spacing-title">No buffer</span>
+                      <span class="appt-spacing-badge blue">Maximum availability</span>
+                    </div>
+                    <p class="appt-spacing-desc">Jobs can be booked consecutively. Best for quick inspections or clustered jobs in the same neighbourhood.</p>
+                  </div>
+                </label>
+                <label class="appt-spacing-option" id="bp-spacing-opt-fixed" onclick="selectSpacingBp('fixed')">
+                  <input type="radio" name="bp-appt-spacing" value="fixed" />
+                  <div class="appt-spacing-body">
+                    <div class="appt-spacing-header">
+                      <span class="appt-spacing-title">Fixed crew buffer</span>
+                    </div>
+                    <p class="appt-spacing-desc">Block a consistent window after every job for equipment load-out, site cleanup, or crew debrief before the next dispatch.</p>
+                    <div class="appt-spacing-sub" id="bp-spacing-sub-fixed">
+                      <span>Reserve</span>
+                      <input class="appt-spacing-num" type="number" value="30" min="5" step="5" id="bp-spacing-fixed-val" />
+                      <div class="unit-dd unit-dd-inline" id="bp-spacing-fixed-unit" data-value="minutes">
+                        <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                          <span class="unit-dd-val">minutes</span>
+                          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="unit-dd-menu">
+                          <div class="unit-dd-item selected" onclick="selectUnitDd(this,'minutes')">minutes</div>
+                          <div class="unit-dd-item" onclick="selectUnitDd(this,'hours')">hours</div>
+                        </div>
+                      </div>
+                      <span>after each job before the next booking</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="ie-sub-divider"><span>Booking Constraints</span></div>
+
+            <!-- Lead Time -->
+            <div class="ie-field">
+              <span class="ie-label-sm">Minimum Lead Time</span>
+              <p class="ie-field-hint">Customers can't book within this window from now.</p>
+              <div class="ie-suffix-wrap" style="margin-top:6px;">
+                <input class="ie-input ie-has-suffix" id="bp-lead-time" type="number" value="24" min="0" step="1" />
+                <div class="ie-suffix-unit">
+                  <div class="unit-dd" id="bp-lead-unit" data-value="Hours">
+                    <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                      <span class="unit-dd-val">Hours</span>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="unit-dd-menu">
+                      <div class="unit-dd-item selected" onclick="selectUnitDd(this,'Hours')">Hours</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Days')">Days</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Mins')">Mins</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scheduling Window -->
+            <div class="ie-field" style="margin-top:4px;">
+              <span class="ie-label-sm">Maximum Scheduling Window</span>
+              <p class="ie-field-hint">Customers can only book within this range from today.</p>
+              <div class="ie-suffix-wrap" style="margin-top:6px;">
+                <input class="ie-input ie-has-suffix" id="bp-sched-window" type="number" value="60" min="1" step="1" />
+                <div class="ie-suffix-unit">
+                  <div class="unit-dd" id="bp-window-unit" data-value="Days">
+                    <button class="unit-dd-btn" onclick="event.stopPropagation();toggleUnitDd(this)">
+                      <span class="unit-dd-val">Days</span>
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="unit-dd-menu">
+                      <div class="unit-dd-item selected" onclick="selectUnitDd(this,'Days')">Days</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Weeks')">Weeks</div>
+                      <div class="unit-dd-item" onclick="selectUnitDd(this,'Months')">Months</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ie-sub-divider"><span>Available Hours</span></div>
+
+            <!-- Available Days & Hours -->
+            <div class="ie-field">
+              <p class="ie-field-hint">Set the days and hours customers can schedule this service.</p>
+              <div class="ie-week-grid" style="margin-top:8px;">
+                <div class="ie-week-row">
+                  <div class="ie-week-left"><span class="ie-day-name">Monday</span><div class="ie-toggle on" onclick="toggleIeDay(this,'bp-mon-t')"></div></div>
+                  <div class="ie-day-times" id="bp-mon-t"><input class="ie-time" type="time" value="08:00"><span class="ie-tsep">–</span><input class="ie-time" type="time" value="17:00"></div>
+                </div>
+                <div class="ie-week-row">
+                  <div class="ie-week-left"><span class="ie-day-name">Tuesday</span><div class="ie-toggle on" onclick="toggleIeDay(this,'bp-tue-t')"></div></div>
+                  <div class="ie-day-times" id="bp-tue-t"><input class="ie-time" type="time" value="08:00"><span class="ie-tsep">–</span><input class="ie-time" type="time" value="17:00"></div>
+                </div>
+                <div class="ie-week-row">
+                  <div class="ie-week-left"><span class="ie-day-name">Wednesday</span><div class="ie-toggle on" onclick="toggleIeDay(this,'bp-wed-t')"></div></div>
+                  <div class="ie-day-times" id="bp-wed-t"><input class="ie-time" type="time" value="08:00"><span class="ie-tsep">–</span><input class="ie-time" type="time" value="17:00"></div>
+                </div>
+                <div class="ie-week-row">
+                  <div class="ie-week-left"><span class="ie-day-name">Thursday</span><div class="ie-toggle on" onclick="toggleIeDay(this,'bp-thu-t')"></div></div>
+                  <div class="ie-day-times" id="bp-thu-t"><input class="ie-time" type="time" value="08:00"><span class="ie-tsep">–</span><input class="ie-time" type="time" value="17:00"></div>
+                </div>
+                <div class="ie-week-row">
+                  <div class="ie-week-left"><span class="ie-day-name">Friday</span><div class="ie-toggle on" onclick="toggleIeDay(this,'bp-fri-t')"></div></div>
+                  <div class="ie-day-times" id="bp-fri-t"><input class="ie-time" type="time" value="08:00"><span class="ie-tsep">–</span><input class="ie-time" type="time" value="17:00"></div>
+                </div>
+                <div class="ie-week-row">
+                  <div class="ie-week-left"><span class="ie-day-name">Saturday</span><div class="ie-toggle" onclick="toggleIeDay(this,'bp-sat-t')"></div></div>
+                  <div class="ie-day-times ie-closed" id="bp-sat-t"><span class="ie-closed-pill">Closed</span></div>
+                </div>
+                <div class="ie-week-row" style="border-bottom:none;">
+                  <div class="ie-week-left"><span class="ie-day-name">Sunday</span><div class="ie-toggle" onclick="toggleIeDay(this,'bp-sun-t')"></div></div>
+                  <div class="ie-day-times ie-closed" id="bp-sun-t"><span class="ie-closed-pill">Closed</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── Section 4: Customer Booking Flow ── -->
+        <div class="ie-collapsible-card open">
+          <div class="ie-collapsible-hdr" onclick="toggleIeCard('bp-sec4-body', this)">
+            <div>
+              <p class="ie-section-title">Customer Booking Flow</p>
+              <p class="ie-section-sub">Choose what steps the customer goes through before submitting.</p>
+            </div>
+            <svg class="ie-coll-chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="bp-sec4-body" class="ie-collapsible-body">
+            <div class="bpf-radio-group">
+
+              <div class="bpf-radio-item bpf-radio-selected" onclick="bpBpfSelect(0)" id="bp-bpf-opt-0">
+                <div class="bpf-radio-dot bpf-dot-selected"></div>
+                <div class="bpf-radio-content">
+                  <p class="bpf-radio-title">Customer picks a date</p>
+                  <p class="bpf-radio-desc">Your customer chooses the day that works for them — you decide who shows up and when.</p>
+                  <div class="bpf-steps-row">
+                    <span class="bpf-step-pill">Address &amp; details</span>
+                    <span class="bpf-step-arr">→</span>
+                    <span class="bpf-step-pill bpf-step-highlight">Date</span>
+                    <span class="bpf-step-arr">→</span>
+                    <span class="bpf-step-pill">Submit</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bpf-radio-item" onclick="bpBpfSelect(1)" id="bp-bpf-opt-1">
+                <div class="bpf-radio-dot"></div>
+                <div class="bpf-radio-content">
+                  <p class="bpf-radio-title">Customer picks a date &amp; time slot</p>
+                  <p class="bpf-radio-desc">Your customer locks in the day and a time window — your crew shows up on schedule.</p>
+                  <div class="bpf-steps-row">
+                    <span class="bpf-step-pill">Address &amp; details</span>
+                    <span class="bpf-step-arr">→</span>
+                    <span class="bpf-step-pill bpf-step-highlight">Date</span>
+                    <span class="bpf-step-arr">→</span>
+                    <span class="bpf-step-pill bpf-step-highlight">Time slot</span>
+                    <span class="bpf-step-arr">→</span>
+                    <span class="bpf-step-pill">Submit</span>
+                  </div>
+
+                  <div class="asvc-slot-subopts" id="bp-slot-subopts" style="display:none;">
+                    <div class="asvc-slot-opt asvc-slot-opt-on" onclick="bpSlotTypeSelect(0);event.stopPropagation();" id="bp-slot-type-0">
+                      <div class="asvc-slot-opt-hdr">
+                        <div class="asvc-slot-opt-dot asvc-slot-dot-on"></div>
+                        <div class="asvc-slot-opt-body">
+                          <p class="asvc-slot-opt-title">Assisted Scheduling</p>
+                          <p class="asvc-slot-opt-desc">Zuper checks your team's real-time calendar and only shows windows they're actually free — no manual setup needed.</p>
+                        </div>
+                      </div>
+                      <div class="asvc-slot-tech-wrap" id="bp-slot-tech-wrap">
+                        <label class="bpf-checkbox-label" onclick="event.stopPropagation()">
+                          <input type="checkbox" class="bpf-checkbox" id="bp-bpf-tech-cb">
+                          <span class="bpf-checkbox-text">Allow customer to choose a slot by technician</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="asvc-slot-opt" onclick="bpSlotTypeSelect(1);event.stopPropagation();" id="bp-slot-type-1">
+                      <div class="asvc-slot-opt-hdr">
+                        <div class="asvc-slot-opt-dot"></div>
+                        <div class="asvc-slot-opt-body">
+                          <p class="asvc-slot-opt-title">Preferred Slots</p>
+                          <p class="asvc-slot-opt-desc">Define the exact time windows you offer — customers pick from what you've set up for each day.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div><!-- /scroll -->
 
       <!-- Footer -->
       <div class="bp-footer">
-        <button class="bp-btn-back" onclick="closeBookingPolicyScreen()">Back</button>
-        <button class="bp-btn-next" onclick="openAdvancedSettingsScreen()">Next</button>
+        <button class="bp-btn-back" onclick="goToPrevScreen('booking-policy-screen')">Back</button>
+        <button class="bp-btn-next" onclick="goToNextScreen('booking-policy-screen')">Next</button>
       </div>
     </div><!-- /left -->
 
@@ -1928,6 +2053,187 @@
 
   </div><!-- /body -->
 </div>
+<!-- ═══════════════════════════════════════════════
+     ROOFING OPTIONS SCREEN
+════════════════════════════════════════════════ -->
+
+<div id="roofing-options-screen">
+  <!-- Top nav -->
+  <div class="screen-topnav">
+    <div class="stn-logo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <button class="stn-new-btn">New <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <div class="stn-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="stn-kbd"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="stn-right">
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="stn-badge">99+</span></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
+      <div class="stn-icon-btn"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="stn-avatar">S</div>
+    </div>
+  </div>
+  <!-- Breadcrumb -->
+  <div class="ap-breadcrumb">
+    <div class="ap-breadcrumb-left">
+      <button class="ap-back-btn" onclick="goBackToWidgets()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to widgets
+      </button>
+    </div>
+    <div class="ap-breadcrumb-center">
+      <div class="ap-widget-name">
+        <span class="wname-text">Online Booking - Seattle</span>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+    </div>
+    <div></div>
+  </div>
+
+  <!-- Stepper -->
+  <div class="ap-stepper-bar" id="ro-stepper-bar"></div>
+
+  <!-- Body -->
+  <div class="ro-body">
+    <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
+
+      <!-- LEFT PANE: Option list -->
+      <div class="ro-left">
+        <div class="ro-scroll">
+
+          <div class="ro-header">
+            <div>
+              <p class="ro-title">Roofing Options</p>
+              <p class="ro-subtitle">Add and manage the roofing options customers can choose from.</p>
+            </div>
+            <button class="ro-add-btn" onclick="roAddOption()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="15" height="15"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Option
+            </button>
+          </div>
+
+          <!-- Option list -->
+          <div id="ro-options-list">
+
+            <!-- Card 0: Metal Roofing Installation -->
+            <div class="ro-list-card" id="ro-card-0">
+              <div class="ro-list-thumb" style="background:linear-gradient(140deg,#b91c1c,#7f1d1d);">
+                <svg fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.35)" stroke-width="1" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.35)" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="ro-list-info">
+                <div class="ro-list-name-row">
+                  <span class="ro-list-name">Metal Roofing Installation</span>
+                  <span class="ro-list-badge" style="color:#027a48;background:#ecfdf3;">Best</span>
+                </div>
+                <p class="ro-list-desc">Architectural asphalt shingles deliver the best mix of curb appeal, dependability, and value. Built with reinforced fiber...</p>
+                <div class="ro-list-price-row">
+                  <span class="ro-list-price">$820<span class="ro-list-unit"> /sq</span></span>
+                  <span class="ro-list-sep">|</span>
+                  <span class="ro-list-finance">Pay as low as $180 /mo.</span>
+                  <div class="ro-list-controls">
+                    <div class="ro-list-toggle" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
+                    <button class="ro-list-menu-btn" onclick="event.stopPropagation()"><svg fill="currentColor" viewBox="0 0 4 18" width="4" height="18"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="9" r="1.5"/><circle cx="2" cy="16" r="1.5"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 1: Asphalt Shingles - Premium (Hot selling, toggle on) -->
+            <div class="ro-list-card" id="ro-card-1">
+              <div class="ro-list-thumb" style="background:linear-gradient(140deg,#374151,#111827);">
+                <svg fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.35)" stroke-width="1" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.35)" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="ro-list-info">
+                <div class="ro-list-name-row">
+                  <span class="ro-list-name">Asphalt Shingles - Premium</span>
+                  <span class="ro-list-badge" style="color:#c4320a;background:#fff4ed;">Hot selling</span>
+                </div>
+                <p class="ro-list-desc">Architectural asphalt shingles deliver the best mix of curb appeal, dependability, and value. Built with reinforced fiber...</p>
+                <div class="ro-list-price-row">
+                  <span class="ro-list-price">$620<span class="ro-list-unit"> /sq</span></span>
+                  <span class="ro-list-sep">|</span>
+                  <span class="ro-list-finance">Pay as low as $180 /mo.</span>
+                  <div class="ro-list-controls">
+                    <div class="ro-list-toggle on" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
+                    <button class="ro-list-menu-btn" onclick="event.stopPropagation()"><svg fill="currentColor" viewBox="0 0 4 18" width="4" height="18"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="9" r="1.5"/><circle cx="2" cy="16" r="1.5"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Asphalt Shingles - Premium (Premium, toggle off) -->
+            <div class="ro-list-card" id="ro-card-2">
+              <div class="ro-list-thumb" style="background:linear-gradient(140deg,#4b5563,#1f2937);">
+                <svg fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.35)" stroke-width="1" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.35)" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="ro-list-info">
+                <div class="ro-list-name-row">
+                  <span class="ro-list-name">Asphalt Shingles - Premium</span>
+                  <span class="ro-list-badge" style="color:#1d4ed8;background:#eff6ff;">Premium</span>
+                </div>
+                <p class="ro-list-desc">Architectural asphalt shingles deliver the best mix of curb appeal, dependability, and value. Built with reinforced fiber...</p>
+                <div class="ro-list-price-row">
+                  <span class="ro-list-price">$1220<span class="ro-list-unit"> /sq</span></span>
+                  <span class="ro-list-sep">|</span>
+                  <span class="ro-list-finance">Pay as low as $180 /mo.</span>
+                  <div class="ro-list-controls">
+                    <div class="ro-list-toggle" onclick="event.stopPropagation();this.classList.toggle('on')"></div>
+                    <button class="ro-list-menu-btn" onclick="event.stopPropagation()"><svg fill="currentColor" viewBox="0 0 4 18" width="4" height="18"><circle cx="2" cy="2" r="1.5"/><circle cx="2" cy="9" r="1.5"/><circle cx="2" cy="16" r="1.5"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /ro-options-list -->
+
+        </div><!-- /ro-scroll -->
+
+        <!-- Footer -->
+        <div class="ro-footer">
+          <button class="ro-btn-back" onclick="goToPrevScreen('roofing-options-screen')">Back</button>
+          <button class="ro-btn-next" onclick="goToNextScreen('roofing-options-screen')">Proceed</button>
+        </div>
+      </div><!-- /ro-left -->
+
+      <!-- RIGHT PANE: Customer-facing carousel preview -->
+      <div class="ro-right">
+        <div class="ro-carousel-wrap">
+
+          <!-- Active card (focused/selected) -->
+          <div class="ro-car-card">
+            <div class="ro-car-img" style="background:linear-gradient(180deg,#374151,#111827);">
+              <svg fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.25)" stroke-width="1" width="36" height="36"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.25)" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg>
+              <div class="ro-car-top-badges">
+                <span class="ro-car-hot-badge">Hot selling</span>
+                <button class="ro-car-hide-btn">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="ro-car-body">
+              <p class="ro-car-name">Architectural Asphalt Shingles</p>
+              <p class="ro-car-desc">Architectural asphalt shingles deliver the best mix of curb appeal, dependability, and value. Built with reinforced fiberglass mats an...</p>
+              <div class="ro-car-price-row">
+                <span class="ro-car-price">$620</span><span class="ro-car-unit">/sq</span>
+              </div>
+              <p class="ro-car-finance">Pay as low as $180 /mo.</p>
+              <button class="ro-car-estimate-btn">Get Estimate</button>
+              <button class="ro-car-details-btn">View details</button>
+            </div>
+          </div>
+
+          <!-- Side card (partially visible) -->
+
+        </div>
+      </div><!-- /ro-right -->
+
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════
      ADVANCED SETTINGS SCREEN (Step 5)
 ════════════════════════════════════════════════ -->
@@ -1969,38 +2275,8 @@
     <div></div>
   </div>
 
-  <!-- Stepper: all previous done, Advanced Settings active -->
-  <div class="ap-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Widget Purpose</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Advanced Settings</span>
-    </div>
-  </div>
+  <!-- Stepper -->
+  <div class="ap-stepper-bar" id="as-stepper-bar"></div>
 
   <!-- Body -->
   <div class="as-body">
@@ -2016,18 +2292,6 @@
 
         <!-- ── Widget Behaviour ── -->
         <div class="as-section-card">
-          <div class="as-card-hdr">
-            <div class="as-card-hdr-left">
-              <div class="as-card-icon">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-              </div>
-              <div>
-                <p class="as-card-title">Widget Behaviour</p>
-                <p class="as-card-sub">Control how the booking widget responds to customers in specific scenarios.</p>
-              </div>
-            </div>
-          </div>
-
           <div class="as-card-body">
 
             <!-- Text Message Opt-In -->
@@ -2035,9 +2299,8 @@
               <div class="as-inner-row">
                 <div class="as-inner-content">
                   <p class="as-inner-title">Text Message Opt-In</p>
-                  <p class="as-inner-sub">Allow customers to opt in to text message updates about their estimate.</p>
+                  <p class="as-inner-sub">Customers will be shown an opt-in consent message before submitting.</p>
                 </div>
-                <div class="as-toggle on" id="toggle-sms" onclick="asToggle('toggle-sms','sms-body',true)"></div>
               </div>
               <div id="sms-body" class="as-field-group" style="display:flex;">
                 <div class="as-field">
@@ -2060,7 +2323,7 @@
             </div>
 
             <!-- Out of Service Territory -->
-            <div class="as-mini-card">
+            <div class="as-mini-card" id="as-oos-card">
               <div class="as-inner-row">
                 <div class="as-inner-content">
                   <p class="as-inner-title">Out of Service Territory Message</p>
@@ -2096,56 +2359,6 @@
           </div>
         </div>
 
-        <!-- ── Booking Policy ── -->
-        <div class="ie-collapsible-card open">
-          <div class="ie-collapsible-hdr" onclick="toggleIeCard('as-policy-body', this)">
-            <div>
-              <p class="ie-section-title">Booking Policy</p>
-              <p class="ie-section-sub">Display your booking policy at your booking page.</p>
-            </div>
-            <svg class="ie-coll-chev" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <div id="as-policy-body" class="ie-collapsible-body">
-            <div class="ie-field-row" style="gap:8px;">
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <label class="ie-label" style="margin:0;">Show booking policy</label>
-                <div class="ie-switch on" id="as-policy-toggle" onclick="this.classList.toggle('on')"></div>
-              </div>
-              <p class="ie-field-hint">Customers will see this policy before confirming their booking.</p>
-              <div class="bp-rich-wrap" style="margin-top:4px;">
-                <div class="bp-rich-editor" id="as-policy-editor" contenteditable="true"
-                  data-placeholder="Enter your booking policy…">By booking this appointment, you agree to our service terms. Cancellations must be made at least 24 hours in advance. No-shows may incur a cancellation fee. Payment is due upon completion of service.</div>
-                <div class="bp-toolbar">
-                  <button onclick="document.execCommand('undo')" title="Undo">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>
-                  </button>
-                  <button onclick="document.execCommand('redo')" title="Redo">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.17"/></svg>
-                  </button>
-                  <div class="bp-toolbar-sep"></div>
-                  <button onclick="document.execCommand('bold')" title="Bold"><strong>B</strong></button>
-                  <button onclick="document.execCommand('italic')" title="Italic"><em>I</em></button>
-                  <button onclick="document.execCommand('underline')" title="Underline" style="text-decoration:underline;">U</button>
-                  <div class="bp-toolbar-sep"></div>
-                  <button onclick="document.execCommand('insertUnorderedList')" title="Bullet list">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
-                  </button>
-                  <button onclick="document.execCommand('insertOrderedList')" title="Numbered list">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-2-2-2"/></svg>
-                  </button>
-                  <button onclick="document.execCommand('removeFormat')" title="Clear format" style="font-size:11px;">T<sub>x</sub></button>
-                  <div class="bp-toolbar-sep"></div>
-                  <select title="Format">
-                    <option>Paragraph</option>
-                    <option>Heading 1</option>
-                    <option>Heading 2</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- ── Customer Notifications ── -->
         <div class="as-section-card">
           <div class="as-card-hdr">
@@ -2162,7 +2375,7 @@
 
           <div class="as-card-body">
             <!-- SMS Text Message mini-card -->
-            <div class="as-mini-card">
+            <div class="as-mini-card" id="as-cn-sms-card">
               <div class="as-inner-row" style="border-bottom:none;">
                 <div class="as-inner-content">
                   <p class="as-inner-title">Text Message</p>
@@ -2172,7 +2385,7 @@
               </div>
               <div class="as-zuper-banner">
                 <div class="as-zuper-logo">
-                  <img src="https://www.figma.com/api/mcp/asset/3e78a6a2-e2d7-4b10-a6a8-50a0cf58c152" alt="Zuper" style="width:50px;height:50px;object-fit:contain;"/>
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="32" height="32"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.84a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 </div>
                 <div class="as-zuper-text">
                   <p class="as-zuper-title">Zuper Connect</p>
@@ -2282,7 +2495,7 @@ Based on the details you submitted, we've prepared a preliminary estimate and se
 
       <!-- Footer -->
       <div class="as-footer">
-        <button class="as-btn-back" onclick="closeAdvancedSettingsScreen()">Back</button>
+        <button class="as-btn-back" onclick="goToPrevScreen('advanced-settings-screen')">Back</button>
         <button class="as-btn-publish" onclick="openWidgetReadyModal()">Publish Widget</button>
       </div>
     </div><!-- /as-left -->
@@ -2834,6 +3047,16 @@ Based on the details you submitted, we've prepared a preliminary estimate and se
   </div><!-- /pw-widget-wrap -->
 
 </div><!-- /preview-website-screen -->
+
+<!-- ── Job Category Dropdown ── -->
+<div id="lh-cat-dd" style="display:none;position:fixed;background:white;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);min-width:180px;z-index:1200;padding:4px 0;">
+  <div class="lh-cat-item" onclick="selectLhCat('Roofing')">Roofing</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Plumbing')">Plumbing</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Electrical')">Electrical</div>
+  <div class="lh-cat-item" onclick="selectLhCat('HVAC')">HVAC</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Landscaping')">Landscaping</div>
+  <div class="lh-cat-item" onclick="selectLhCat('General')">General</div>
+</div>
 
 <!-- ── Assign to Dropdown ── -->
 <div class="assign-dd" id="assign-dd" style="display:none;">

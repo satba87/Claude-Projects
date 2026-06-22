@@ -31,6 +31,8 @@
 
   // Modal
   function openNewWidgetModal() {
+    document.getElementById('widget-name-input').value = 'Online Booking - Seattle';
+    document.getElementById('widget-desc-input').value = 'Online booking tool that lets customers schedule services and book appointments directly from your website.';
     document.getElementById('new-widget-modal').classList.add('open');
   }
   function closeNewWidgetModal() {
@@ -66,30 +68,47 @@
     showToast('Widget updated');
   }
 
+  const PURPOSE_CARD_META = {
+    'online-booking':   { iconColor: '#2563eb', iconWrap: 'blue',   badgeClass: 'online-booking',   label: 'Online Booking',   icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>' },
+    'instant-estimate': { iconColor: '#a16207', iconWrap: 'yellow', badgeClass: 'instant-estimate', label: 'Instant Estimate', icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#a16207" stroke-width="1.5"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>' },
+    'estimate-booking': { iconColor: '#15803d', iconWrap: 'green',  badgeClass: 'estimate-booking', label: 'Estimate & Book', icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#15803d" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>' },
+    'lead-intake':      { iconColor: '#7e22ce', iconWrap: 'purple', badgeClass: 'lead-intake',      label: 'Lead Intake',     icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#7e22ce" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+  };
+
+  // Temp store for widget being configured (not yet added to grid)
+  var _pendingWidget = null;
+
   function createWidget() {
     const name = document.getElementById('widget-name-input').value.trim() || 'Online Booking Widget';
     const desc = document.getElementById('widget-desc-input').value.trim();
-    const isEstimate = false; // type is now chosen on the Widget Purpose step
 
-    // Add new card to widget list
+    // Store details — card added to grid only on Publish
+    _pendingWidget = { name, desc };
+
+    // Sync name across all screen breadcrumbs
+    document.querySelectorAll('.wname-text').forEach(el => el.textContent = name);
+
+    closeNewWidgetModal();
+    openAppearanceScreen();
+  }
+
+  function _addWidgetCardToGrid() {
+    if (!_pendingWidget) return;
+    const { name, desc } = _pendingWidget;
+    const meta = PURPOSE_CARD_META[currentWidgetPurpose] || PURPOSE_CARD_META['online-booking'];
+    const cardDesc = desc || meta.label + ' widget';
     const ddId = 'dd-' + Date.now();
-    const iconSvg = isEstimate
-      ? `<svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>`
-      : `<svg fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>`;
-    const cardDesc = desc || (isEstimate
-      ? 'Instantly provide customers with an estimated quote for services directly from your website.'
-      : 'Online booking tool that lets customers schedule services and book appointments directly from your website.');
 
     const card = document.createElement('div');
     card.className = 'widget-card';
     card.style.position = 'relative';
     card.innerHTML = `
       <div class="card-top">
-        <div class="card-icon-wrap grey">${iconSvg}</div>
+        <div class="card-icon-wrap ${meta.iconWrap}">${meta.icon}</div>
         <div class="card-actions">
           <div class="status-badge">
-            <div class="status-dot draft"></div>
-            <span class="status-label">Draft</span>
+            <div class="status-dot active"></div>
+            <span class="status-label">Active</span>
           </div>
           <div class="icon-btn" title="More options" onclick="toggleDropdown(event,'${ddId}')">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
@@ -97,6 +116,7 @@
         </div>
       </div>
       <div class="card-body">
+        <span class="card-type-badge ${meta.badgeClass}">${meta.label}</span>
         <p class="card-title">${name}</p>
         <p class="card-desc">${cardDesc}</p>
       </div>
@@ -118,23 +138,42 @@
       </div>`;
     card.addEventListener('click', (e) => handleCardClick(e));
     document.getElementById('widgets-grid').appendChild(card);
-
-    // Sync widget name across all screen breadcrumbs
-    document.querySelectorAll('.wname-text').forEach(el => el.textContent = name);
-
-    // Reset modal inputs
-    document.getElementById('widget-name-input').value = '';
-    document.getElementById('widget-desc-input').value = '';
-
-
-    closeNewWidgetModal();
-    if (isEstimate) { showToast('This will follow the instant estimate flow'); return; }
-    openAppearanceScreen();
+    _pendingWidget = null;
   }
 
   // Appearance screen
   function openAppearanceScreen() {
+    _resetWidgetFlow();
     document.getElementById('appearance-screen').classList.add('open');
+  }
+
+  function _resetWidgetFlow() {
+    // Reset purpose to default
+    currentWidgetPurpose = 'online-booking';
+
+    // Reset stepper to appearance step (first step, nothing done)
+    _renderStepper('appearance-screen');
+
+    // Reset widget purpose card selection to default
+    document.querySelectorAll('.wp-purpose-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    var defaultCard = document.getElementById('wpc-online-booking');
+    if (defaultCard) defaultCard.classList.add('selected');
+
+    // Reset widget purpose preview to default state (updates right-side preview only)
+    selectWidgetPurpose('online-booking');
+
+    // Re-render stepper at appearance step (selectWidgetPurpose may shift it)
+    _renderStepper('appearance-screen');
+
+    // Remove open from all flow screens except appearance (which caller will open)
+    ['widget-purpose-screen','questions-screen','services-screen','add-service-screen',
+     'roofing-options-screen','booking-policy-screen','advanced-settings-screen']
+      .forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove('open');
+      });
   }
 
   function goBackToWidgets() {
@@ -185,15 +224,137 @@
     'lead-intake': {
       color: '#9333ea', bg: '#fdf4ff',
       icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-      title: 'Lead Intake Form',
+      title: 'Lead Intake',
       sub: 'Capture customer contact details and service needs for your team to follow up — great for high-touch or custom jobs.',
       tags: ['Contact capture', 'CRM ready', 'Follow-up workflow']
     }
   };
 
+  var currentWidgetPurpose = 'online-booking';
+  var lhJobChecked = false;
+
+  var WP_STEPS = {
+    'online-booking':   ['Manage Questions', 'Service Configuration', 'Advanced Settings'],
+    'instant-estimate': ['Manage Questions', 'Roofing Options', 'Advanced Settings'],
+    'estimate-booking': ['Manage Questions', 'Roofing Options', 'Booking Policy', 'Advanced Settings'],
+    'lead-intake':      ['Manage Questions', 'Advanced Settings'],
+  };
+
+  var WP_SCREEN_FLOWS = {
+    'online-booking':   ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'services-screen', 'advanced-settings-screen'],
+    'instant-estimate': ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'roofing-options-screen', 'advanced-settings-screen'],
+    'estimate-booking': ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'roofing-options-screen', 'booking-policy-screen', 'advanced-settings-screen'],
+    'lead-intake':      ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'advanced-settings-screen'],
+  };
+
+  // Sections only visible for specific purposes in Advanced Settings
+  var AS_SECTIONS_BY_PURPOSE = {
+    'lead-intake':      { show: [], hide: ['as-oos-card', 'as-booking-policy-card', 'as-cn-sms-card'] },
+    'online-booking':   { show: ['as-oos-card', 'as-booking-policy-card', 'as-cn-sms-card'], hide: [] },
+    'instant-estimate': { show: ['as-oos-card'], hide: ['as-booking-policy-card', 'as-cn-sms-card'] },
+    'estimate-booking': { show: ['as-oos-card', 'as-booking-policy-card', 'as-cn-sms-card'], hide: [] },
+  };
+
+  function _filterAdvancedSettings(purpose) {
+    var rules = AS_SECTIONS_BY_PURPOSE[purpose] || AS_SECTIONS_BY_PURPOSE['online-booking'];
+    rules.show.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = '';
+    });
+    rules.hide.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function goToNextScreen(currentId) {
+    var flow = WP_SCREEN_FLOWS[currentWidgetPurpose] || WP_SCREEN_FLOWS['online-booking'];
+    var idx = flow.indexOf(currentId);
+    if (idx >= 0 && idx < flow.length - 1) {
+      document.getElementById(currentId).classList.remove('open');
+      var nextId = flow[idx + 1];
+      document.getElementById(nextId).classList.add('open');
+      _renderStepper(nextId);
+      if (nextId === 'advanced-settings-screen') _filterAdvancedSettings(currentWidgetPurpose);
+    }
+  }
+
+  function goToPrevScreen(currentId) {
+    var flow = WP_SCREEN_FLOWS[currentWidgetPurpose] || WP_SCREEN_FLOWS['online-booking'];
+    var idx = flow.indexOf(currentId);
+    if (idx > 0) {
+      document.getElementById(currentId).classList.remove('open');
+      var prevId = flow[idx - 1];
+      document.getElementById(prevId).classList.add('open');
+      _renderStepper(prevId);
+    }
+  }
+
+  var _DONE_SVG = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  var SCREEN_LABELS = {
+    'appearance-screen':      'Appearance',
+    'widget-purpose-screen':  'Widget Type',
+    'questions-screen':       'Manage Questions',
+    'services-screen':        'Service Configuration',
+    'booking-policy-screen':  'Booking Policy',
+    'advanced-settings-screen': 'Advanced Settings',
+    'roofing-options-screen':   'Roofing Options',
+  };
+
+  var SCREEN_STEPPER_ID = {
+    'appearance-screen':      'ap-stepper-bar',
+    'widget-purpose-screen':  'wp-stepper-bar',
+    'questions-screen':       'qs-stepper-bar',
+    'services-screen':        'svc-stepper-bar',
+    'booking-policy-screen':  'bp-stepper-bar',
+    'roofing-options-screen':   'ro-stepper-bar',
+    'advanced-settings-screen': 'as-stepper-bar',
+  };
+
+  function _renderStepper(activeScreenId) {
+    var flow = WP_SCREEN_FLOWS[currentWidgetPurpose] || WP_SCREEN_FLOWS['online-booking'];
+    var activeIdx = flow.indexOf(activeScreenId);
+    var html = flow.map(function(screenId, i) {
+      var state = i < activeIdx ? 'done' : (i === activeIdx ? 'active' : '');
+      var click = state !== 'active' ? ' onclick="goToScreen(\'' + screenId + '\')"' : '';
+      return (i > 0 ? '<div class="ap-step-line"></div>' : '')
+        + '<div class="ap-step"' + click + '>'
+        + '<div class="ap-step-circle ' + state + '">' + (state === 'done' ? _DONE_SVG : '') + '</div>'
+        + '<span class="ap-step-label ' + state + '">' + (SCREEN_LABELS[screenId] || screenId) + '</span>'
+        + '</div>';
+    }).join('');
+    Object.values(SCREEN_STEPPER_ID).forEach(function(barId) {
+      var bar = document.getElementById(barId);
+      if (bar) bar.innerHTML = html;
+    });
+  }
+
+  function goToScreen(targetId) {
+    var flow = WP_SCREEN_FLOWS[currentWidgetPurpose] || WP_SCREEN_FLOWS['online-booking'];
+    var targetIdx = flow.indexOf(targetId);
+    if (targetIdx < 0) return;
+    var currentId = null;
+    flow.forEach(function(screenId) {
+      var el = document.getElementById(screenId);
+      if (el && el.classList.contains('open')) currentId = screenId;
+    });
+    if (!currentId) return;
+    var currentIdx = flow.indexOf(currentId);
+    if (targetIdx === currentIdx) return;
+    document.getElementById(currentId).classList.remove('open');
+    document.getElementById(targetId).classList.add('open');
+    _renderStepper(targetId);
+  }
+
+  function _renderWpStepper(purpose) {
+    _renderStepper('widget-purpose-screen');
+  }
+
   function selectWidgetPurpose(value) {
     const p = PURPOSE_CONTENT[value];
     if (!p) return;
+    currentWidgetPurpose = value;
     // Highlight selected card
     document.querySelectorAll('.wp-purpose-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('wpc-' + value).classList.add('selected');
@@ -206,6 +367,11 @@
     if (sub) sub.textContent = p.sub;
     const tags = document.getElementById('wpp-tags');
     if (tags) tags.innerHTML = p.tags.map(t => `<span class="wpp-tag">${t}</span>`).join('');
+    // Update stepper
+    _renderStepper('widget-purpose-screen');
+    // Lead Handling is shown for all widget purposes
+    const leadSection = document.querySelector('.wpp-lead-section');
+    if (leadSection) leadSection.style.display = 'block';
   }
 
   // Live preview: welcome message
@@ -588,6 +754,15 @@
                 <span>Required</span>
                 <div class="q-toggle" id="qtoggle-req-${globalIdx}" onclick="toggleRequired(${globalIdx}, this)"></div>
               </div>
+              <div class="q-ctx-item q-ctx-map-item${lhJobChecked ? '' : ' q-ctx-disabled'}" onclick="event.stopPropagation();toggleMapEnabled(${globalIdx})">
+                <span>Map response</span>
+                <div class="q-toggle${q.mapEnabled ? ' on' : ''}" id="qtoggle-map-${globalIdx}"></div>
+              </div>
+              <div class="q-ctx-item" onclick="event.stopPropagation();toggleDepEnabled(${globalIdx})">
+                <span>Dependent field</span>
+                <div class="q-toggle${q.depEnabled ? ' on' : ''}" id="qtoggle-dep-${globalIdx}"></div>
+              </div>
+              <div class="q-ctx-divider"></div>
               <div class="q-ctx-item danger" onclick="event.stopPropagation();removeCustomQuestion(${globalIdx})">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                 Delete
@@ -595,26 +770,33 @@
             </div>
           </div>
         </div>
-        <div class="q-type-row">
-          <label class="q-type-label-txt">Question type</label>
-          <div class="q-type-select-wrap">
-            <select class="q-type-select" id="qtype-${globalIdx}"
-              onchange="changeCustomType(${globalIdx}, this.value)"
-              onclick="event.stopPropagation()">
-              <option value="text"    ${q.type==='text'?'selected':''}>Short answer</option>
-              <option value="textarea"${q.type==='textarea'?'selected':''}>Long answer</option>
-              <option value="radio"   ${q.type==='radio'?'selected':''}>Single choice</option>
-              <option value="checkbox"${q.type==='checkbox'?'selected':''}>Multiple choice</option>
-              <option value="dropdown"${q.type==='dropdown'?'selected':''}>Dropdown</option>
-              <option value="date"    ${q.type==='date'?'selected':''}>Date</option>
-              <option value="datetime"${q.type==='datetime'?'selected':''}>Date &amp; Time</option>
-            </select>
-          </div>
-        </div>
         <div id="qfields-${globalIdx}">${inputControl}</div>
 
-        <!-- Map Response -->
-        <div class="q-map-section" onclick="event.stopPropagation()">
+        <!-- Dependent Field -->
+        ${q.depEnabled ? `<div class="q-dep-section" id="qdep-section-${globalIdx}" onclick="event.stopPropagation()">
+          <div class="q-map-divider"></div>
+          <div class="q-map-header-row">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span class="q-map-label">Dependent field</span>
+          </div>
+          <p class="q-dep-hint">Show this question when</p>
+          <div class="q-dep-controls">
+            <select class="q-dep-select" id="qdep-src-${globalIdx}" onchange="updateDepSource(${globalIdx}, this.value)" onclick="event.stopPropagation()">
+              <option value="">— Select question —</option>
+              ${buildDepSourceOptions(globalIdx)}
+            </select>
+            <div class="q-dep-equals-row">
+              <span class="q-dep-equals">is equal to</span>
+              <select class="q-dep-select" id="qdep-ans-${globalIdx}" onchange="updateDepAnswer(${globalIdx}, this.value)" onclick="event.stopPropagation()">
+                <option value="">— Select answer —</option>
+                ${buildDepAnswerOptions(globalIdx, q.depSource)}
+              </select>
+            </div>
+          </div>
+        </div>` : ''}
+
+        <!-- Map Response (injected by toggleMapEnabled) -->
+        ${q.mapEnabled ? `<div class="q-map-section" id="qmap-section-${globalIdx}" onclick="event.stopPropagation()">
           <div class="q-map-divider"></div>
           <div class="q-map-header-row">
             <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
@@ -623,9 +805,7 @@
           <div class="q-map-row" style="margin-top:8px;">
             <span class="q-map-module-label">Module</span>
             <div class="q-map-select-wrap">
-              <select class="q-map-select" id="qmap-module-${globalIdx}"
-                onchange="onMapModuleChange(${globalIdx}, this.value)"
-                onclick="event.stopPropagation()">
+              <select class="q-map-select" id="qmap-module-${globalIdx}" onchange="onMapModuleChange(${globalIdx}, this.value)" onclick="event.stopPropagation()">
                 <option value="">— Not mapped —</option>
                 <option value="contact">Contact</option>
                 <option value="job">Job</option>
@@ -635,9 +815,7 @@
           <div class="q-map-row" id="qmap-field-row-${globalIdx}" style="display:none; margin-top:8px;">
             <span class="q-map-module-label">Field <span class="q-map-required">*</span></span>
             <div class="q-map-select-wrap">
-              <select class="q-map-select" id="qmap-${globalIdx}"
-                onchange="updateFieldMapping(${globalIdx}, this.value)"
-                onclick="event.stopPropagation()">
+              <select class="q-map-select" id="qmap-${globalIdx}" onchange="updateFieldMapping(${globalIdx}, this.value)" onclick="event.stopPropagation()">
                 <option value="">Select field</option>
               </select>
             </div>
@@ -646,14 +824,14 @@
             <svg fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="2" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
             <span id="qmap-hint-field-${globalIdx}"></span>
           </div>
-        </div>
+        </div>` : ''}
 
       </div>`;
   }
 
   function buildOptionsHTML(q, globalIdx) {
     const inputType = q.type === 'radio' ? 'radio' : 'checkbox';
-    const showGoto = q.type === 'radio';
+    const showGoto = q.type === 'radio' && q.gotoEnabled;
     const gotoDests = showGoto ? buildSkipDestOptions(globalIdx) : '';
     const opts = (q.options || ['Option 1', 'Option 2']).map((opt, oi) => `
       <div class="q-option-row" id="qopt-${globalIdx}-${oi}">
@@ -883,6 +1061,133 @@
     if (star) star.style.display = isRequired ? 'inline' : 'none';
     const q = customQuestions.find(q => q.id === idx);
     if (q) q.required = isRequired;
+  }
+
+  function toggleDepEnabled(globalIdx) {
+    const q = customQuestions[globalIdx - 2];
+    if (!q) return;
+    q.depEnabled = !q.depEnabled;
+
+    const toggleEl = document.getElementById(`qtoggle-dep-${globalIdx}`);
+    if (toggleEl) toggleEl.classList.toggle('on', q.depEnabled);
+
+    const cardInner = document.getElementById(`qcard-inner-${globalIdx}`);
+    if (!cardInner) return;
+
+    const existing = document.getElementById(`qdep-section-${globalIdx}`);
+    if (q.depEnabled && !existing) {
+      const depDiv = document.createElement('div');
+      depDiv.id = `qdep-section-${globalIdx}`;
+      depDiv.className = 'q-dep-section';
+      depDiv.onclick = e => e.stopPropagation();
+      depDiv.innerHTML = `
+        <div class="q-map-divider"></div>
+        <div class="q-map-header-row">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span class="q-map-label">Dependent field</span>
+        </div>
+        <p class="q-dep-hint">Show this question when</p>
+        <div class="q-dep-controls">
+          <select class="q-dep-select" id="qdep-src-${globalIdx}" onchange="updateDepSource(${globalIdx}, this.value)" onclick="event.stopPropagation()">
+            <option value="">— Select question —</option>
+            ${buildDepSourceOptions(globalIdx)}
+          </select>
+          <div class="q-dep-equals-row">
+            <span class="q-dep-equals">is equal to</span>
+            <select class="q-dep-select" id="qdep-ans-${globalIdx}" onchange="updateDepAnswer(${globalIdx}, this.value)" onclick="event.stopPropagation()">
+              <option value="">— Select answer —</option>
+            </select>
+          </div>
+        </div>`;
+      const mapSection = cardInner.querySelector('.q-map-section');
+      cardInner.insertBefore(depDiv, mapSection || null);
+    } else if (!q.depEnabled && existing) {
+      existing.remove();
+    }
+  }
+
+  function toggleMapEnabled(globalIdx) {
+    if (!lhJobChecked) return;
+    const q = customQuestions[globalIdx - 2];
+    if (!q) return;
+    q.mapEnabled = !q.mapEnabled;
+
+    const toggleEl = document.getElementById(`qtoggle-map-${globalIdx}`);
+    if (toggleEl) toggleEl.classList.toggle('on', q.mapEnabled);
+
+    const cardInner = document.getElementById(`qcard-inner-${globalIdx}`);
+    if (!cardInner) return;
+
+    const existing = document.getElementById(`qmap-section-${globalIdx}`);
+    if (q.mapEnabled && !existing) {
+      const mapDiv = document.createElement('div');
+      mapDiv.id = `qmap-section-${globalIdx}`;
+      mapDiv.className = 'q-map-section';
+      mapDiv.onclick = e => e.stopPropagation();
+      mapDiv.innerHTML = `
+        <div class="q-map-divider"></div>
+        <div class="q-map-header-row">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <span class="q-map-label">Map response</span>
+        </div>
+        <div class="q-map-row" style="margin-top:8px;">
+          <span class="q-map-module-label">Module</span>
+          <div class="q-map-select-wrap">
+            <select class="q-map-select" id="qmap-module-${globalIdx}" onchange="onMapModuleChange(${globalIdx}, this.value)" onclick="event.stopPropagation()">
+              <option value="">— Not mapped —</option>
+              <option value="contact">Contact</option>
+              <option value="job">Job</option>
+            </select>
+          </div>
+        </div>
+        <div class="q-map-row" id="qmap-field-row-${globalIdx}" style="display:none; margin-top:8px;">
+          <span class="q-map-module-label">Field <span class="q-map-required">*</span></span>
+          <div class="q-map-select-wrap">
+            <select class="q-map-select" id="qmap-${globalIdx}" onchange="updateFieldMapping(${globalIdx}, this.value)" onclick="event.stopPropagation()">
+              <option value="">Select field</option>
+            </select>
+          </div>
+        </div>
+        <div class="q-map-hint" id="qmap-hint-${globalIdx}" style="display:none;">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="2" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="qmap-hint-field-${globalIdx}"></span>
+        </div>`;
+      cardInner.appendChild(mapDiv);
+    } else if (!q.mapEnabled && existing) {
+      existing.remove();
+    }
+  }
+
+  function buildDepSourceOptions(globalIdx) {
+    const q = customQuestions[globalIdx - 2];
+    const cur = q ? q.depSource : null;
+    return customQuestions
+      .filter(cq => cq.id < globalIdx && ['radio', 'checkbox', 'dropdown'].includes(cq.type))
+      .map(cq => `<option value="${cq.id}"${cq.id === cur ? ' selected' : ''}>${cq.label || 'Question ' + cq.id}</option>`)
+      .join('');
+  }
+
+  function buildDepAnswerOptions(globalIdx, sourceId) {
+    if (!sourceId && sourceId !== 0) return '';
+    const srcQ = customQuestions.find(cq => cq.id === parseInt(sourceId));
+    if (!srcQ || !srcQ.options) return '';
+    const q = customQuestions[globalIdx - 2];
+    const cur = q ? q.depAnswer : null;
+    return srcQ.options.map(opt => `<option value="${opt}"${opt === cur ? ' selected' : ''}>${opt}</option>`).join('');
+  }
+
+  function updateDepSource(globalIdx, sourceId) {
+    const q = customQuestions[globalIdx - 2];
+    if (!q) return;
+    q.depSource = sourceId ? parseInt(sourceId) : null;
+    q.depAnswer = null;
+    const ansEl = document.getElementById(`qdep-ans-${globalIdx}`);
+    if (ansEl) ansEl.innerHTML = '<option value="">— Select answer —</option>' + buildDepAnswerOptions(globalIdx, sourceId);
+  }
+
+  function updateDepAnswer(globalIdx, answer) {
+    const q = customQuestions[globalIdx - 2];
+    if (q) q.depAnswer = answer || null;
   }
 
   function duplicateQuestion(idx) {
@@ -1377,10 +1682,16 @@
       add.style.display = 'none'; ams.classList.remove('open');
     }
     const assignDd = document.getElementById('assign-dd');
-    const assignTrigger = document.getElementById('assign-trigger');
+    const assignTrigger = document.getElementById(_amActiveTrigger);
     if (assignDd && assignDd.style.display !== 'none' && e.target.isConnected &&
-        !assignDd.contains(e.target) && !assignTrigger.contains(e.target)) {
+        !assignDd.contains(e.target) && !(assignTrigger && assignTrigger.contains(e.target))) {
       closeAssignDropdown();
+    }
+    const lhCatDd = document.getElementById('lh-cat-dd');
+    const lhCatTrigger = document.getElementById('lh-cat-trigger');
+    if (lhCatDd && lhCatDd.style.display !== 'none' &&
+        !lhCatDd.contains(e.target) && !(lhCatTrigger && lhCatTrigger.contains(e.target))) {
+      lhCatDd.style.display = 'none';
     }
   });
 
@@ -1410,10 +1721,12 @@
   var AM_REM_ICON = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><line x1="16" y1="6" x2="22" y2="12"/><line x1="22" y1="6" x2="16" y2="12"/></svg>';
 
   var _amScrollHandler = null;
+  var _amActiveTrigger = 'assign-trigger';
+  var _amActiveText    = 'assign-trigger-text';
 
   function _positionAssignDD() {
     var dd = document.getElementById('assign-dd');
-    var btn = document.getElementById('assign-trigger');
+    var btn = document.getElementById(_amActiveTrigger);
     if (!dd || !btn) return;
     var rect = btn.getBoundingClientRect();
     dd.style.top = (rect.bottom + 6) + 'px';
@@ -1421,8 +1734,10 @@
     dd.style.width = rect.width + 'px';
   }
 
-  function openAssignDropdown(e) {
+  function openAssignDropdown(e, triggerId, textId) {
     if (e) e.stopPropagation();
+    _amActiveTrigger = triggerId || 'assign-trigger';
+    _amActiveText    = textId    || 'assign-trigger-text';
     var dd = document.getElementById('assign-dd');
     if (!dd) return;
     _positionAssignDD();
@@ -1450,7 +1765,8 @@
   function closeAssignModal() { closeAssignDropdown(); }
 
   function confirmAM() {
-    var txt = document.getElementById('assign-trigger-text');
+    var txt = document.getElementById(_amActiveText);
+    if (!txt) txt = document.getElementById('assign-trigger-text');
     if (amSelected.size === 0) {
       txt.textContent = 'Select teams or users';
       txt.style.color = '';
@@ -1723,6 +2039,51 @@ function openBookingPolicyScreen() {
     }
   }
 
+  /* ── Booking Policy page helpers ── */
+  function selectSpacingBp(type) {
+    ['none','fixed'].forEach(function(t) {
+      var opt = document.getElementById('bp-spacing-opt-' + t);
+      var sub = document.getElementById('bp-spacing-sub-' + t);
+      var radio = opt && opt.querySelector('input[type="radio"]');
+      if (opt) opt.classList.toggle('selected', t === type);
+      if (radio) radio.checked = (t === type);
+      if (sub) sub.classList.toggle('visible', t === type);
+    });
+  }
+
+  var bpBpfSelected = 0;
+  function bpBpfSelect(idx) {
+    var prev = document.getElementById('bp-bpf-opt-' + bpBpfSelected);
+    if (prev) {
+      prev.classList.remove('bpf-radio-selected');
+      var prevDot = prev.querySelector('.bpf-radio-dot');
+      if (prevDot) prevDot.classList.remove('bpf-dot-selected');
+    }
+    bpBpfSelected = idx;
+    var cur = document.getElementById('bp-bpf-opt-' + idx);
+    if (cur) {
+      cur.classList.add('bpf-radio-selected');
+      var curDot = cur.querySelector('.bpf-radio-dot');
+      if (curDot) curDot.classList.add('bpf-dot-selected');
+    }
+    var subopts = document.getElementById('bp-slot-subopts');
+    if (subopts) subopts.style.display = idx === 1 ? 'flex' : 'none';
+  }
+
+  var bpSlotTypeSelected = 0;
+  function bpSlotTypeSelect(idx) {
+    [0, 1].forEach(function(i) {
+      var opt = document.getElementById('bp-slot-type-' + i);
+      if (!opt) return;
+      var dot = opt.querySelector('.asvc-slot-opt-dot');
+      opt.classList.toggle('asvc-slot-opt-on', i === idx);
+      if (dot) dot.classList.toggle('asvc-slot-dot-on', i === idx);
+    });
+    bpSlotTypeSelected = idx;
+    var techWrap = document.getElementById('bp-slot-tech-wrap');
+    if (techWrap) techWrap.style.display = idx === 0 ? 'block' : 'none';
+  }
+
   function bpfTechCheckChange(checked) {
     _asvcBpfUpdateSteps(checked);
   }
@@ -1893,19 +2254,114 @@ function openBookingPolicyScreen() {
     updateAsPreview();
   }
 
-  function selectLeadHandling(row, type) {
-    // deselect all
-    document.getElementById('lh-contact').classList.remove('selected');
-    document.getElementById('lh-job').classList.remove('selected');
+  /* ── Roofing Options ── */
+  function roSelectCard(idx) {
+    document.querySelectorAll('.ro-option-card').forEach(function(c, i) {
+      c.classList.toggle('open', i === idx);
+    });
+  }
+  function roToggleCol(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  }
+  function roToggleSwitch(el, subId) {
+    el.classList.toggle('on');
+    const sub = document.getElementById(subId);
+    if (sub) sub.style.display = el.classList.contains('on') ? 'block' : 'none';
+  }
+  function roAddOption() {
+    const list = document.getElementById('ro-options-list');
+    const idx = list.children.length;
+    const card = document.createElement('div');
+    card.className = 'ro-option-card open';
+    card.id = 'ro-card-' + idx;
+    card.onclick = function() { roSelectCard(idx); };
+    card.innerHTML = `<div class="ro-card-header">
+      <div class="ro-card-left">
+        <div class="ro-card-thumb" style="background:#f3f4f6;">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#d1d5db" stroke-width="1.5" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#d1d5db" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div><p class="ro-card-name">New option</p><p class="ro-card-meta">Roofing · — · Contact for pricing</p></div>
+      </div>
+      <div class="ro-card-actions">
+        <button class="ro-card-action-btn danger" onclick="event.stopPropagation();this.closest('.ro-option-card').remove()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+        <svg class="ro-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+      </div></div>
+      <div class="ro-edit-form">
+        <div class="ro-section"><p class="ro-field-label">Name <span class="ro-required">*</span></p><input class="ro-input" type="text" placeholder="e.g. Architectural Asphalt Shingles" onclick="event.stopPropagation()" /></div>
+        <div class="ro-section ro-row-2">
+          <div><p class="ro-field-label">Material type</p><div class="ro-select-wrap"><select class="ro-select" onclick="event.stopPropagation()"><option>Roofing</option><option>Metal</option><option>Solar</option></select></div></div>
+          <div><p class="ro-field-label">Label</p><div class="ro-select-wrap"><select class="ro-select" onclick="event.stopPropagation()"><option>Best</option><option>Better</option><option>Good</option><option>Premium</option></select></div></div>
+        </div>
+      </div>`;
+    list.appendChild(card);
+    roSelectCard(idx);
+  }
+  function roDuplicateCard(idx) {
+    const src = document.getElementById('ro-card-' + idx);
+    if (!src) return;
+    const clone = src.cloneNode(true);
+    const newIdx = document.getElementById('ro-options-list').children.length;
+    clone.id = 'ro-card-' + newIdx;
+    clone.classList.remove('open');
+    clone.onclick = function() { roSelectCard(newIdx); };
+    src.parentNode.appendChild(clone);
+  }
+  function roDeleteCard(idx) {
+    const card = document.getElementById('ro-card-' + idx);
+    if (card) card.remove();
+  }
+  function roUpdatePreview() {}
+
+  function toggleLhJob(checked) {
+    lhJobChecked = checked;
     const jobSub = document.getElementById('lh-job-sub');
-    if (type === 'contact') {
-      document.getElementById('lh-contact').classList.add('selected');
-      if (jobSub) jobSub.style.display = 'none';
-    } else {
-      document.getElementById('lh-job').classList.add('selected');
-      if (jobSub) jobSub.style.display = 'flex';
+    if (jobSub) jobSub.style.display = checked ? 'flex' : 'none';
+    // Sync disabled state on all Map response context menu items
+    document.querySelectorAll('.q-ctx-map-item').forEach(function(el) {
+      el.classList.toggle('q-ctx-disabled', !checked);
+    });
+    // If unchecked, turn off any active map response sections
+    if (!checked) {
+      customQuestions.forEach(function(q, i) {
+        if (q.mapEnabled) {
+          q.mapEnabled = false;
+          const globalIdx = i + 2;
+          const toggle = document.getElementById('qtoggle-map-' + globalIdx);
+          if (toggle) toggle.classList.remove('on');
+          const section = document.getElementById('qmap-section-' + globalIdx);
+          if (section) section.remove();
+        }
+      });
     }
     updateAsPreview();
+  }
+
+  function toggleLhCatDd(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('lh-cat-dd');
+    const trigger = document.getElementById('lh-cat-trigger');
+    if (!dd || !trigger) return;
+    if (dd.style.display !== 'none') { dd.style.display = 'none'; return; }
+    dd.style.display = 'block';
+    const rect = trigger.getBoundingClientRect();
+    const ddH = dd.offsetHeight;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    if (spaceBelow < ddH + 8) {
+      dd.style.top = (rect.top - ddH - 4) + 'px';
+    } else {
+      dd.style.top = (rect.bottom + 4) + 'px';
+    }
+    dd.style.left = (rect.right - dd.offsetWidth) + 'px';
+  }
+
+  function selectLhCat(name) {
+    const label = document.getElementById('lh-cat-label');
+    if (label) { label.textContent = name; label.style.color = '#111827'; }
+    const dd = document.getElementById('lh-cat-dd');
+    if (dd) dd.style.display = 'none';
   }
 
   function switchAsTab(tabEl, tabId) {
@@ -1920,10 +2376,10 @@ function openBookingPolicyScreen() {
   }
 
   function updateAsPreview() {
-    const smsOn = document.getElementById('toggle-sms')?.classList.contains('on');
+    const smsOn = true; // Text Message Opt-In is always enabled (mandatory)
     const oosOn = document.getElementById('toggle-oos')?.classList.contains('on');
     const emailOn = document.getElementById('toggle-email')?.classList.contains('on');
-    const lhJobSelected = document.getElementById('lh-job')?.classList.contains('selected');
+    const lhJobSelected = document.getElementById('lh-job-cb')?.checked;
     const collectChecked = document.querySelector('.as-check-row .as-checkbox.checked');
 
     const setBadge = (id, on) => {
@@ -1949,6 +2405,7 @@ function openBookingPolicyScreen() {
   }
 
   function openWidgetReadyModal() {
+    _addWidgetCardToGrid();
     document.getElementById('widget-ready-modal').classList.add('open');
   }
   function closeWidgetReadyModal() {
@@ -2029,22 +2486,24 @@ function pwScrollDates(dir) {
   }
 
   function navigateToStep(n) {
-    const screens = [
-      'appearance-screen',
-      'widget-purpose-screen',
-      'questions-screen',
-      'services-screen',
-      'booking-policy-screen',
-      'advanced-settings-screen'
-    ];
-    screens.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('open', i === n - 1);
+    var flow = WP_SCREEN_FLOWS[currentWidgetPurpose] || WP_SCREEN_FLOWS['online-booking'];
+    var allScreens = ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'services-screen', 'booking-policy-screen', 'advanced-settings-screen'];
+    allScreens.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('open');
     });
+    var target = flow[n - 1];
+    if (target) document.getElementById(target).classList.add('open');
   }
 
   // Wire stepper step clicks across all screens
   document.addEventListener('DOMContentLoaded', function () {
+    // Initialise steppers for default selection (Online Booking)
+    _renderStepper('appearance-screen');
+    // Lead Handling is visible for all widget purposes
+    var leadSection = document.querySelector('.wpp-lead-section');
+    if (leadSection) leadSection.style.display = 'block';
+
     document.querySelectorAll('.ap-stepper-bar').forEach(function (bar) {
       bar.querySelectorAll('.ap-step').forEach(function (step, idx) {
         step.style.cursor = 'pointer';
