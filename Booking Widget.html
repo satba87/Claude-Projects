@@ -1404,6 +1404,16 @@
               <span class="ie-field-hint">Shown as-is on the widget — leave blank to hide pricing</span>
             </div>
 
+            <!-- Job Category (shown only when Create a Job is enabled at widget level) -->
+            <div class="ie-field" id="asvc-job-cat-field" style="display:none;">
+              <span class="ie-label-sm">Job Category</span>
+              <div class="as-input lh-cat-trigger" id="asvc-cat-trigger" onclick="toggleAsvcCatDd(event)" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;cursor:pointer;gap:8px;">
+                <span id="asvc-cat-label" style="font-size:13px;color:#374151;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Select category</span>
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14" style="flex-shrink:0;color:#9ca3af;"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <span class="ie-field-hint">Jobs created from bookings of this service will be assigned this category in Zuper</span>
+            </div>
+
           </div>
         </div>
 
@@ -3050,12 +3060,16 @@ Based on the details you submitted, we've prepared a preliminary estimate and se
 
 <!-- ── Job Category Dropdown ── -->
 <div id="lh-cat-dd" style="display:none;position:fixed;background:white;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);min-width:180px;z-index:1200;padding:4px 0;">
-  <div class="lh-cat-item" onclick="selectLhCat('Roofing')">Roofing</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Plumbing')">Plumbing</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Electrical')">Electrical</div>
-  <div class="lh-cat-item" onclick="selectLhCat('HVAC')">HVAC</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Landscaping')">Landscaping</div>
-  <div class="lh-cat-item" onclick="selectLhCat('General')">General</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Roof Inspection')">Roof Inspection</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Roof Replacement')">Roof Replacement</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Roof Repair')">Roof Repair</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Emergency Tarping')">Emergency Tarping</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Storm Damage Assessment')">Storm Damage Assessment</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Gutter Cleaning')">Gutter Cleaning</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Gutter Replacement')">Gutter Replacement</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Skylight Installation')">Skylight Installation</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Ventilation & Insulation')">Ventilation & Insulation</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Lead Pipeline')">Lead Pipeline</div>
 </div>
 
 <!-- ── Assign to Dropdown ── -->

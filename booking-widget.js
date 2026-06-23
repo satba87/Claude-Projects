@@ -372,6 +372,8 @@
     // Lead Handling is shown for all widget purposes
     const leadSection = document.querySelector('.wpp-lead-section');
     if (leadSection) leadSection.style.display = 'block';
+    // Re-evaluate category visibility based on new purpose
+    if (lhJobChecked) toggleLhJob(true);
   }
 
   // Live preview: welcome message
@@ -2317,8 +2319,15 @@ function openBookingPolicyScreen() {
 
   function toggleLhJob(checked) {
     lhJobChecked = checked;
+    // Widget-level category: show only for non-online-booking purposes
     const jobSub = document.getElementById('lh-job-sub');
-    if (jobSub) jobSub.style.display = checked ? 'flex' : 'none';
+    if (jobSub) {
+      const showCatAtWidget = checked && currentWidgetPurpose !== 'online-booking';
+      jobSub.style.display = showCatAtWidget ? 'flex' : 'none';
+    }
+    // Service-level category: show for online-booking only
+    const svcCatField = document.getElementById('asvc-job-cat-field');
+    if (svcCatField) svcCatField.style.display = (checked && currentWidgetPurpose === 'online-booking') ? 'block' : 'none';
     // Sync disabled state on all Map response context menu items
     document.querySelectorAll('.q-ctx-map-item').forEach(function(el) {
       el.classList.toggle('q-ctx-disabled', !checked);
@@ -2362,6 +2371,36 @@ function openBookingPolicyScreen() {
     if (label) { label.textContent = name; label.style.color = '#111827'; }
     const dd = document.getElementById('lh-cat-dd');
     if (dd) dd.style.display = 'none';
+  }
+
+  function toggleAsvcCatDd(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('lh-cat-dd');
+    const trigger = document.getElementById('asvc-cat-trigger');
+    if (!dd || !trigger) return;
+    // Hijack the shared dropdown — update its onclick to write to asvc label
+    dd.querySelectorAll('.lh-cat-item').forEach(function(item) {
+      item.onclick = function() { selectAsvcCat(item.textContent.trim()); };
+    });
+    if (dd.style.display !== 'none') { dd.style.display = 'none'; return; }
+    dd.style.display = 'block';
+    const rect = trigger.getBoundingClientRect();
+    const ddH = dd.offsetHeight;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    dd.style.top = (spaceBelow < ddH + 8 ? rect.top - ddH - 4 : rect.bottom + 4) + 'px';
+    dd.style.left = rect.left + 'px';
+    dd.style.width = rect.width + 'px';
+  }
+
+  function selectAsvcCat(name) {
+    const label = document.getElementById('asvc-cat-label');
+    if (label) { label.textContent = name; label.style.color = '#111827'; }
+    const dd = document.getElementById('lh-cat-dd');
+    if (dd) dd.style.display = 'none';
+    // Restore dropdown items to write to widget-level label
+    if (dd) dd.querySelectorAll('.lh-cat-item').forEach(function(item) {
+      item.onclick = function() { selectLhCat(item.textContent.trim()); };
+    });
   }
 
   function switchAsTab(tabEl, tabId) {
