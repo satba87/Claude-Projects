@@ -2375,6 +2375,8 @@ function openBookingPolicyScreen() {
     if (q1Label) q1Label.innerHTML = isLead
       ? 'How can we reach you? <span class="q-required">*</span>'
       : 'Where should we send your booking confirmation? <span class="q-required">*</span>';
+    // Auto-select the correct default question card so the right preview matches
+    selectQuestion(isLead ? 1 : 0);
   }
 
   function _updateWtChips(purpose) {
