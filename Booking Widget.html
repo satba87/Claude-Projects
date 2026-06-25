@@ -219,7 +219,7 @@
         <div style="display:flex;align-items:flex-start;justify-content:space-between;">
           <div>
             <h1 class="page-title">Widgets</h1>
-            <p class="page-subtitle">Create and embed online booking widgets on your website</p>
+            <p class="page-subtitle">Create and embed widgets to capture leads, estimates, and bookings on your website</p>
           </div>
           <div class="center-toolbar" style="margin-top:0;">
             <div class="toolbar-search">
@@ -268,11 +268,11 @@
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
-                <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
+                <button class="dropdown-item" onclick="showToast('Widget duplicated successfully')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   Duplicate
                 </button>
-                <button class="dropdown-item" onclick="showToast('Widget deactivated')">
+                <button class="dropdown-item" onclick="openConfirmModal('deactivate-modal')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
                   Deactivate
                 </button>
@@ -303,7 +303,7 @@
             </div>
             <div class="dropdown-menu" id="dd3" style="display:none;">
               <div class="dropdown-section">
-                <button class="dropdown-item" onclick="showToast('Widget activated!')">
+                <button class="dropdown-item" onclick="openConfirmModal('activate-modal')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                   Activate
                 </button>
@@ -311,11 +311,11 @@
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
-                <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
+                <button class="dropdown-item" onclick="showToast('Widget duplicated successfully')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   Duplicate
                 </button>
-                <button class="dropdown-item danger" onclick="showToast('Widget deleted')">
+                <button class="dropdown-item danger" onclick="openConfirmModal('delete-modal')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                   Delete widget
                 </button>
@@ -342,7 +342,7 @@
             <div class="card-body">
               <span class="card-type-badge estimate-booking">Estimate & Book</span>
               <p class="card-title">Online Booking - Seattle</p>
-              <p class="card-desc">Show a price estimate upfront, then let customers convert immediately by booking an appointment — all in one flow.</p>
+              <p class="card-desc">Show a price estimate upfront, then let customers book an appointment immediately — no separate follow-up needed.</p>
             </div>
             <div class="dropdown-menu" id="dd4" style="display:none;">
               <div class="dropdown-section">
@@ -350,7 +350,7 @@
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
                 </button>
-                <button class="dropdown-item danger" onclick="showToast('Widget deleted')">
+                <button class="dropdown-item danger" onclick="openConfirmModal('delete-modal')">
                   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                   Delete widget
                 </button>
@@ -487,6 +487,63 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- Deactivate Confirm Modal -->
+<div class="modal-overlay" id="deactivate-modal" onclick="closeConfirmModalOutside(event,'deactivate-modal')">
+  <div class="confirm-modal">
+    <div class="confirm-modal-top">
+      <div class="confirm-icon-wrap danger">
+        <svg fill="none" viewBox="0 0 24 24" stroke="#dc2626" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      </div>
+      <div>
+        <p class="confirm-modal-title">Deactivate widget?</p>
+        <p class="confirm-modal-desc">Your widget will be deactivated immediately. Any shared links or embed codes will stop working.</p>
+      </div>
+    </div>
+    <div class="confirm-modal-actions">
+      <button class="btn-secondary" onclick="closeConfirmModal('deactivate-modal')">Cancel</button>
+      <button class="btn-danger" onclick="closeConfirmModal('deactivate-modal');showToast('Widget deactivated successfully')">Deactivate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Activate Confirm Modal -->
+<div class="modal-overlay" id="activate-modal" onclick="closeConfirmModalOutside(event,'activate-modal')">
+  <div class="confirm-modal">
+    <div class="confirm-modal-top">
+      <div class="confirm-icon-wrap success">
+        <svg fill="none" viewBox="0 0 24 24" stroke="#16a34a" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <p class="confirm-modal-title">Activate widget?</p>
+        <p class="confirm-modal-desc">Your widget will be activated and ready to share via a link, QR code, or embed code.</p>
+      </div>
+    </div>
+    <div class="confirm-modal-actions">
+      <button class="btn-secondary" onclick="closeConfirmModal('activate-modal')">Cancel</button>
+      <button class="btn-success" onclick="closeConfirmModal('activate-modal');showToast('Widget activated successfully')">Activate</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="delete-modal" onclick="closeConfirmModalOutside(event,'delete-modal')">
+  <div class="confirm-modal">
+    <div class="confirm-modal-top">
+      <div class="confirm-icon-wrap danger">
+        <svg fill="none" viewBox="0 0 24 24" stroke="#dc2626" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      </div>
+      <div>
+        <p class="confirm-modal-title">Delete widget?</p>
+        <p class="confirm-modal-desc">This widget and all its settings will be permanently deleted. This action cannot be undone.</p>
+      </div>
+    </div>
+    <div class="confirm-modal-actions">
+      <button class="btn-secondary" onclick="closeConfirmModal('delete-modal')">Cancel</button>
+      <button class="btn-danger" onclick="closeConfirmModal('delete-modal');showToast('Widget deleted successfully')">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════
      APPEARANCE SCREEN (Step 1 of widget setup)
      Hidden until user clicks Next in modal
@@ -541,13 +598,13 @@
     <div class="ap-form-pane">
       <div class="ap-form-scroll">
         <p class="ap-section-title">Appearance</p>
-        <p class="ap-section-subtitle">Customize how your booking widget looks to customers.</p>
+        <p class="ap-section-subtitle">Customize how your widget looks to customers.</p>
 
         <!-- Welcome Message -->
         <div class="ap-form-row">
           <div class="ap-row-label">
             <p class="ap-row-label-title">Welcome Message</p>
-            <p class="ap-row-label-desc">This message appears at the top of your booking widget when customers land on it.</p>
+            <p class="ap-row-label-desc">This message appears at the top of your widget when customers land on it.</p>
           </div>
           <div class="ap-row-control">
             <input class="ap-text-input" type="text" value="Book Your Service Appointment!"
@@ -632,7 +689,7 @@
 
       <!-- Footer -->
       <div class="ap-footer">
-        <button class="ap-btn-back" onclick="goBackToWidgets()">Back</button>
+        <button class="ap-btn-back" onclick="goToPrevScreen('appearance-screen')">Back</button>
         <button class="ap-btn-next" onclick="goToNextScreen('appearance-screen')">Next</button>
       </div>
     </div>
@@ -656,7 +713,8 @@
             </div>
           </div>
 
-          <!-- Preview card -->
+          <!-- Preview card: Map (Online Booking / Instant Estimate / Estimate & Book) -->
+          <div id="ap-preview-map">
           <div class="wp-card">
             <p class="wp-card-title">What's your address?</p>
             <p class="wp-card-subtitle">Enter your address and service details to get started.</p>
@@ -676,6 +734,28 @@
               </div>
             </div>
           </div>
+
+          </div><!-- /ap-preview-map -->
+
+          <!-- Preview card: Contact Intake Form (Lead Capture) -->
+          <div id="ap-preview-contact" style="display:none;">
+          <div class="wp-card">
+            <p class="wp-card-title">Your Contact Details</p>
+            <p class="wp-card-subtitle">Help us understand how to reach you.</p>
+            <div class="ap-contact-field">
+              <label class="ap-contact-label">Full Name</label>
+              <input class="wp-address-input" type="text" placeholder="e.g. John Smith" readonly style="margin-bottom:8px;" />
+            </div>
+            <div class="ap-contact-field">
+              <label class="ap-contact-label">Email Address</label>
+              <input class="wp-address-input" type="text" placeholder="e.g. john@example.com" readonly style="margin-bottom:8px;" />
+            </div>
+            <div class="ap-contact-field">
+              <label class="ap-contact-label">Phone Number</label>
+              <input class="wp-address-input" type="text" placeholder="e.g. (555) 000-0000" readonly style="margin-bottom:0;" />
+            </div>
+          </div>
+          </div><!-- /ap-preview-contact -->
 
           <!-- Preview widget footer -->
           <div class="wp-preview-footer">
@@ -721,38 +801,16 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
 
   <!-- Stepper -->
-  <div class="ap-stepper-bar" id="wp-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Widget Type</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Advanced Settings</span>
-    </div>
-  </div>
+  <div class="ap-stepper-bar" id="wp-stepper-bar"></div>
 
   <!-- Body -->
   <div class="ap-body">
@@ -794,19 +852,19 @@
             </div>
             <div class="wp-purpose-content">
               <p class="wp-purpose-title">Estimate & Book</p>
-              <p class="wp-purpose-desc">Show a price estimate upfront, then let customers convert immediately by booking an appointment — all in one flow.</p>
+              <p class="wp-purpose-desc">Show a price estimate upfront, then let customers book an appointment immediately — no separate follow-up needed.</p>
             </div>
             <div class="wp-purpose-radio-dot"></div>
           </div>
 
-          <!-- Option 4: Lead Intake -->
+          <!-- Option 4: Lead Capture -->
           <div class="wp-purpose-card" id="wpc-lead-intake" onclick="selectWidgetPurpose('lead-intake')">
             <div class="wp-purpose-icon" style="background:#fdf4ff; color:#9333ea;">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="wp-purpose-content">
-              <p class="wp-purpose-title">Lead Intake</p>
-              <p class="wp-purpose-desc">Capture customer contact details and service needs for your team to follow up — great for high-touch or custom jobs.</p>
+              <p class="wp-purpose-title">Lead Capture</p>
+              <p class="wp-purpose-desc">Capture customer contact details and service needs so your team can follow up and qualify the job.</p>
             </div>
             <div class="wp-purpose-radio-dot"></div>
           </div>
@@ -820,7 +878,7 @@
           <div class="as-mini-card" style="padding:14px 16px;display:flex;flex-direction:column;gap:0;">
             <label class="bpf-checkbox-label" onclick="event.stopPropagation()">
               <input type="checkbox" class="bpf-checkbox" id="lh-job-cb" onchange="toggleLhJob(this.checked)">
-              <div>
+              <div style="flex:1;">
                 <span class="bpf-checkbox-text" style="font-weight:500;color:#111827;">Create a Job</span>
                 <p style="font-size:12px;color:#9ca3af;margin:3px 0 0;">Automatically create a job record, ready to assign and schedule.</p>
               </div>
@@ -838,7 +896,7 @@
       </div>
 
       <div class="ap-footer">
-        <button class="ap-btn-back" onclick="goToPrevScreen('widget-purpose-screen')">Back</button>
+        <button class="ap-btn-back" onclick="goBackToWidgets()">Back</button>
         <button class="ap-btn-next" onclick="goToNextScreen('widget-purpose-screen')">Next</button>
       </div>
     </div>
@@ -899,7 +957,10 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
@@ -916,7 +977,7 @@
         <div class="qs-header">
           <div>
             <p class="qs-title">Manage questions</p>
-            <p class="qs-subtitle">General settings related to booking page</p>
+            <p class="qs-subtitle" id="qs-subtitle-text">Customize the questions customers answer before booking their appointment.</p>
           </div>
           <button class="btn-add-q" id="btn-add-q" onclick="toggleQPicker(event)">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -989,7 +1050,7 @@
           <div class="q-left-spacer"></div>
           <div class="q-card" id="qcard-inner-1">
             <div class="q-card-header">
-              <div class="q-label">Where should we send your booking confirmation? <span class="q-required">*</span></div>
+              <div class="q-label" id="qs-q1-label">Where should we send your booking confirmation? <span class="q-required">*</span></div>
             </div>
             <div class="q-input-row" style="margin-bottom:8px;">
               <input class="q-input-preview" type="text" placeholder="First name" readonly />
@@ -1001,6 +1062,18 @@
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
               <input class="q-phone-input" type="text" placeholder="Phone number" readonly />
+            </div>
+            <!-- Address fields merged in for Lead Capture -->
+            <div id="q1-address-field" style="display:none; margin-top:8px;">
+              <input class="q-input-preview" type="text" placeholder="Street address" readonly style="margin-bottom:6px;" />
+              <div class="q-input-row">
+                <input class="q-input-preview" type="text" placeholder="City" readonly />
+                <input class="q-input-preview" type="text" placeholder="ZIP code" readonly />
+              </div>
+            </div>
+            <!-- Notes field for Lead Capture -->
+            <div id="q1-notes-field" style="display:none; margin-top:8px;">
+              <textarea class="q-input-preview" placeholder="Tell us about your project (optional)" readonly style="height:68px; resize:none; padding:8px;"></textarea>
             </div>
           </div>
         </div>
@@ -1073,7 +1146,10 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
@@ -1300,43 +1376,16 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
 
   <!-- Stepper -->
-  <div class="ap-stepper-bar">
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Appearance</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Widget Type</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle done"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <span class="ap-step-label">Manage Questions</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle active"></div>
-      <span class="ap-step-label active">Service Configuration</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Booking Policy</span>
-    </div>
-    <div class="ap-step-line"></div>
-    <div class="ap-step">
-      <div class="ap-step-circle"></div>
-      <span class="ap-step-label">Advanced Settings</span>
-    </div>
-  </div>
+  <div class="ap-stepper-bar" id="svc-stepper-bar"></div>
 
   <!-- Body -->
   <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
@@ -1467,13 +1516,13 @@
                   </div>
                 </div>
               </div>
-              <span class="ie-field-hint">Total time blocked on the calendar per booking, including travel and on-site work</span>
+              <span class="ie-field-hint">Pre-filled based on the selected job category. You can override this if needed.</span>
             </div>
 
-            <!-- Appointment Spacing -->
+            <!-- Buffer Time -->
             <div class="ie-field">
               <div class="ie-field-label-row">
-                <span class="ie-label-sm">Appointment Spacing</span>
+                <span class="ie-label-sm">Buffer Time</span>
               </div>
               <div class="appt-spacing-wrap" onclick="event.stopPropagation()">
                 <label class="appt-spacing-option selected" id="spacing-opt-none" onclick="selectSpacing('none')">
@@ -1483,14 +1532,14 @@
                       <span class="appt-spacing-title">No buffer</span>
                       <span class="appt-spacing-badge blue">Maximum availability</span>
                     </div>
-                    <p class="appt-spacing-desc">Jobs can be booked consecutively. Best for quick inspections or clustered jobs in the same neighbourhood.</p>
+                    <p class="appt-spacing-desc">Jobs can be booked consecutively. Best for quick inspections or clustered jobs in the same neighborhood.</p>
                   </div>
                 </label>
                 <label class="appt-spacing-option" id="spacing-opt-fixed" onclick="selectSpacing('fixed')">
                   <input type="radio" name="appt-spacing" value="fixed" />
                   <div class="appt-spacing-body">
                     <div class="appt-spacing-header">
-                      <span class="appt-spacing-title">Fixed crew buffer</span>
+                      <span class="appt-spacing-title">Fixed buffer time</span>
                     </div>
                     <p class="appt-spacing-desc">Block a consistent window after every job for equipment load-out, site cleanup, or crew debrief before the next dispatch.</p>
                     <div class="appt-spacing-sub" id="spacing-sub-fixed">
@@ -1539,7 +1588,7 @@
 
             <!-- Scheduling Window -->
             <div class="ie-field" style="margin-top:4px;">
-              <span class="ie-label-sm">Maximum Scheduling Window</span>
+              <span class="ie-label-sm">Maximum Booking Window</span>
               <p class="ie-field-hint">Customers can only book within this range from today.</p>
               <div class="ie-suffix-wrap" style="margin-top:6px;">
                 <input class="ie-input ie-has-suffix" id="asvc-sched-window" type="number" value="60" min="1" step="1" />
@@ -1615,7 +1664,7 @@
                 <div class="bpf-radio-dot bpf-dot-selected"></div>
                 <div class="bpf-radio-content">
                   <p class="bpf-radio-title">Customer picks a date</p>
-                  <p class="bpf-radio-desc">Your customer chooses the day that works for them — you decide who shows up and when.</p>
+                  <p class="bpf-radio-desc">Your customer chooses the day that works for them — you decide who shows up.</p>
                   <div class="bpf-steps-row">
                     <span class="bpf-step-pill">Address &amp; details</span>
                     <span class="bpf-step-arr">→</span>
@@ -1764,7 +1813,10 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
@@ -1834,12 +1886,12 @@
                   </div>
                 </div>
               </div>
-              <span class="ie-field-hint">Total time blocked on the calendar per booking, including travel and on-site work</span>
+              <span class="ie-field-hint">Pre-filled based on the selected job category. You can override this if needed.</span>
             </div>
 
-            <!-- Appointment Spacing -->
+            <!-- Buffer Time -->
             <div class="ie-field">
-              <span class="ie-label-sm">Appointment Spacing</span>
+              <span class="ie-label-sm">Buffer Time</span>
               <div class="appt-spacing-wrap" onclick="event.stopPropagation()">
                 <label class="appt-spacing-option selected" id="bp-spacing-opt-none" onclick="selectSpacingBp('none')">
                   <input type="radio" name="bp-appt-spacing" value="none" checked />
@@ -1848,14 +1900,14 @@
                       <span class="appt-spacing-title">No buffer</span>
                       <span class="appt-spacing-badge blue">Maximum availability</span>
                     </div>
-                    <p class="appt-spacing-desc">Jobs can be booked consecutively. Best for quick inspections or clustered jobs in the same neighbourhood.</p>
+                    <p class="appt-spacing-desc">Jobs can be booked consecutively. Best for quick inspections or clustered jobs in the same neighborhood.</p>
                   </div>
                 </label>
                 <label class="appt-spacing-option" id="bp-spacing-opt-fixed" onclick="selectSpacingBp('fixed')">
                   <input type="radio" name="bp-appt-spacing" value="fixed" />
                   <div class="appt-spacing-body">
                     <div class="appt-spacing-header">
-                      <span class="appt-spacing-title">Fixed crew buffer</span>
+                      <span class="appt-spacing-title">Fixed buffer time</span>
                     </div>
                     <p class="appt-spacing-desc">Block a consistent window after every job for equipment load-out, site cleanup, or crew debrief before the next dispatch.</p>
                     <div class="appt-spacing-sub" id="bp-spacing-sub-fixed">
@@ -1904,7 +1956,7 @@
 
             <!-- Scheduling Window -->
             <div class="ie-field" style="margin-top:4px;">
-              <span class="ie-label-sm">Maximum Scheduling Window</span>
+              <span class="ie-label-sm">Maximum Booking Window</span>
               <p class="ie-field-hint">Customers can only book within this range from today.</p>
               <div class="ie-suffix-wrap" style="margin-top:6px;">
                 <input class="ie-input ie-has-suffix" id="bp-sched-window" type="number" value="60" min="1" step="1" />
@@ -1980,7 +2032,7 @@
                 <div class="bpf-radio-dot bpf-dot-selected"></div>
                 <div class="bpf-radio-content">
                   <p class="bpf-radio-title">Customer picks a date</p>
-                  <p class="bpf-radio-desc">Your customer chooses the day that works for them — you decide who shows up and when.</p>
+                  <p class="bpf-radio-desc">Your customer chooses the day that works for them — you decide who shows up.</p>
                   <div class="bpf-steps-row">
                     <span class="bpf-step-pill">Address &amp; details</span>
                     <span class="bpf-step-arr">→</span>
@@ -2098,7 +2150,10 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
@@ -2280,7 +2335,10 @@
         <span class="wname-text">Online Booking - Seattle</span>
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="cursor:pointer;" onclick="event.stopPropagation();openEditWidgetModal()"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
-      <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ap-draft-badge"><span>•</span><span>Saved as draft</span></div>
+        <div class="wt-header-chip"><span class="wt-header-chip-icon"></span><span class="wt-header-chip-label">Online Booking</span></div>
+      </div>
     </div>
     <div></div>
   </div>
@@ -3060,16 +3118,13 @@ Based on the details you submitted, we've prepared a preliminary estimate and se
 
 <!-- ── Job Category Dropdown ── -->
 <div id="lh-cat-dd" style="display:none;position:fixed;background:white;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);min-width:180px;z-index:1200;padding:4px 0;">
-  <div class="lh-cat-item" onclick="selectLhCat('Roof Inspection')">Roof Inspection</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Roof Replacement')">Roof Replacement</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Roof Repair')">Roof Repair</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Emergency Tarping')">Emergency Tarping</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Storm Damage Assessment')">Storm Damage Assessment</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Gutter Cleaning')">Gutter Cleaning</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Gutter Replacement')">Gutter Replacement</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Skylight Installation')">Skylight Installation</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Ventilation & Insulation')">Ventilation & Insulation</div>
-  <div class="lh-cat-item" onclick="selectLhCat('Lead Pipeline')">Lead Pipeline</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Lead Qualification')">Lead Qualification</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Sales Appointment')">Sales Appointment</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Repair Appointment')">Repair Appointment</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Repair Service')">Repair Service</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Permitting')">Permitting</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Installation')">Installation</div>
+  <div class="lh-cat-item" onclick="selectLhCat('Commercial Bidding')">Commercial Bidding</div>
 </div>
 
 <!-- ── Assign to Dropdown ── -->

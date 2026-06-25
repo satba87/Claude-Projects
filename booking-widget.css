@@ -441,6 +441,41 @@
     }
     .btn-primary:hover { background: #c73d13; }
 
+    /* ── Confirm modals (Deactivate / Activate / Delete) ── */
+    .confirm-modal {
+      background: white; border-radius: 12px;
+      width: 520px; padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+      animation: modalIn .2s ease;
+    }
+    .confirm-modal-top { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+    .confirm-icon-wrap {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .confirm-icon-wrap.danger { background: #fee2e2; }
+    .confirm-icon-wrap.success { background: #dcfce7; }
+    .confirm-icon-wrap svg { width: 22px; height: 22px; }
+    .confirm-modal-title { font-size: 17px; font-weight: 600; color: var(--ink-normal); margin-bottom: 6px; }
+    .confirm-modal-desc { font-size: 14px; color: var(--ink-light); line-height: 1.55; }
+    .confirm-modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+    .btn-danger {
+      padding: 8px 20px; border-radius: 8px;
+      background: #dc2626; border: 1px solid transparent;
+      font-size: 14px; font-weight: 500; color: white;
+      cursor: pointer; font-family: inherit; min-width: 90px;
+      transition: background .15s;
+    }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-success {
+      padding: 8px 20px; border-radius: 8px;
+      background: #16a34a; border: 1px solid transparent;
+      font-size: 14px; font-weight: 500; color: white;
+      cursor: pointer; font-family: inherit; min-width: 90px;
+      transition: background .15s;
+    }
+    .btn-success:hover { background: #15803d; }
+
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; right: 24px;
@@ -793,6 +828,8 @@
   }
   .wp-card-title { font-size: 18px; font-weight: 600; color: #101828; }
   .wp-card-subtitle { font-size: 12px; color: #6b7280; margin-top: 3px; margin-bottom: 14px; }
+  .ap-contact-field { display: flex; flex-direction: column; gap: 3px; margin-bottom: 0; }
+  .ap-contact-label { font-size: 11px; font-weight: 500; color: #374151; }
   .wp-address-input {
     width: 100%;
     border: 0.77px solid #e5e7eb;
@@ -2757,6 +2794,8 @@
     width: 15px; height: 15px; flex-shrink: 0;
     accent-color: #0172cb; cursor: pointer;
   }
+  .bpf-checkbox:disabled { opacity: 0.5; cursor: not-allowed; }
+  .bpf-checkbox:disabled + div { opacity: 0.75; }
   .bpf-checkbox-text { font-size: 13px; color: #374151; }
 
   /* Slot type sub-options (inside Customer Booking Flow) */
@@ -3940,6 +3979,16 @@
     font-size: 13px; color: #6b7280; line-height: 1.6;
     max-width: 280px; margin: 0;
   }
+  /* ── Widget type chip (header bar) ── */
+  .wt-header-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px 3px 5px; border-radius: 20px;
+    background: #f3f4f6; border: 1px solid #e5e7eb;
+  }
+  .wt-header-chip-icon { display: flex; align-items: center; }
+  .wt-header-chip-icon svg { width: 12px; height: 12px; }
+  .wt-header-chip-label { font-size: 11px; font-weight: 500; color: #374151; }
+
   .wpp-tags {
     display: flex; flex-wrap: wrap; gap: 8px;
     justify-content: center; margin-top: 4px;

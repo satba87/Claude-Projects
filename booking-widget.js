@@ -72,7 +72,7 @@
     'online-booking':   { iconColor: '#2563eb', iconWrap: 'blue',   badgeClass: 'online-booking',   label: 'Online Booking',   icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>' },
     'instant-estimate': { iconColor: '#a16207', iconWrap: 'yellow', badgeClass: 'instant-estimate', label: 'Instant Estimate', icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#a16207" stroke-width="1.5"><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>' },
     'estimate-booking': { iconColor: '#15803d', iconWrap: 'green',  badgeClass: 'estimate-booking', label: 'Estimate & Book', icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#15803d" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>' },
-    'lead-intake':      { iconColor: '#7e22ce', iconWrap: 'purple', badgeClass: 'lead-intake',      label: 'Lead Intake',     icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#7e22ce" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+    'lead-intake':      { iconColor: '#7e22ce', iconWrap: 'purple', badgeClass: 'lead-intake',      label: 'Lead Capture',     icon: '<svg fill="none" viewBox="0 0 24 24" stroke="#7e22ce" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
   };
 
   // Temp store for widget being configured (not yet added to grid)
@@ -126,11 +126,11 @@
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             Edit
           </button>
-          <button class="dropdown-item" onclick="showToast('Widget duplicated!')">
+          <button class="dropdown-item" onclick="showToast('Widget duplicated successfully')">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Duplicate
           </button>
-          <button class="dropdown-item danger" onclick="this.closest('.widget-card').remove();showToast('Widget deleted')">
+          <button class="dropdown-item danger" onclick="this.closest('.widget-card').remove();showToast('Widget deleted successfully')">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
             Delete widget
           </button>
@@ -141,18 +141,18 @@
     _pendingWidget = null;
   }
 
-  // Appearance screen
+  // Widget type screen (first screen in flow)
   function openAppearanceScreen() {
     _resetWidgetFlow();
-    document.getElementById('appearance-screen').classList.add('open');
+    document.getElementById('widget-purpose-screen').classList.add('open');
   }
 
   function _resetWidgetFlow() {
     // Reset purpose to default
     currentWidgetPurpose = 'online-booking';
 
-    // Reset stepper to appearance step (first step, nothing done)
-    _renderStepper('appearance-screen');
+    // Reset stepper to widget-purpose step (first step)
+    _renderStepper('widget-purpose-screen');
 
     // Reset widget purpose card selection to default
     document.querySelectorAll('.wp-purpose-card').forEach(function(c) {
@@ -161,14 +161,14 @@
     var defaultCard = document.getElementById('wpc-online-booking');
     if (defaultCard) defaultCard.classList.add('selected');
 
-    // Reset widget purpose preview to default state (updates right-side preview only)
+    // Reset widget purpose preview to default state
     selectWidgetPurpose('online-booking');
 
-    // Re-render stepper at appearance step (selectWidgetPurpose may shift it)
-    _renderStepper('appearance-screen');
+    // Re-render stepper at widget-purpose step
+    _renderStepper('widget-purpose-screen');
 
-    // Remove open from all flow screens except appearance (which caller will open)
-    ['widget-purpose-screen','questions-screen','services-screen','add-service-screen',
+    // Remove open from all flow screens (caller will open widget-purpose-screen)
+    ['appearance-screen','widget-purpose-screen','questions-screen','services-screen','add-service-screen',
      'roofing-options-screen','booking-policy-screen','advanced-settings-screen']
       .forEach(function(id) {
         var el = document.getElementById(id);
@@ -218,14 +218,14 @@
       color: '#16a34a', bg: '#f0fdf4',
       icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>',
       title: 'Estimate & Book',
-      sub: 'Show a price estimate upfront, then let customers convert immediately by booking an appointment — all in one flow.',
+      sub: 'Show a price estimate upfront, then let customers book an appointment immediately — no separate follow-up needed.',
       tags: ['Estimate first', 'One-click booking', 'Higher conversion']
     },
     'lead-intake': {
       color: '#9333ea', bg: '#fdf4ff',
       icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="40" height="40"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-      title: 'Lead Intake',
-      sub: 'Capture customer contact details and service needs for your team to follow up — great for high-touch or custom jobs.',
+      title: 'Lead Capture',
+      sub: 'Capture customer contact details and service needs so your team can follow up and qualify the job.',
       tags: ['Contact capture', 'CRM ready', 'Follow-up workflow']
     }
   };
@@ -241,10 +241,10 @@
   };
 
   var WP_SCREEN_FLOWS = {
-    'online-booking':   ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'services-screen', 'advanced-settings-screen'],
-    'instant-estimate': ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'roofing-options-screen', 'advanced-settings-screen'],
-    'estimate-booking': ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'roofing-options-screen', 'booking-policy-screen', 'advanced-settings-screen'],
-    'lead-intake':      ['appearance-screen', 'widget-purpose-screen', 'questions-screen', 'advanced-settings-screen'],
+    'online-booking':   ['widget-purpose-screen', 'appearance-screen', 'questions-screen', 'services-screen', 'advanced-settings-screen'],
+    'instant-estimate': ['widget-purpose-screen', 'appearance-screen', 'questions-screen', 'roofing-options-screen', 'advanced-settings-screen'],
+    'estimate-booking': ['widget-purpose-screen', 'appearance-screen', 'questions-screen', 'roofing-options-screen', 'booking-policy-screen', 'advanced-settings-screen'],
+    'lead-intake':      ['widget-purpose-screen', 'appearance-screen', 'questions-screen', 'advanced-settings-screen'],
   };
 
   // Sections only visible for specific purposes in Advanced Settings
@@ -372,13 +372,31 @@
     // Lead Handling is shown for all widget purposes
     const leadSection = document.querySelector('.wpp-lead-section');
     if (leadSection) leadSection.style.display = 'block';
-    // Re-evaluate category visibility based on new purpose
-    if (lhJobChecked) toggleLhJob(true);
+    // Apply Create a Job defaults per widget type
+    _applyLhJobDefaults(value);
+    // Update widget type chips on all screens
+    _updateWtChips(value);
+    // Update welcome message default and preview variant
+    _applyAppearanceDefaults(value);
   }
 
   // Live preview: welcome message
+  var PURPOSE_WELCOME = {
+    'online-booking':   'Book Your Service Appointment!',
+    'instant-estimate': 'Get Your Instant Roof Estimate',
+    'estimate-booking': 'Get Your Instant Roof Estimate',
+    'lead-intake':      'How Can We Help With Your Roof?',
+  };
+
+  var PURPOSE_QS_SUBTITLE = {
+    'online-booking':   'Customize the questions customers answer before booking their appointment.',
+    'instant-estimate': 'Customize the questions customers see during their estimate.',
+    'estimate-booking': 'Customize the questions customers answer to receive their estimate and book.',
+    'lead-intake':      'Customize the questions customers answer when submitting their inquiry.',
+  };
+
   function updatePreviewMessage(val) {
-    document.getElementById('preview-welcome-text').textContent = val || 'Book Your Service Appointment!';
+    document.getElementById('preview-welcome-text').textContent = val || PURPOSE_WELCOME[currentWidgetPurpose] || 'Book Your Service Appointment!';
   }
 
   // Brand color selection
@@ -423,6 +441,17 @@
     document.getElementById('tc-black').classList.remove('selected');
     document.getElementById('tc-'+color).classList.add('selected');
     document.getElementById('preview-proceed-btn').style.color = color === 'white' ? '#ffffff' : '#1f2937';
+  }
+
+  // Confirm modals (Deactivate / Activate / Delete)
+  function openConfirmModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+  function closeConfirmModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+  function closeConfirmModalOutside(e, id) {
+    if (e.target.id === id) closeConfirmModal(id);
   }
 
   // Toast
@@ -757,7 +786,7 @@
                 <div class="q-toggle" id="qtoggle-req-${globalIdx}" onclick="toggleRequired(${globalIdx}, this)"></div>
               </div>
               <div class="q-ctx-item q-ctx-map-item${lhJobChecked ? '' : ' q-ctx-disabled'}" onclick="event.stopPropagation();toggleMapEnabled(${globalIdx})">
-                <span>Map response</span>
+                <span>Field mapping</span>
                 <div class="q-toggle${q.mapEnabled ? ' on' : ''}" id="qtoggle-map-${globalIdx}"></div>
               </div>
               <div class="q-ctx-item" onclick="event.stopPropagation();toggleDepEnabled(${globalIdx})">
@@ -802,7 +831,7 @@
           <div class="q-map-divider"></div>
           <div class="q-map-header-row">
             <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            <span class="q-map-label">Map response</span>
+            <span class="q-map-label">Field mapping</span>
           </div>
           <div class="q-map-row" style="margin-top:8px;">
             <span class="q-map-module-label">Module</span>
@@ -1130,7 +1159,7 @@
         <div class="q-map-divider"></div>
         <div class="q-map-header-row">
           <svg fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-          <span class="q-map-label">Map response</span>
+          <span class="q-map-label">Field mapping</span>
         </div>
         <div class="q-map-row" style="margin-top:8px;">
           <span class="q-map-module-label">Module</span>
@@ -2317,6 +2346,73 @@ function openBookingPolicyScreen() {
   }
   function roUpdatePreview() {}
 
+  function _applyAppearanceDefaults(purpose) {
+    var msg = PURPOSE_WELCOME[purpose] || 'Book Your Service Appointment!';
+    var input = document.getElementById('ap-welcome-msg');
+    if (input) { input.value = msg; }
+    var previewText = document.getElementById('preview-welcome-text');
+    if (previewText) previewText.textContent = msg;
+    // Swap preview card: map for most types, contact form for lead-intake
+    var mapPreview = document.getElementById('ap-preview-map');
+    var contactPreview = document.getElementById('ap-preview-contact');
+    if (mapPreview && contactPreview) {
+      var isLead = purpose === 'lead-intake';
+      mapPreview.style.display = isLead ? 'none' : 'block';
+      contactPreview.style.display = isLead ? 'block' : 'none';
+    }
+    // Update Manage Questions subtitle
+    var qsSub = document.getElementById('qs-subtitle-text');
+    if (qsSub) qsSub.textContent = PURPOSE_QS_SUBTITLE[purpose] || PURPOSE_QS_SUBTITLE['online-booking'];
+    // Lead Capture: hide standalone address card, merge address+notes into contact card
+    var isLead = purpose === 'lead-intake';
+    var q0 = document.getElementById('qcard-0');
+    var q1Label = document.getElementById('qs-q1-label');
+    var q1Addr = document.getElementById('q1-address-field');
+    var q1Notes = document.getElementById('q1-notes-field');
+    if (q0) q0.style.display = isLead ? 'none' : '';
+    if (q1Addr) q1Addr.style.display = isLead ? 'block' : 'none';
+    if (q1Notes) q1Notes.style.display = isLead ? 'block' : 'none';
+    if (q1Label) q1Label.innerHTML = isLead
+      ? 'How can we reach you? <span class="q-required">*</span>'
+      : 'Where should we send your booking confirmation? <span class="q-required">*</span>';
+  }
+
+  function _updateWtChips(purpose) {
+    var meta = PURPOSE_CARD_META[purpose];
+    if (!meta) return;
+    document.querySelectorAll('.wt-header-chip-label').forEach(function(el) {
+      el.textContent = meta.label;
+    });
+    document.querySelectorAll('.wt-header-chip-icon').forEach(function(el) {
+      el.innerHTML = meta.icon;
+    });
+  }
+
+  function _applyLhJobDefaults(purpose) {
+    const cb = document.getElementById('lh-job-cb');
+    const hint = document.getElementById('lh-job-locked-hint');
+    if (!cb) return;
+
+    if (purpose === 'online-booking') {
+      cb.checked = true;
+      cb.disabled = true;
+      lhJobChecked = true;
+      if (hint) hint.style.display = 'none';
+    } else if (purpose === 'lead-intake') {
+      cb.checked = false;
+      cb.disabled = false;
+      lhJobChecked = false;
+      if (hint) hint.style.display = 'none';
+    } else {
+      // instant-estimate, estimate-booking — checked by default, optional
+      cb.checked = true;
+      cb.disabled = false;
+      lhJobChecked = true;
+      if (hint) hint.style.display = 'none';
+    }
+    toggleLhJob(lhJobChecked);
+  }
+
   function toggleLhJob(checked) {
     lhJobChecked = checked;
     // Widget-level category: show only for non-online-booking purposes
@@ -2328,7 +2424,7 @@ function openBookingPolicyScreen() {
     // Service-level category: show for online-booking only
     const svcCatField = document.getElementById('asvc-job-cat-field');
     if (svcCatField) svcCatField.style.display = (checked && currentWidgetPurpose === 'online-booking') ? 'block' : 'none';
-    // Sync disabled state on all Map response context menu items
+    // Sync disabled state on all Field mapping context menu items
     document.querySelectorAll('.q-ctx-map-item').forEach(function(el) {
       el.classList.toggle('q-ctx-disabled', !checked);
     });
